@@ -32,8 +32,6 @@
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
-            /* 讓表格單元格內容在小螢幕上可以換行，避免過長 */
-            word-wrap: break-word; 
         }
         th {
             background-color: #e5e7eb;
@@ -140,9 +138,14 @@
 
         <section class="mb-8">
             <h2 class="text-2xl font-bold mb-4 border-b-2 border-blue-500 pb-2">課程進度 (Course Schedule)</h2>
-            <!-- 修正跑版問題：在表格外面加上一層容器，並設定水平捲軸 -->
             <div class="overflow-x-auto">
                 <table>
+                    <colgroup>
+                        <col style="width: 11.11%;">
+                        <col style="width: 11.11%;">
+                        <col style="width: 55.56%;">
+                        <col style="width: 22.22%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>週次 (Week)</th>
