@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Lag 研究設計指南 | 研究生專用版</title>
+    <!-- Google Fonts for Traditional Chinese -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS (via CDN for standalone usage) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .prose-custom p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: #374151;
+        }
+        .print-break {
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navigation / Header -->
+    <header class="bg-slate-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-wide"><i class="fa-solid fa-clock-rotate-left mr-2"></i>Time Lag 研究指南</h1>
+                <p class="text-xs text-slate-300 mt-1">研究生專用版 (Graduate Student Edition)</p>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6 text-sm">
+                    <li><a href="#theory" class="hover:text-sky-300 transition">理論基礎</a></li>
+                    <li><a href="#selection" class="hover:text-sky-300 transition">如何選擇</a></li>
+                    <li><a href="#tables" class="hover:text-sky-300 transition">建議間隔表</a></li>
+                    <li><a href="#template" class="hover:text-sky-300 transition">論文模板</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 py-12 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">T1–T2–T3 縱貫性研究設計指南</h2>
+            <div class="flex justify-center space-x-2 text-sm text-gray-500">
+                <span class="bg-gray-100 px-3 py-1 rounded-full border border-gray-200">#縱貫研究</span>
+                <span class="bg-gray-100 px-3 py-1 rounded-full border border-gray-200">#TimeLag</span>
+                <span class="bg-gray-100 px-3 py-1 rounded-full border border-gray-200">#研究方法</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-12">
+
+        <!-- Section 1: Theory -->
+        <section id="theory" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 print-break">
+            <div class="flex items-center mb-6">
+                <div class="bg-sky-100 text-sky-600 p-3 rounded-lg mr-4">
+                    <i class="fa-solid fa-book-open text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800">1. 為何需要 Time Lag？</h3>
+            </div>
+            <div class="prose-custom">
+                <p>根據 Ployhart & Vandenberg (2010)，<strong>因果關係是一種隨時間展開的現象（causality unfolds over time）</strong>。橫斷資料（Cross-sectional）只能看到「同時發生的關聯」，但要判斷因果順序，必須確保：</p>
+                <ul class="list-none space-y-2 mb-4 bg-sky-50 p-4 rounded-lg">
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <span><strong>時序性：</strong>A 發生在 B 之前。</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <span><strong>因果力：</strong>A 造成 B 的變化（排除反向因果）。</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <span><strong>穩定性：</strong>變化軌跡是穩定的、可被觀察的。</span></li>
+                </ul>
+                
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-100 text-sm text-amber-900 mb-4">
+                    <div class="flex items-start">
+                        <i class="fa-solid fa-triangle-exclamation mt-1 mr-2 text-amber-600"></i>
+                        <div>
+                            <strong class="block mb-1 text-amber-800">為何橫斷研究不足以檢驗中介？</strong>
+                            <p class="mb-0">Maxwell & Cole (2007) 的研究證實，使用橫斷資料分析中介效果（Cross-sectional mediation）往往會產生嚴重偏差，甚至可能出現與真實縱貫效果「正負相反」的結論。唯有透過縱貫設計，才能正確估計隨時間展開的心理歷程。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="font-medium text-slate-700 border-l-4 border-sky-500 pl-4 py-1 bg-gray-50">
+                    核心觀念：Time lag 的選擇必須是基於「研究設計（Research Design）」的考量，絕不僅是「行政安排（Administrative Convenience）」。
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: How to Choose -->
+        <section id="selection" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 print-break">
+            <div class="flex items-center mb-6">
+                <div class="bg-indigo-100 text-indigo-600 p-3 rounded-lg mr-4">
+                    <i class="fa-solid fa-sliders text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800">2. 如何選擇 Time Lag？</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Step 1 -->
+                <div class="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                    <h4 class="font-bold text-lg mb-2 text-indigo-700">Step 1：判斷速度</h4>
+                    <p class="text-sm text-gray-600 mb-2">變項的自然變化速度為何？</p>
+                    <ul class="text-sm space-y-1">
+                        <li><span class="w-2 h-2 rounded-full bg-red-500 inline-block mr-1"></span> <strong>快變：</strong>情緒、壓力</li>
+                        <li><span class="w-2 h-2 rounded-full bg-blue-500 inline-block mr-1"></span> <strong>中變：</strong>態度、滿意度</li>
+                        <li><span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-1"></span> <strong>慢變：</strong>人格、價值觀</li>
+                    </ul>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                    <h4 class="font-bold text-lg mb-2 text-indigo-700">Step 2：形成機制</h4>
+                    <p class="text-sm text-gray-600 mb-2">理論預期影響如何發生？</p>
+                    <ul class="text-sm space-y-1">
+                        <li><strong>快速反應：</strong>1天 ~ 2週</li>
+                        <li><strong>累積形成：</strong>3週 ~ 8週</li>
+                        <li><strong>深層改變：</strong>3個月以上</li>
+                    </ul>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-gray-50 p-5 rounded-lg border border-gray-100">
+                    <h4 class="font-bold text-lg mb-2 text-indigo-700">Step 3：避免極端</h4>
+                    <p class="text-sm text-gray-600 mb-2">Ployhart & Vandenberg 提醒：</p>
+                    <ul class="text-sm space-y-1">
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2 mt-1"></i> <span><strong>太短：</strong>觀察不到變化 (No change)</span></li>
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2 mt-1"></i> <span><strong>太長：</strong>效果稀釋 (Decay)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Tables -->
+        <section id="tables" class="space-y-6">
+            <h3 class="text-2xl font-bold text-slate-800 border-l-8 border-slate-700 pl-4">3. 常見變項建議間隔表</h3>
+            <p class="text-gray-600 mb-4">依據 OB/HR 與心理學文獻整合：</p>
+
+            <!-- Table 1: Fast -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-red-100">
+                <div class="bg-red-50 px-6 py-3 border-b border-red-100 flex items-center">
+                    <i class="fa-solid fa-bolt text-red-500 mr-2"></i>
+                    <h4 class="font-bold text-red-800">快速變動（建議 3天 – 2週）</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-50 text-gray-700 uppercase">
+                            <tr>
+                                <th class="px-6 py-3 w-2/5">變項</th>
+                                <th class="px-6 py-3 w-2/5">時間機制</th>
+                                <th class="px-6 py-3 w-1/5">建議 Interval</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">情緒耗竭 (Emotional Exhaustion)</td>
+                                <td class="px-6 py-3">隨每日工作負荷波動</td>
+                                <td class="px-6 py-3 font-bold text-red-600">1 – 7 天</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">短期壓力 (Daily Strain)</td>
+                                <td class="px-6 py-3">當日壓力源的立即反應</td>
+                                <td class="px-6 py-3 font-bold text-red-600">1 – 7 天</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">認知失調 (Cognitive Dissonance)</td>
+                                <td class="px-6 py-3">心理衝突的不適感與緩解</td>
+                                <td class="px-6 py-3 font-bold text-red-600">1 – 2 週</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 2: Medium -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-blue-100 relative">
+                <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-bl-lg font-bold">碩士論文最常見</div>
+                <div class="bg-blue-50 px-6 py-3 border-b border-blue-100 flex items-center">
+                    <i class="fa-solid fa-layer-group text-blue-500 mr-2"></i>
+                    <h4 class="font-bold text-blue-800">中度變動（建議 3週 – 8週）</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-50 text-gray-700 uppercase">
+                            <tr>
+                                <th class="px-6 py-3 w-2/5">變項</th>
+                                <th class="px-6 py-3 w-2/5">時間機制</th>
+                                <th class="px-6 py-3 w-1/5">建議 Interval</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">心理安全感 (Psychological Safety)</td>
+                                <td class="px-6 py-3">隨多次互動經驗累積</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 8 週</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">組織認同 (Organizational Identification)</td>
+                                <td class="px-6 py-3">穩定但具可塑性</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 12 週</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">工作滿意度 (Job Satisfaction)</td>
+                                <td class="px-6 py-3">態度性變項</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 12 週</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">個人–工作適配 (P-J Fit)</td>
+                                <td class="px-6 py-3">知覺到的供需與能力對應</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 12 週</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">工作塑造 (Job Crafting)</td>
+                                <td class="px-6 py-3">主動改變工作的行為歷程</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 8 週</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">行為意圖 (Intention to leave/OCB)</td>
+                                <td class="px-6 py-3">態度轉化為行為意向</td>
+                                <td class="px-6 py-3 font-bold text-blue-600">3 – 8 週</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Table 3: Slow -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-green-100">
+                <div class="bg-green-50 px-6 py-3 border-b border-green-100 flex items-center">
+                    <i class="fa-solid fa-tree text-green-500 mr-2"></i>
+                    <h4 class="font-bold text-green-800">慢速變動（建議 3 – 12 個月）</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-50 text-gray-700 uppercase">
+                            <tr>
+                                <th class="px-6 py-3 w-2/5">變項</th>
+                                <th class="px-6 py-3 w-2/5">時間機制</th>
+                                <th class="px-6 py-3 w-1/5">建議 Interval</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">角色認同 (Role Identity)</td>
+                                <td class="px-6 py-3">深層自我概念的轉變</td>
+                                <td class="px-6 py-3 font-bold text-green-600">3 – 6 個月</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-3 font-medium text-gray-900">社會化 (Socialization)</td>
+                                <td class="px-6 py-3">新進員工適應</td>
+                                <td class="px-6 py-3 font-bold text-green-600">6 – 12 個月</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 & 5: Strategies & Mistakes -->
+        <div class="grid md:grid-cols-2 gap-8 print-break">
+            <!-- Strategies -->
+            <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-purple-100 text-purple-600 p-2 rounded-lg mr-3">
+                        <i class="fa-solid fa-chess-knight"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">4. 設計策略</h3>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-900">策略 A：時序分離</h4>
+                        <p class="text-sm text-gray-700 mt-1">
+                            <strong>T1(X) → T2(M) → T3(Y)</strong><br>
+                            目的：降低共同方法變異 (CMV)、確認因果序。<br>
+                            <span class="text-xs text-purple-600 bg-white px-2 py-1 rounded mt-2 inline-block">執行度高</span>
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-400">
+                        <h4 class="font-bold text-gray-800">策略 B：完全縱貫 (進階)</h4>
+                        <p class="text-sm text-gray-700 mt-1">
+                            <strong>T1, T2, T3 皆測量 X, M, Y</strong><br>
+                            目的：觀察變項的「成長」或「軌跡」。<br>
+                            <span class="text-xs text-gray-600 bg-white px-2 py-1 rounded mt-2 inline-block">需高留存率</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mistakes -->
+            <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                 <div class="flex items-center mb-4">
+                    <div class="bg-red-100 text-red-600 p-2 rounded-lg mr-3">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800">5. 常見錯誤</h3>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex items-start text-sm">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700"><strong>錯誤 1：</strong>用「方便性」決定（如：主管下週開會）。</span>
+                    </li>
+                    <li class="flex items-start text-sm">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700"><strong>錯誤 2：</strong>間隔太短（如：態度變項只隔 1 週），導致 T1 與 T2 高度相關。</span>
+                    </li>
+                    <li class="flex items-start text-sm">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700"><strong>錯誤 3：</strong>在「策略 B」中沒有進行測量恆等性檢驗 (Measurement Invariance)。</span>
+                    </li>
+                     <li class="flex items-start text-sm">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1 mr-2"></i>
+                        <span class="text-gray-700"><strong>錯誤 4：</strong>只做兩個時間點卻宣稱研究「變化軌跡」。</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Section 6: Template -->
+        <section id="template" class="bg-slate-800 text-slate-200 rounded-xl shadow-lg p-6 md:p-10 relative print-break">
+            <div class="absolute top-4 right-4">
+                 <button onclick="copyToClipboard()" class="bg-slate-700 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm transition flex items-center shadow-md border border-slate-600">
+                    <i class="fa-regular fa-copy mr-2"></i> 複製文字
+                </button>
+            </div>
+            
+            <h3 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">
+                <i class="fa-solid fa-pen-nib mr-2"></i>撰寫模板
+            </h3>
+            <p class="text-slate-400 text-sm mb-4 italic">請依實際研究週數修改 [X] 的數值，並修改成符合你研究的用語，勿直接抄襲貼上在論文中</p>
+            
+            <div class="bg-slate-900 rounded-lg p-6 font-mono text-sm leading-relaxed border border-slate-700 relative group">
+                <textarea id="template-text" class="w-full bg-transparent border-none focus:ring-0 text-slate-300 resize-none h-[32rem] md:h-[22rem] outline-none" readonly>本研究採用三時間點縱貫設計（time-lagged design），以捕捉中介過程的動態變化並提升因果推論的嚴謹性。依據 Ployhart and Vandenberg (2010) 的論述，time lag 應根據變項的自然變化速度（natural rate of change）與心理歷程的動態特性加以規劃，而非基於資料蒐集的行政便利性。
+
+本研究的中介變項為心理安全感與組織認同，根據 Dormann and Griffin (2015) 的綜述，此類態度性與關係導向的心理構念的 optimal time lag 通常較短（如數週至數月），例如在壓力與憂鬱模型中約 1.6 個月（約 7 週），方能因外在情境（如領導行為）發生足夠的變化。若間隔過短，變化可能尚未形成而無法偵測；若間隔過長，則隨時間推移，原始效應可能因其他事件干擾而衰退（decay）。
+
+因此，本研究採用約 [X] 週之間隔（例如，基於先導研究或相關文獻 meta-analysis 的估計，Edmondson (1999) 對心理安全感的縱向研究），以兼顧變化偵測效力與避免效果稀釋。
+
+此外，本研究於 T1、T2、T3 依序測量預測變項、中介變項與結果變項。此時序分離設計（temporal separation）可提升因果推論能力，並作為降低共同方法變異（CMV）的程序性策略（Podsakoff et al., 2003）。然而，此設計亦有潛在局限，例如若間隔過長，可能引入外部事件污染（extraneous contamination）或導致樣本流失（attrition）。</textarea>
+            </div>
+            <div id="copy-message" class="absolute bottom-6 right-10 text-green-400 text-sm opacity-0 transition-opacity">已複製到剪貼簿！</div>
+        </section>
+
+        <!-- References -->
+        <section class="border-t border-gray-300 pt-8 pb-12">
+            <h4 class="font-bold text-gray-800 mb-4">📚 核心參考文獻 (APA 7th Format)</h4>
+            <ul class="text-sm text-gray-600 space-y-2 pl-5 list-disc marker:text-gray-400">
+                <li class="pl-2 -ml-2 list-none">
+                    Dormann, C., & Griffin, M. A. (2015). Optimal time lags in panel studies. <em>Psychological Methods</em>, <em>20</em>(4), 489–505. <a href="https://doi.org/10.1037/met0000041" target="_blank" class="text-sky-600 hover:underline">https://doi.org/10.1037/met0000041</a>
+                </li>
+                <li class="pl-2 -ml-2 list-none">
+                    Maxwell, S. E., & Cole, D. A. (2007). Bias in cross-sectional analyses of longitudinal mediation. <em>Psychological Methods</em>, <em>12</em>(1), 23–44. <a href="https://doi.org/10.1037/1082-989X.12.1.23" target="_blank" class="text-sky-600 hover:underline">https://doi.org/10.1037/1082-989X.12.1.23</a>
+                </li>
+                <li class="pl-2 -ml-2 list-none">
+                    Ployhart, R. E., & Vandenberg, R. J. (2010). Longitudinal research: The theory, design, and analysis of change. <em>Journal of Management</em>, <em>36</em>(1), 94–120. <a href="https://doi.org/10.1177/0149206309352110" target="_blank" class="text-sky-600 hover:underline">https://doi.org/10.1177/0149206309352110</a>
+                </li>
+                <li class="pl-2 -ml-2 list-none">
+                    Podsakoff, P. M., MacKenzie, S. B., Lee, J. Y., & Podsakoff, N. P. (2003). Common method biases in behavioral research: A critical review of the literature and recommended remedies. <em>Journal of Applied Psychology</em>, <em>88</em>(5), 879–903. <a href="https://doi.org/10.1037/0021-9010.88.5.879" target="_blank" class="text-sky-600 hover:underline">https://doi.org/10.1037/0021-9010.88.5.879</a>
+                </li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t border-gray-200 py-6 text-center text-sm text-gray-500">
+        <p>© 2025 Research Design Guide. For academic use.</p>
+    </footer>
+
+    <!-- JavaScript for Clipboard -->
+    <script>
+        function copyToClipboard() {
+            const copyText = document.getElementById("template-text");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            
+            // 使用更兼容的 execCommand 來確保在所有環境（包含 iframe）都能複製
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('無法複製文字', err);
+            }
+
+            // Show feedback message
+            const msg = document.getElementById("copy-message");
+            msg.classList.remove("opacity-0");
+            setTimeout(() => {
+                msg.classList.add("opacity-0");
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
