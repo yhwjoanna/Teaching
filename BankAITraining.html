@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人資部門 AI 使用現況與需求調查報告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 Datalabels 插件以顯示百分比 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f3f4f6; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        .chart-container-lg { position: relative; height: 400px; width: 100%; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-6 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-3">
+                    <i class="fas fa-chart-pie"></i> 人資部門 AI 使用現況與需求分析
+                </h1>
+                <p class="text-blue-200 mt-2 text-sm">資料來源：內部問卷調查 (N=25) | 分析日期：2025/12/12</p>
+            </div>
+            <div class="hidden md:block text-right">
+                <div class="text-3xl font-bold text-yellow-400">76%</div>
+                <div class="text-xs text-blue-200 uppercase">處於探索階段</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Chart 1: Adoption Status -->
+        <div class="card p-6 border-l-4 border-yellow-400">
+            <h2 class="text-lg font-bold mb-2 flex items-center text-gray-700">
+                <i class="fas fa-seedling mr-2 text-yellow-500"></i> AI 導入成熟度分佈
+            </h2>
+            <!-- Explanation Box -->
+            <div class="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-2 inline-flex items-center text-xs text-yellow-800 w-full">
+                <i class="fas fa-info-circle mr-2 text-yellow-600"></i>
+                <span><strong>百分比意義：</strong>顯示處於該階段的人數佔全體受訪者 (N=25) 的比例。</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="adoptionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 2: Top Challenges -->
+        <div class="card p-6 border-l-4 border-red-500">
+            <h2 class="text-lg font-bold mb-2 flex items-center text-gray-700">
+                <i class="fas fa-shield-alt mr-2 text-red-500"></i> 推動 AI 的最大障礙 (Top 3)
+            </h2>
+             <!-- Explanation Box -->
+             <div class="mb-4 bg-red-50 border border-red-200 rounded-md p-2 inline-flex items-center text-xs text-red-800 w-full">
+                <i class="fas fa-info-circle mr-2 text-red-600"></i>
+                <span><strong>百分比意義：</strong>顯示勾選此障礙的人數佔全體受訪者 (N=25) 的比例（可複選）。</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="barrierChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 3: Current Usage Areas -->
+        <div class="card p-6 border-l-4 border-blue-500">
+            <h2 class="text-lg font-bold mb-2 flex items-center text-gray-700">
+                <i class="fas fa-tools mr-2 text-blue-500"></i> 目前主要應用領域
+            </h2>
+            <!-- Explanation Box -->
+            <div class="mb-4 bg-blue-50 border border-blue-200 rounded-md p-2 inline-flex items-center text-xs text-blue-800 w-full">
+                <i class="fas fa-info-circle mr-2 text-blue-600"></i>
+                <span><strong>百分比意義：</strong>顯示已在該領域應用 AI 的人數佔全體受訪者 (N=25) 的比例。</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="usageChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 4: Future Priorities -->
+        <div class="card p-6 border-l-4 border-green-500">
+            <h2 class="text-lg font-bold mb-2 flex items-center text-gray-700">
+                <i class="fas fa-rocket mr-2 text-green-500"></i> 整體優先導入需求 (全體)
+            </h2>
+            <!-- Explanation Box -->
+            <div class="mb-4 bg-green-50 border border-green-200 rounded-md p-2 inline-flex items-center text-xs text-green-800 w-full">
+                <i class="fas fa-info-circle mr-2 text-green-600"></i>
+                <span><strong>百分比意義：</strong>顯示將此項目視為最優先的人數佔全體受訪者 (N=25) 的比例。</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="futureChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Section 1: Departmental Breakdown (Sorted High to Low) -->
+        <div class="card col-span-1 md:col-span-2 p-6 border-l-4 border-indigo-500">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-xl font-bold flex items-center text-gray-700">
+                        <i class="fas fa-sitemap mr-2 text-indigo-500"></i> 各職能部門需求差異分析
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1 mb-2">分析不同 HR 職能 (Function) 的需求分佈 (圖例已按總熱度由高至低排列)</p>
+                    
+                    <!-- Added Explanation Box -->
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-md p-2 inline-flex items-center text-xs text-indigo-800">
+                        <i class="fas fa-info-circle mr-2 text-indigo-600"></i>
+                        <span><strong>百分比意義：</strong> 顯示該部門內，有多少比例的同仁選擇了此需求（例：招募團隊中有 100% 的人選擇了 Chatbot）。</span>
+                    </div>
+                </div>
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded whitespace-nowrap">Key Analysis</span>
+            </div>
+            
+            <div class="chart-container-lg">
+                <canvas id="deptChart"></canvas>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6 text-sm">
+                 <div class="bg-blue-50 p-3 rounded border border-blue-200">
+                    <strong class="text-blue-800 block mb-1">1. 服務自動化 (Chatbot)</strong>
+                    <span class="text-gray-600">需求最高。招募 (TA) 與營運團隊最為迫切，希望解決重複答疑。</span>
+                </div>
+                <div class="bg-green-50 p-3 rounded border border-green-200">
+                    <strong class="text-green-800 block mb-1">2. 培訓內容製作</strong>
+                    <span class="text-gray-600">需求次高。專注於 L&D 與 員關 (ER) 部門，用於教材與公告生成。</span>
+                </div>
+                <div class="bg-red-50 p-3 rounded border border-red-200">
+                    <strong class="text-red-800 block mb-1">3. 數據分析與預測</strong>
+                    <span class="text-gray-600">集中在 薪酬 (C&B) 與 HRBP，用於處理報表與公式。</span>
+                </div>
+                 <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
+                    <strong class="text-yellow-800 block mb-1">4. 流程自動化</strong>
+                    <span class="text-gray-600">需求較分散，主要應用於入職流程文件處理。</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center p-6 text-gray-400 text-sm">
+        Generated by Gemini Analysis based on Uploaded CSV Data
+    </footer>
+
+    <script>
+        // Register the plugin
+        Chart.register(ChartDataLabels);
+
+        // Global settings for DataLabels
+        Chart.defaults.set('plugins.datalabels', {
+            color: '#fff',
+            font: {
+                weight: 'bold',
+                family: "'Noto Sans TC', sans-serif"
+            }
+        });
+
+        const totalRespondents = 25;
+
+        // --- Data Definitions ---
+
+        // 1. Department Breakdown Data
+        const deptLabels = ['招募 (TA)', '薪酬 (C&B)', '培訓 (L&D)', '員關 (ER)', 'HRBP/營運'];
+        // Data structure: [Chatbot, Analytics, Content, Process Auto, Others]
+        const deptData = {
+            chatbot: [5, 3, 3, 1, 2],    // Sum 14 (Rank 1)
+            analytics: [0, 2, 0, 1, 1],  // Sum 4  (Rank 3)
+            content: [0, 0, 2, 3, 0],    // Sum 5  (Rank 2)
+            process: [0, 0, 1, 0, 1]     // Sum 2  (Rank 4)
+        };
+
+        // Calculate totals per department for percentage calc
+        const deptTotals = deptLabels.map((_, i) => {
+            return deptData.chatbot[i] + deptData.analytics[i] + deptData.content[i] + deptData.process[i];
+        });
+
+        // 2. Existing Overall Data
+        const adoptionData = {
+            labels: ['探索階段 (偶爾嘗試)', '部分應用 (特定任務)', '深度整合 (日常流程)'],
+            data: [19, 5, 1]
+        };
+
+        const barrierData = {
+            labels: ['數據安全與隱私疑慮', '工具/資源缺乏', '系統整合困難', '預算限制', '準確性與偏見', '技能不足'],
+            data: [21, 15, 10, 8, 6, 3]
+        };
+
+        const usageData = {
+            labels: ['撰寫內部公告/郵件', '製作培訓素材', '生成教材大綱', 'AI 面試/評測', '履歷篩選', 'Excel/數據'],
+            data: [16, 12, 8, 3, 2, 2]
+        };
+
+        const futureData = {
+            labels: ['Chatbot (員工服務)', '人力數據分析', '員工培訓內容', '流程自動化', '績效管理'],
+            data: [11, 5, 4, 2, 1]
+        };
+
+        // --- Chart Configurations ---
+
+        // Chart 0: Department Analysis (Stacked Bar) 
+        // SORTED ORDER: Chatbot (14) -> Content (5) -> Analytics (4) -> Process (2)
+        new Chart(document.getElementById('deptChart'), {
+            type: 'bar',
+            data: {
+                labels: deptLabels,
+                datasets: [
+                    { label: 'Chatbot 服務自動化', data: deptData.chatbot, backgroundColor: '#3B82F6' },
+                    { label: '培訓內容製作', data: deptData.content, backgroundColor: '#10B981' }, // Reordered: Rank 2
+                    { label: '數據分析與預測', data: deptData.analytics, backgroundColor: '#EF4444' }, // Reordered: Rank 3
+                    { label: '流程自動化', data: deptData.process, backgroundColor: '#F59E0B' }      // Reordered: Rank 4
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true },
+                    y: { stacked: true, beginAtZero: true, title: { display: true, text: '票數 (人)' } }
+                },
+                plugins: {
+                    datalabels: {
+                        display: function(context) { return context.dataset.data[context.dataIndex] > 0; }, 
+                        formatter: (value, ctx) => {
+                            const deptIndex = ctx.dataIndex;
+                            const total = deptTotals[deptIndex];
+                            if (total === 0) return "";
+                            const percentage = Math.round((value / total) * 100);
+                            return percentage + "%";
+                        },
+                        font: { size: 12 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                let value = context.raw;
+                                let total = deptTotals[context.dataIndex];
+                                let percentage = Math.round((value / total) * 100);
+                                return `${label}${value} 人 (${percentage}%)`;
+                            }
+                        }
+                    },
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Chart 1: Adoption
+        new Chart(document.getElementById('adoptionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: adoptionData.labels,
+                datasets: [{
+                    data: adoptionData.data,
+                    backgroundColor: ['#FBBF24', '#3B82F6', '#10B981'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let sum = 0;
+                            let dataArr = ctx.chart.data.datasets[0].data;
+                            dataArr.map(data => { sum += data; });
+                            return (value * 100 / sum).toFixed(0) + "%";
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Barriers
+        new Chart(document.getElementById('barrierChart'), {
+            type: 'bar',
+            data: {
+                labels: barrierData.labels,
+                datasets: [{
+                    label: '提及次數',
+                    data: barrierData.data,
+                    backgroundColor: '#EF4444',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'start',
+                        formatter: (value) => Math.round((value / totalRespondents) * 100) + '%'
+                    }
+                },
+                scales: { x: { beginAtZero: true, max: 25 } }
+            }
+        });
+
+        // Chart 3: Usage
+        new Chart(document.getElementById('usageChart'), {
+            type: 'bar',
+            data: {
+                labels: usageData.labels,
+                datasets: [{
+                    label: '使用人次',
+                    data: usageData.data,
+                    backgroundColor: '#3B82F6',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'start',
+                        formatter: (value) => Math.round((value / totalRespondents) * 100) + '%'
+                    }
+                },
+                scales: { y: { beginAtZero: true, max: 20 } }
+            }
+        });
+
+        // Chart 4: Future
+        new Chart(document.getElementById('futureChart'), {
+            type: 'bar',
+            data: {
+                labels: futureData.labels,
+                datasets: [{
+                    label: '優先票數',
+                    data: futureData.data,
+                    backgroundColor: '#10B981',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'start',
+                        formatter: (value) => Math.round((value / totalRespondents) * 100) + '%'
+                    }
+                },
+                scales: { y: { beginAtZero: true, max: 15 } }
+            }
+        });
+    </script>
+</body>
+</html>
