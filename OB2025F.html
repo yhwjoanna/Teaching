@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>組織行為期末報告流程表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background-color: white;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .shadow-lg, .shadow-md, .shadow-sm {
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb;
+            }
+            .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800 pb-10">
+
+    <!-- Top Navigation / Action Bar -->
+    <div class="bg-white shadow-sm sticky top-0 z-50 no-print">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-lg font-bold text-gray-700"><i class="fas fa-clipboard-list mr-2"></i>組織行為期末報告日程</h1>
+            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center">
+                <i class="fas fa-print mr-2"></i> 列印 / 存為 PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-8 container">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-10 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div class="mb-3">
+                <span class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full tracking-wide">組織行為 (Organizational Behavior)</span>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">期末分組報告流程表</h1>
+            
+            <!-- Date and Time Combined -->
+            <div class="flex flex-col md:flex-row items-center justify-center text-gray-500 mb-6 gap-2 md:gap-4">
+                <div class="flex items-center">
+                    <i class="far fa-clock mr-2"></i>
+                    <span class="font-medium text-lg">13:10 - 16:00</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-4 text-sm text-gray-600 flex-wrap">
+                <div class="bg-gray-50 px-3 py-1 rounded-full border border-gray-200">
+                    <i class="fas fa-stopwatch mr-1"></i> 每組總長 25 分鐘 (報告20+講評5)
+                </div>
+                <div class="bg-gray-50 px-3 py-1 rounded-full border border-gray-200">
+                    <i class="fas fa-mug-hot mr-1"></i> 中場休息 12 分鐘
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Notes Section -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-10 rounded-r-xl shadow-sm">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-exclamation-circle text-yellow-600 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-bold text-yellow-800 mb-2">報告注意事項</h3>
+                    <ul class="list-disc list-outside ml-4 text-yellow-800 space-y-2 text-sm md:text-base">
+                        <li><span class="font-bold">報告時間：</span>每組報告時間為 <span class="font-bold text-red-600">20 分鐘</span>，講評 5 分鐘。</li>
+                        <li><span class="font-bold">響鈴機制：</span>19分一短聲 (剩1分鐘)，20分強制結束。</li>
+                        <li><span class="font-bold">時間控制：</span>請各組儘速上下台，不另設換場時間。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Session -->
+        <div class="mb-8">
+            <div class="flex items-center mb-6">
+                <div class="bg-indigo-100 text-indigo-800 p-2 rounded-lg mr-3">
+                    <i class="fas fa-users-cog text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">下午場：理論與實務應用</h2>
+                    <p class="text-sm text-gray-500">TAT、CEST、鑲嵌、資源保存、JD-R、SDT</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 relative">
+                <div class="timeline-line"></div>
+
+                <!-- Opening -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-gray-600 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-gray-50 p-5 rounded-xl shadow-sm border-l-4 border-gray-600 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-gray-800 font-bold text-lg">13:10 - 13:13</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">開場說明</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i> 說明評分標準與時間規則
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 1: TAT -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-pink-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-pink-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-pink-600 font-bold text-lg">13:13 - 13:38</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">TAT (特質活化理論)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-brain mr-2 w-4"></i> Trait Activation Theory
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 2: CEST -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-purple-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-purple-600 font-bold text-lg">13:38 - 14:03</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">CEST (認知經驗自我理論)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-lightbulb mr-2 w-4"></i> Cognitive-Experiential Self-Theory
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 3: Job Embeddedness -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-blue-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-blue-600 font-bold text-lg">14:03 - 14:28</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">Job Embeddedness (工作鑲嵌)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-anchor mr-2 w-4"></i> 留任與離職傾向分析
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Break -->
+                <div class="relative pl-16 py-2">
+                    <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-gray-300 rounded-full border-4 border-white z-10"></div>
+                    <div class="flex items-center text-gray-500 bg-gray-100 px-4 py-2 rounded-lg border border-gray-200 border-dashed">
+                        <i class="fas fa-coffee mr-3"></i>
+                        <span class="font-medium mr-4">14:28 - 14:40</span>
+                        <span>中場休息 (12分鐘)</span>
+                    </div>
+                </div>
+
+                <!-- Group 4: COR -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-teal-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-teal-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-teal-600 font-bold text-lg">14:40 - 15:05</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">COR (資源保存理論)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-battery-full mr-2 w-4"></i> Conservation of Resources Theory
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 5: JD-R -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-orange-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-orange-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-orange-600 font-bold text-lg">15:05 - 15:30</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">JD-R (工作要求-資源模型)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-balance-scale mr-2 w-4"></i> Job Demands-Resources Model
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 6: SDT -->
+                <div class="relative pl-16">
+                    <div class="absolute left-4 top-4 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-indigo-500 hover:shadow-md transition">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                            <span class="font-mono text-indigo-600 font-bold text-lg">15:30 - 15:55</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-1">SDT (自我決定論)</h3>
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <i class="fas fa-seedling mr-2 w-4"></i> Self-Determination Theory
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Closing -->
+                <div class="relative pl-16">
+                     <div class="timeline-line bg-transparent"></div> <!-- Stop line here -->
+                     <div class="mt-4 bg-gray-800 text-white rounded-xl p-6 flex items-center shadow-md">
+                        <div class="mr-4 text-3xl">🏁</div>
+                        <div>
+                            <h3 class="font-bold text-xl">15:55 - 16:00 總結與頒獎</h3>
+                            <p class="text-gray-300 text-sm mt-1">計算總分、名次公布與課程結語</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
