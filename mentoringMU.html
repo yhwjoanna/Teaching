@@ -1,0 +1,362 @@
+import React, { useState, useMemo } from 'react';
+import { Map, Heart, Sun, Battery, Sparkles, Anchor, Coffee, BookOpen, User, Navigation, ClipboardCheck, ArrowRight, RotateCcw, CheckCircle2, Loader2, Save } from 'lucide-react';
+
+const App = () => {
+  const [employeeId, setEmployeeId] = useState('');
+  const [internalLoc, setInternalLoc] = useState(50);
+  const [prosocial, setProsocial] = useState(50);
+  const [mode, setMode] = useState('assessment'); // 'assessment' or 'result'
+  const [currentStep, setCurrentStep] = useState(0); // 0: EmpID, 1: loc, 2: prosocial
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+
+  const [locAnswers, setLocAnswers] = useState(Array(5).fill(0));
+  const [proAnswers, setProAnswers] = useState(Array(5).fill(0));
+
+  // 請在此處填入您的 Google Apps Script 部署網址
+  const GOOGLE_SCRIPT_URL = ""; 
+
+  const locQuestions = [
+    "當被導者成長有限時，我會先反思自己是否可以做得更好。",
+    "被導者的學習成效，部分取決於我如何引導與回饋。",
+    "即使制度不完善，我仍能在 mentoring 關係中創造正向影響。",
+    "我相信自己可以透過調整方式，幫助不同特質的被導者。",
+    "若 mentoring 沒有進展，我會主動嘗試新的做法。"
+  ];
+
+  const proQuestions = [
+    "我願意花時間傾聽被導者的想法與困惑。",
+    "當被導者感到挫折時，我會先給予情緒支持，而不只是建議。",
+    "我會試著站在被導者的立場理解他的選擇與反應。",
+    "即使被導者進度較慢，我仍願意耐心陪伴。",
+    "我關心被導者是否感到被尊重與理解。"
+  ];
+
+  const analysis = useMemo(() => {
+    let style = "";
+    let color = "";
+    let description = "";
+    let energyAdvice = "";
+    let growthTip = "";
+    let icon = null;
+    let quote = "";
+
+    if (internalLoc >= 50 && prosocial >= 50) {
+      style = "平衡引領者";
+      color = "bg-emerald-500";
+      icon = <Sparkles className="text-white w-8 h-8" />;
+      quote = "「當你的內在穩定，你便能照亮他人的路。」";
+      description = "你展現了極佳的平衡感：既有照顧他人的熱忱，也對指導過程充滿信心。這種特質讓你能夠在不迷失自我的前提下，給予徒弟最強而有力的支持。";
+      energyAdvice = "由於你投入程度高且具備掌控感，容易成為組織中的『導師勞模』。請注意定期進行『自我督導』，檢視是否因過度追求完美指導而忽略了自己的工作負荷，保持能量的永續性。";
+      growthTip = "你具備成為『導師教練 (Mentor Coach)』的潛力。嘗試將你的直覺反應轉化為可複製的『引導模組』，分享給其他資淺導師，從一對一的指導提升到帶領導師社群的層次。";
+    } else if (internalLoc < 50 && prosocial >= 50) {
+      style = "溫情陪伴者";
+      color = "bg-rose-400";
+      icon = <Heart className="text-white w-8 h-8" />;
+      quote = "「給予溫暖的同時，也要為自己留一盞燈。」";
+      description = "你是一位極具共情能力的導師，徒弟在你身邊會感到非常安全。但有時你會有過於在意徒弟的情緒或進度，當結果不如預期時，你容易將責任歸於環境或運氣，感到受挫。";
+      energyAdvice = "請務必練習『心理切割』。提醒自己：你是支持者，而非替徒弟承擔後果的人。當感到無力時，請透過規律的運動或短暫的社交抽離來排解『同情疲勞』，確保情感邊界的健康。";
+      growthTip = "嘗試練習『教練式問句 (Coaching Questions)』，減少直接給予情感安慰，轉而引導徒弟思考下一步。將焦點從『共感痛苦』移向『結構化解決方案』，這能減輕你的能量損耗。";
+    } else if (internalLoc >= 50 && prosocial < 50) {
+      style = "效能推進者";
+      color = "bg-indigo-500";
+      icon = <Anchor className="text-white w-8 h-8" />;
+      quote = "「精準的引導，能讓成長事半功倍。」";
+      description = "你是一位風格乾脆、實事求是的導師。深信能力與方法是成功的關鍵，能為徒弟提供清晰的戰略指導。但在心理支持或建立情感信任層面，投入較為節制。";
+      energyAdvice = "你的個人能量保護得很好，因為你專注於任務。但若徒弟成長受阻，你可能會因為『效率不足』而產生急躁情緒。請將『建立心理安全感』視為一項必要的指標，列入你的能量分配清單中。";
+      growthTip = "嘗試『脆弱力 (Vulnerability)』分享。在每次會議中撥出 10% 的時間分享一個你曾經搞砸的例子或失敗的經驗。這能降低徒弟的防衛心，讓你的專業建議在信任的基礎上發揮更大效用。";
+    } else {
+      style = "自主隨行者";
+      color = "bg-slate-500";
+      icon = <User className="text-white w-8 h-8" />;
+      quote = "「在陪伴中等待，讓成長自然發生。」";
+      description = "你傾向於與徒弟保持適當距離，給予他們極大的自主權。這種『不干預』的風格能讓成熟的徒弟有發揮空間，但也可能被誤解為不感興趣或冷淡。";
+      energyAdvice = "你目前對 Mentoring 的參與度較低，或許是因為你尚未發現這項任務對你的價值。請試著從徒弟身上挖掘一個『你感興趣的視角』(例如新世代的思維)，將指導轉化為『反向學習』的機會，重啟動力。";
+      growthTip = "建立『微型互動機制』。不需要每週深談，但每週傳一個簡單的訊息（如：『最近遇到最有挑戰的事是什麼？』）主動發起小規模的連結。這能讓你維持導師的存在感，同時不增加過多心理負擔。";
+    }
+
+    return { style, color, description, energyAdvice, growthTip, icon, quote };
+  }, [internalLoc, prosocial]);
+
+  const isStepComplete = useMemo(() => {
+    if (currentStep === 0) return employeeId.trim().length > 0;
+    const answers = currentStep === 1 ? locAnswers : proAnswers;
+    return answers.every(val => val > 0);
+  }, [currentStep, employeeId, locAnswers, proAnswers]);
+
+  const handleCompleteAssessment = async () => {
+    const finalLoc = Math.round((locAnswers.reduce((a, b) => a + b, 0) / 25) * 100);
+    const finalPro = Math.round((proAnswers.reduce((a, b) => a + b, 0) / 25) * 100);
+    
+    setInternalLoc(finalLoc);
+    setProsocial(finalPro);
+    setIsSubmitting(true);
+
+    const payload = {
+      employeeId: employeeId,
+      locScore: finalLoc,
+      prosocialScore: finalPro,
+      style: analysis.style,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    if (!GOOGLE_SCRIPT_URL) {
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setMode('result');
+      }, 800);
+      return;
+    }
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      setSubmitStatus('success');
+      setMode('result');
+    } catch (error) {
+      console.error("Submission failed", error);
+      setSubmitStatus('error');
+      setMode('result');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderQuestionSet = (questions, answers, setAnswers, title, icon, accentColor) => (
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className={`flex items-center gap-3 mb-8 p-6 rounded-2xl bg-white shadow-sm border-l-4 ${accentColor}`}>
+        {icon}
+        <div>
+          <h2 className="text-xl font-bold text-slate-800">{title}</h2>
+          <p className="text-xs text-slate-400 mt-1 font-medium italic">1 分非常不同意，5 分非常同意</p>
+        </div>
+      </div>
+      {questions.map((q, idx) => (
+        <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:border-slate-200 transition-colors">
+          <p className="text-sm font-semibold text-slate-700 mb-6">{idx + 1}. {q}</p>
+          <div className="flex justify-between w-full gap-2">
+            {[1, 2, 3, 4, 5].map((val) => (
+              <button
+                key={val}
+                onClick={() => {
+                  const newAnswers = [...answers];
+                  newAnswers[idx] = val;
+                  setAnswers(newAnswers);
+                }}
+                className={`flex-1 h-10 rounded-xl text-sm font-bold transition-all border ${
+                  answers[idx] === val 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-md' 
+                  : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'
+                }`}
+              >
+                {val}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+        
+        {/* Header Section */}
+        <div className="bg-slate-900 p-8 text-white relative">
+          <div className="relative z-10">
+            <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
+              <Navigation className="text-sky-400" />
+              導師風格探索地圖
+            </h1>
+            <p className="text-slate-400 mt-2 text-sm max-w-xl">
+              {mode === 'assessment' ? '了解自己的內在動力，找到與 mentee 共同成長的最佳路徑' : `工號 ${employeeId} 的風格座標已完成。`}
+            </p>
+          </div>
+        </div>
+
+        <div className="p-6 md:p-10">
+          {mode === 'assessment' ? (
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center justify-between mb-10 px-4">
+                <div className="flex gap-2">
+                  <div className={`h-2 w-12 rounded-full ${currentStep >= 0 ? 'bg-indigo-500' : 'bg-slate-200'}`}></div>
+                  <div className={`h-2 w-12 rounded-full ${currentStep >= 1 ? 'bg-sky-500' : 'bg-slate-200'}`}></div>
+                  <div className={`h-2 w-12 rounded-full ${currentStep >= 2 ? 'bg-rose-400' : 'bg-slate-200'}`}></div>
+                </div>
+                <span className="text-xs font-black text-slate-300 uppercase tracking-widest">Step {currentStep + 1} / 3</span>
+              </div>
+
+              {currentStep === 0 && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="bg-indigo-50 p-8 rounded-3xl border border-indigo-100 text-center mb-8">
+                    <User className="w-12 h-12 text-indigo-500 mx-auto mb-4" />
+                    <h2 className="text-xl font-bold text-slate-800 mb-2">基本資料填寫</h2>
+                    <p className="text-sm text-slate-500 italic">在開始評測前，請先輸入您的工號以紀錄您的專屬軌跡。</p>
+                  </div>
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <label className="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">員工工號</label>
+                    <input 
+                      type="text" 
+                      value={employeeId}
+                      onChange={(e) => setEmployeeId(e.target.value)}
+                      placeholder="Input Employee ID..."
+                      className="w-full px-4 py-4 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none text-xl font-mono text-center tracking-widest"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 1 && renderQuestionSet(locQuestions, locAnswers, setLocAnswers, "第一階段：引導推動力 (Internal LOC)", <BookOpen className="text-sky-600" />, "border-sky-500")}
+              {currentStep === 2 && renderQuestionSet(proQuestions, proAnswers, setProAnswers, "第二階段：支持熱忱 (Prosocial)", <Heart className="text-rose-400" />, "border-rose-400")}
+              
+              <div className="mt-12 flex justify-between items-center border-t border-slate-100 pt-8">
+                <button 
+                  onClick={() => currentStep > 0 && setCurrentStep(currentStep - 1)}
+                  disabled={currentStep === 0}
+                  className={`text-sm font-bold flex items-center gap-2 ${currentStep === 0 ? 'opacity-0' : 'text-slate-400 hover:text-slate-600'}`}
+                >
+                  返回上一步
+                </button>
+                
+                <button 
+                  onClick={() => {
+                    if (currentStep < 2) setCurrentStep(currentStep + 1);
+                    else handleCompleteAssessment();
+                  }}
+                  disabled={!isStepComplete || isSubmitting}
+                  className={`px-10 py-3 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all shadow-lg ${
+                    isStepComplete 
+                    ? 'bg-slate-900 text-white hover:bg-slate-800 hover:-translate-y-1' 
+                    : 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                  }`}
+                >
+                  {isSubmitting ? <Loader2 className="animate-spin" /> : currentStep < 2 ? '繼續下一步' : '計算結果'}
+                  {!isSubmitting && <ArrowRight size={18} />}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-12 animate-in fade-in zoom-in-95 duration-700">
+              <div className="space-y-8">
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-inner">
+                  <div className="flex justify-between items-center mb-6">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">能量指標細節</h4>
+                    {submitStatus === 'success' && (
+                      <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-black">
+                        <Save size={10} /> 已存檔
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-8">
+                    <section>
+                      <div className="flex justify-between items-center mb-3">
+                        <label className="text-xs font-bold text-slate-700 flex items-center gap-2">
+                          <BookOpen size={14} className="text-sky-600" /> 引導推動力
+                        </label>
+                        <span className="text-xs font-mono font-bold text-sky-600">{internalLoc}%</span>
+                      </div>
+                      <input type="range" className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800" value={internalLoc} onChange={(e) => setInternalLoc(parseInt(e.target.value))} />
+                    </section>
+                    <section>
+                      <div className="flex justify-between items-center mb-3">
+                        <label className="text-xs font-bold text-slate-700 flex items-center gap-2">
+                          <Heart size={14} className="text-rose-500" /> 支持熱忱
+                        </label>
+                        <span className="text-xs font-mono font-bold text-rose-500">{prosocial}%</span>
+                      </div>
+                      <input type="range" className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800" value={prosocial} onChange={(e) => setProsocial(parseInt(e.target.value))} />
+                    </section>
+                  </div>
+                </div>
+
+                <div className={`rounded-3xl p-8 border-2 border-slate-50 bg-slate-50 shadow-sm transition-all duration-500`}>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className={`p-4 rounded-2xl shadow-xl ${analysis.color}`}>
+                      {analysis.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black text-slate-800 tracking-tight">{analysis.style}</h3>
+                      <p className="text-xs text-slate-400 mt-1 font-bold italic">{analysis.quote}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600 leading-relaxed font-medium mb-6">{analysis.description}</p>
+                  
+                  <div className="pt-6 border-t border-slate-200 flex justify-center">
+                    <button 
+                      onClick={() => { setMode('assessment'); setCurrentStep(0); setLocAnswers(Array(5).fill(0)); setProAnswers(Array(5).fill(0)); setSubmitStatus(null); }}
+                      className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:text-indigo-600 transition-colors"
+                    >
+                      <RotateCcw size={14} /> 重新探索 (變更工號)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col space-y-6">
+                <div className="relative aspect-square bg-white border-8 border-slate-50 rounded-[2.5rem] shadow-inner overflow-hidden">
+                   <div className="absolute top-1/2 left-0 w-full h-px bg-slate-100 -translate-y-1/2"></div>
+                   <div className="absolute top-0 left-1/2 w-px h-full bg-slate-100 -translate-x-1/2"></div>
+                   
+                   {/* 軸向標籤 */}
+                   <div className="absolute top-6 left-1/2 -translate-x-1/2 text-[9px] font-black text-slate-300 uppercase tracking-widest">高度支持熱忱</div>
+                   <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-black text-slate-300 uppercase tracking-widest">低度支持熱忱</div>
+                   
+                   <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-300 uppercase tracking-widest rotate-90">高度引導推動</div>
+                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-300 uppercase tracking-widest -rotate-90">低度引導推動</div>
+                   
+                   {/* 風格座標點：大小再縮小 10% (w-8 -> w-7)，並優化圓角 (rounded-lg) 與邊框 (border-2) */}
+                   <div 
+                    className={`absolute w-7 h-7 rounded-lg border-2 border-white shadow-xl transition-all duration-1000 ease-out ${analysis.color} flex items-center justify-center`}
+                    style={{ left: `${internalLoc}%`, bottom: `${prosocial}%`, transform: 'translate(-50%, 50%)' }}
+                  >
+                    <div className="w-1 h-1 bg-white rounded-full animate-ping"></div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-amber-50/50 p-6 rounded-2xl border border-amber-100 relative group">
+                    <div className="absolute -top-3 -right-3 bg-amber-100 p-2 rounded-full text-amber-600 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                       <Battery size={14} />
+                    </div>
+                    <h4 className="text-xs font-black text-amber-700 flex items-center gap-2 mb-3 uppercase tracking-wider underline decoration-amber-200 decoration-2 underline-offset-4">
+                      能量管理與自我照顧建議
+                    </h4>
+                    <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                      {analysis.energyAdvice}
+                    </p>
+                  </div>
+
+                  <div className="bg-sky-50/50 p-6 rounded-2xl border border-sky-100 relative group">
+                    <div className="absolute -top-3 -right-3 bg-sky-100 p-2 rounded-full text-sky-600 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                       <Sparkles size={14} />
+                    </div>
+                    <h4 className="text-xs font-black text-sky-700 flex items-center gap-2 mb-3 uppercase tracking-wider underline decoration-sky-200 decoration-2 underline-offset-4">
+                      導師成長的小小挑戰
+                    </h4>
+                    <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                      {analysis.growthTip}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-slate-50 border-t border-slate-100 p-8 text-center">
+          <p className="text-[10px] text-slate-400 font-bold italic tracking-[0.2em] uppercase">
+            — Be the light that warms others without burning out yourself —
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
