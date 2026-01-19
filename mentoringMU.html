@@ -116,7 +116,7 @@
                     color: "bg-indigo-500",
                     border: "border-indigo-500",
                     icon: "anchor",
-                    quote: "「精準的引導，能讓成長事半功倍。」",
+                    quote: "「精準的引導，能讓成長事半倍。」",
                     description: "你是一位風格乾脆、實事求是的導師。深信能力與方法是成功的關鍵，能提供清晰戰略。但在建立情感信任層面，投入較為節制。",
                     energyAdvice: "你的能量保護良好，但若 mentee 成長受阻，你可能會感到急躁。請將『建立心理安全感』視為一項必要的指標，提醒自己信任才是專業建議能被採納的前提。",
                     growthTip: "嘗試『脆弱力 (Vulnerability)』分享。在互動中分享一個你曾經搞砸的例子或失敗經驗。這能降低 mentee 的防衛心，縮短彼此的心理距離，讓你的專業建議更有影響力。"
@@ -243,7 +243,7 @@
                     <button onclick="prevStep()" class="text-sm font-bold flex items-center gap-2 text-slate-400 hover:text-slate-600 ${state.currentStep === 0 ? 'invisible' : ''}">
                         返回上一步
                     </button>
-                    <button onclick="nextStep()" ${!canNext ? 'disabled' : ''} 
+                    <button id="next-step-btn" onclick="nextStep()" ${!canNext ? 'disabled' : ''} 
                         class="px-10 py-3 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all shadow-lg ${canNext ? 'bg-slate-900 text-white hover:bg-slate-800 hover:-translate-y-1' : 'bg-slate-100 text-slate-300 cursor-not-allowed'}">
                         ${state.isSubmitting ? '處理中...' : (state.currentStep < 2 ? '繼續下一步' : '計算結果')}
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -253,10 +253,26 @@
             `;
             container.innerHTML = content;
 
+            // 修正：針對工號輸入框優化，避免頻繁 render 導致失去焦點
             if(state.currentStep === 0) {
-                document.getElementById('emp-id-input').addEventListener('input', (e) => {
+                const input = document.getElementById('emp-id-input');
+                input.focus();
+                // 將游標移至末尾
+                input.setSelectionRange(input.value.length, input.value.length);
+                
+                input.addEventListener('input', (e) => {
                     state.employeeId = e.target.value;
-                    render();
+                    // 僅更新按鈕狀態而不重新 render 全頁面
+                    const nextBtn = document.getElementById('next-step-btn');
+                    if (state.employeeId.trim().length > 0) {
+                        nextBtn.disabled = false;
+                        nextBtn.classList.remove('bg-slate-100', 'text-slate-300', 'cursor-not-allowed');
+                        nextBtn.classList.add('bg-slate-900', 'text-white', 'hover:bg-slate-800', 'hover:-translate-y-1');
+                    } else {
+                        nextBtn.disabled = true;
+                        nextBtn.classList.add('bg-slate-100', 'text-slate-300', 'cursor-not-allowed');
+                        nextBtn.classList.remove('bg-slate-900', 'text-white', 'hover:bg-slate-800', 'hover:-translate-y-1');
+                    }
                 });
             }
         }
