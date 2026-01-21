@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>導師風格探索地圖 V2</title>
+    <title>導師風格探索地圖</title>
     <!-- 引入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入 Lucide Icons -->
@@ -65,7 +65,8 @@
 
     <script>
         // --- 設定與資料 ---
-        const GOOGLE_SCRIPT_URL = ""; 
+        // 已填入您提供的 Google Apps Script 部署網址
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJzRGd9kMKedakcbK_Dl5WhDYHz8ltWz2M2udoC5sRPqB3E3XnX9s88XWlOpwdRZrEFg/exec"; 
 
         const state = {
             employeeId: '',
@@ -152,6 +153,7 @@
                 timestamp: new Date().toLocaleString()
             };
             try {
+                // 使用 no-cors 模式發送資料到 GAS
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -159,7 +161,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-            } catch (e) { console.error("Submit failed", e); }
+            } catch (e) { 
+                console.error("Submit failed", e); 
+            }
         }
 
         function render() {
