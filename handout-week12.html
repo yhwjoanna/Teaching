@@ -32,6 +32,7 @@
     line-height: 1.85;
     font-size: 17px;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
   /* 整體 layout：.page 與 TOC 視為整體置中
      計算邏輯：在 >=1240px 螢幕上，.page 與 TOC 一起置中（總寬約 880 + 32 + 200 = 1112px）
@@ -59,10 +60,9 @@
     font-family: "Fraunces", "Noto Serif TC", serif; font-weight: 500; font-size: 52px;
     line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 28px;
     font-variation-settings: "opsz" 144;
-    /* 中文標題斷行優化：避免在標點符號前換行、讓多行字數平均 */
+    /* 中文標題穩定斷行：確保長標題可換行、字數均衡 */
     text-wrap: balance;
-    line-break: strict;
-    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
   .lede { font-size: 19px; line-height: 1.7; color: var(--ink-soft); max-width: 620px; }
   .meta-row {
@@ -206,15 +206,18 @@
   @media (max-width: 1240px) { .toc { display: none; } }
   @media (max-width: 640px) {
     body { font-size: 16px; }
-    h1 { font-size: 36px; }
+    h1 { font-size: 32px; letter-spacing: -0.01em; max-width: 100%; }
     h2 { font-size: 28px; }
     h3 { font-size: 20px; }
     .meta-bar { font-size: 11px; padding: 12px 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
     header { padding: 48px 0 40px; }
-    .page { padding: 0 20px; }
+    .page { margin-left: auto; margin-right: auto; padding: 0 20px; }
     .takeaways, .concept, .self-check { padding: 28px 24px; }
     .compare-table { font-size: 13px; }
     .compare-table thead th, .compare-table tbody td { padding: 12px 10px; }
+  }
+  @media (max-width: 400px) {
+    h1 { font-size: 30px; }
   }
   @media print {
     .toc, .meta-bar { display: none; }
