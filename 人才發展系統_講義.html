@@ -1,0 +1,2978 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>人才發展實務 ｜ Talent Development in Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700;900&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #2c2c2c;
+    --ink-mute: #6b6b6b;
+    --ink-faint: #a8a8a8;
+    --paper: #faf8f3;
+    --paper-warm: #f4efe6;
+    --paper-cool: #ffffff;
+    --rule: #d4cfc4;
+    --rule-soft: #e8e4db;
+    --crimson: #8b1a1a;
+    --crimson-deep: #6b1414;
+    --crimson-soft: #f4e8e8;
+    --gold: #b8924a;
+    --navy: #1f3a5f;
+    --navy-soft: #e8edf3;
+    --sage: #4a5d4f;
+    --sage-soft: #e8ede9;
+    
+    --serif-display: 'Playfair Display', 'Noto Serif TC', serif;
+    --serif-tc: 'Noto Serif TC', 'Playfair Display', serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--serif-tc);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    background-image: 
+      radial-gradient(at 20% 10%, rgba(139, 26, 26, 0.02) 0px, transparent 50%),
+      radial-gradient(at 80% 90%, rgba(31, 58, 95, 0.02) 0px, transparent 50%);
+  }
+
+  /* ============ COVER ============ */
+  .cover {
+    min-height: auto;
+    padding: 56px 80px 48px;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 48px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--crimson) 0%, var(--crimson) 60%, var(--gold) 60%, var(--gold) 100%);
+  }
+
+  .cover-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .cover-header .institution {
+    font-weight: 600;
+    color: var(--crimson);
+  }
+
+  .cover-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 600;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cover-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+    max-width: 120px;
+  }
+
+  .cover h1 {
+    font-family: var(--serif-tc);
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+
+  .cover h1 .accent {
+    color: var(--crimson);
+    font-style: italic;
+    font-family: var(--serif-display);
+    font-weight: 500;
+  }
+
+  .cover-en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink-mute);
+    font-weight: 400;
+    margin-bottom: 48px;
+    letter-spacing: 0.01em;
+  }
+
+  .cover-abstract {
+    font-family: var(--serif-tc);
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--crimson);
+    padding-left: 24px;
+    font-weight: 400;
+  }
+
+  .cover-footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+  }
+
+  .cover-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .cover-meta-value {
+    font-family: var(--serif-tc);
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ============ TABLE OF CONTENTS ============ */
+  .toc {
+    padding: 64px 80px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper-warm);
+  }
+
+  .toc-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 36px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .toc-number {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 24px;
+    color: var(--crimson);
+  }
+
+  .toc-title {
+    font-family: var(--serif-tc);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .toc-list {
+    display: grid;
+    gap: 0;
+    max-width: 1100px;
+  }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 24px;
+    padding: 16px 0 16px 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    align-items: baseline;
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .toc-item:hover {
+    border-left-color: var(--crimson);
+    background: rgba(139, 26, 26, 0.025);
+  }
+
+  .toc-item-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 32px;
+    color: var(--crimson);
+    font-weight: 500;
+  }
+
+  .toc-item-content h3 {
+    font-family: var(--serif-tc);
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .toc-item-content p {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+  }
+
+  .toc-item-page {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+
+  /* ============ CHAPTER ============ */
+  .chapter {
+    padding: 64px 80px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chapter:nth-child(even) {
+    background: var(--paper-cool);
+  }
+
+  .chapter-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: end;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .chapter-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 72px;
+    line-height: 0.9;
+    color: var(--crimson);
+    font-weight: 500;
+  }
+
+  .chapter-title-group .label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .chapter-title-group h2 {
+    font-family: var(--serif-tc);
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+
+  .chapter-title-group .en-subtitle {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-mute);
+    font-weight: 400;
+  }
+
+  .chapter-intro {
+    font-family: var(--serif-tc);
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+
+  .chapter-intro .first-letter {
+    font-family: var(--serif-display);
+    font-size: 56px;
+    line-height: 0.9;
+    float: left;
+    color: var(--crimson);
+    padding-right: 16px;
+    padding-top: 6px;
+    font-weight: 700;
+  }
+
+  /* ============ SECTION ============ */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--crimson);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .section h3 {
+    font-family: var(--serif-tc);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .section h4 {
+    font-family: var(--serif-tc);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 16px;
+    color: var(--ink);
+  }
+
+  .section p {
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  /* ============ QUADRANT MATRIX ============ */
+  .matrix-wrapper {
+    margin: 20px 0 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .matrix-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .matrix-y-axis .axis-label {
+    writing-mode: vertical-rl;
+    text-align: center;
+    font-family: var(--serif-tc);
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    aspect-ratio: 16 / 8;
+  }
+
+  .matrix-cell {
+    padding: 18px 22px;
+    background: var(--paper-cool);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .matrix-cell.type-1 { background: linear-gradient(135deg, #1f3a5f 0%, #2c4d75 100%); color: var(--paper); }
+  .matrix-cell.type-2 { background: linear-gradient(135deg, #c5d3e4 0%, #d8e2ee 100%); }
+  .matrix-cell.type-3 { background: linear-gradient(135deg, #e8d4d4 0%, #f0dede 100%); }
+  .matrix-cell.type-4 { background: linear-gradient(135deg, #8b1a1a 0%, #6b1414 100%); color: var(--paper); }
+
+  .matrix-cell-tag {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+  }
+
+  .matrix-cell-title {
+    font-family: var(--serif-tc);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid currentColor;
+    display: inline-block;
+  }
+
+  .matrix-cell-desc {
+    font-family: var(--serif-tc);
+    font-size: 12.5px;
+    opacity: 0.85;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .matrix-cell-actions {
+    list-style: none;
+  }
+
+  .matrix-cell-actions li {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    line-height: 1.55;
+    padding-left: 12px;
+    position: relative;
+    margin-bottom: 3px;
+    opacity: 0.92;
+  }
+
+  .matrix-cell-actions li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    opacity: 0.6;
+  }
+
+  .matrix-x-axis {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  .matrix-x-axis .axis-center {
+    text-align: center;
+    font-family: var(--serif-tc);
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ============ OCM FRAMEWORK ============ */
+  .framework {
+    margin: 28px 0;
+    padding: 32px;
+    background: var(--paper-cool);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--crimson);
+  }
+
+  .framework-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .framework-header .label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .framework-header h4 {
+    font-family: var(--serif-tc);
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .framework-header .en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-mute);
+    margin-top: 4px;
+  }
+
+  .mechanism-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 240px;
+    gap: 24px;
+    align-items: stretch;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .mechanism-row:last-of-type {
+    border-bottom: none;
+  }
+
+  .mechanism-label {
+    font-family: var(--serif-tc);
+    font-weight: 700;
+    font-size: 18px;
+    padding: 4px 0 4px 16px;
+    border-left: 4px solid var(--crimson);
+    align-self: center;
+  }
+
+  .mechanism-label .num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--crimson);
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 500;
+  }
+
+  .mechanism-label .en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-mute);
+    display: block;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .mechanism-tools {
+    font-family: var(--serif-tc);
+    font-size: 13.5px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    align-self: center;
+  }
+
+  .mechanism-tools strong {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .mechanism-result {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: center;
+  }
+
+  .mechanism-result .theory {
+    font-family: var(--serif-tc);
+    font-size: 12.5px;
+    line-height: 1.55;
+    text-align: center;
+    padding: 8px 12px;
+    background: var(--paper-warm);
+    border: 1px dashed var(--rule);
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .mechanism-result .theory .en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-weight: 400;
+  }
+
+  .mechanism-result .output {
+    padding: 14px 16px;
+    background: var(--crimson-soft);
+    border: 1.5px solid var(--crimson);
+    text-align: center;
+  }
+
+  .mechanism-result .output-main {
+    font-family: var(--serif-tc);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--crimson-deep);
+    line-height: 1.25;
+  }
+
+  .mechanism-result .output-main .en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--crimson);
+    font-weight: 500;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .mechanism-result .output-add {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--crimson);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--crimson);
+    opacity: 0.75;
+    font-weight: 600;
+  }
+
+  .framework-outcome {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    font-family: var(--serif-tc);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+  }
+
+  .framework-outcome .arrow {
+    display: block;
+    font-size: 18px;
+    color: var(--gold);
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+
+  .framework-outcome strong {
+    color: var(--gold);
+    font-weight: 700;
+    margin: 0 4px;
+  }
+
+  .framework-outcome .en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    display: block;
+    margin-top: 6px;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  /* ============ TOOLS CATEGORY HEADING (CH 3) ============ */
+  .tool-category {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 24px 0 12px;
+    padding: 10px 16px 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .tool-category:first-of-type {
+    margin-top: 8px;
+  }
+
+  .tool-category .cat-letter {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 24px;
+    color: var(--crimson);
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .tool-category .cat-name-tc {
+    font-family: var(--serif-tc);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+
+  .tool-category .cat-name-en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  /* ============ OCM TOOLS GRID ============ */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: 16px 0 24px;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+
+  .tool-card {
+    padding: 18px 18px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper-cool);
+    transition: background 0.3s;
+  }
+
+  .tool-card:hover {
+    background: var(--crimson-soft);
+  }
+
+  .tool-card-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--crimson);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .tool-card-title {
+    font-family: var(--serif-tc);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tool-card-en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+
+  .tool-card-desc {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  .tool-card.is-summary {
+    background: var(--paper-warm);
+  }
+
+  .tool-card.is-summary .tool-card-num {
+    color: var(--ink-faint);
+  }
+
+  .tool-card.is-summary .tool-card-title {
+    color: var(--ink-mute);
+  }
+
+  /* ============ MAPPING TABLE ============ */
+  .mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-family: var(--serif-tc);
+    font-size: 14px;
+  }
+
+  .mapping-table thead {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .mapping-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .mapping-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .mapping-table tr:nth-child(even) {
+    background: var(--paper-warm);
+  }
+
+  .mapping-table .col-product {
+    font-weight: 600;
+    color: var(--crimson);
+    font-size: 15px;
+    width: 20%;
+  }
+
+  .mapping-table .col-scenario {
+    width: 24%;
+    color: var(--ink-soft);
+  }
+
+  .mapping-table .col-ocm {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    width: 38%;
+  }
+
+  .mapping-table .col-quadrant {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-soft);
+    width: 18%;
+  }
+
+  /* ============ EIGHT-PACK CARDS ============ */
+  .pack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 24px 0;
+  }
+
+  .pack-card {
+    padding: 22px 24px;
+    background: var(--paper-cool);
+    position: relative;
+  }
+
+  .pack-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  .pack-card-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--crimson);
+    font-weight: 500;
+  }
+
+  .pack-card-tag {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--crimson-deep);
+    font-weight: 700;
+    padding: 4px 10px;
+    border: 1px solid var(--crimson);
+    background: var(--crimson-soft);
+  }
+
+  .pack-card h4 {
+    font-family: var(--serif-tc);
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  .pack-card .scenario {
+    font-family: var(--serif-tc);
+    font-size: 14px;
+    color: var(--ink-mute);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .pack-card .actions {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    list-style: none;
+  }
+
+  .pack-card .actions li {
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .pack-card .actions li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--crimson);
+    font-size: 11px;
+    top: 4px;
+  }
+
+  /* ============ SYSTEM DIAGRAM ============ */
+  .system-diagram {
+    margin: 28px 0;
+    padding: 32px;
+    background: linear-gradient(180deg, var(--paper-warm) 0%, var(--paper-cool) 100%);
+    border: 1px solid var(--rule);
+  }
+
+  .system-layer {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+    padding: 16px 0;
+    align-items: center;
+    border-bottom: 1px dashed var(--rule);
+    position: relative;
+  }
+
+  .system-layer:last-child { border-bottom: none; }
+
+  .system-layer-label {
+    font-family: var(--serif-tc);
+    font-size: 16px;
+    font-weight: 700;
+    text-align: right;
+    padding-right: 24px;
+    border-right: 2px solid var(--crimson);
+  }
+
+  .system-layer-label .step {
+    display: block;
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--crimson);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .system-layer-content {
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .system-layer-content strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ============ CALLOUT / PULL QUOTE ============ */
+  .callout {
+    margin: 32px auto;
+    max-width: 760px;
+    padding: 28px 32px;
+    border-top: 3px solid var(--crimson);
+    border-bottom: 3px solid var(--crimson);
+    text-align: center;
+  }
+
+  .callout-quote {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .callout-attribution {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+
+  /* ============ KEY POINTS ============ */
+  .key-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+  }
+
+  .key-point {
+    border-top: 2px solid var(--ink);
+    padding-top: 12px;
+  }
+
+  .key-point-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--crimson);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .key-point h5 {
+    font-family: var(--serif-tc);
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .key-point p {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* ============ FOOTER ============ */
+  .colophon {
+    padding: 48px 80px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .colophon-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 32px;
+  }
+
+  .colophon h5 {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .colophon p, .colophon li {
+    font-family: var(--serif-tc);
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(250, 248, 243, 0.7);
+  }
+
+  .colophon ul { list-style: none; }
+
+  .colophon .ref-citation {
+    font-family: var(--serif-display);
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(250, 248, 243, 0.75);
+    letter-spacing: 0.01em;
+  }
+
+  .colophon .ref-journal {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .colophon-bottom {
+    padding-top: 20px;
+    border-top: 1px solid rgba(250, 248, 243, 0.15);
+    display: flex;
+    justify-content: center;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(250, 248, 243, 0.5);
+  }
+
+  /* ============ SUB SECTION HEADING ============ */
+  .sub-section-heading {
+    font-family: var(--serif-tc);
+    font-size: 22px;
+    font-weight: 700;
+    margin: 36px 0 18px;
+    padding-left: 14px;
+    position: relative;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .sub-section-heading::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 22px;
+    background: var(--crimson);
+  }
+
+  /* ============ SUB SECTION HEADING - END ============ */
+  /* ============ OCM DEEP DIVE CARDS ============ */
+  .ocm-legend {
+    margin-bottom: 28px;
+    padding: 18px 22px;
+    background: var(--paper-warm);
+    border-left: 4px solid var(--gold);
+  }
+
+  .ocm-legend-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .ocm-legend-tags {
+    font-family: var(--serif-tc);
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .ocm-category-band {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin: 32px 0 16px;
+    padding: 14px 20px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .ocm-category-band .cat-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .ocm-category-band .cat-name {
+    font-family: var(--serif-tc);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .ocm-category-band .cat-en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(250, 248, 243, 0.55);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-left: auto;
+    padding-left: 16px;
+    border-left: 1px solid rgba(250, 248, 243, 0.2);
+  }
+
+  .ocm-card {
+    margin-bottom: 16px;
+    background: var(--paper-cool);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--crimson);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    overflow: hidden;
+  }
+
+  .ocm-card-sidebar {
+    background: var(--paper-warm);
+    padding: 20px 20px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ocm-card-num {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--crimson);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .ocm-card-name-tc {
+    font-family: var(--serif-tc);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .ocm-card-name-en {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .ocm-card-quad-tags {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .ocm-card-quad-label {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .ocm-tag {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 4px 9px;
+    margin: 0 4px 6px 0;
+    border: 1px solid currentColor;
+  }
+
+  .ocm-tag.q1 { color: #1f3a5f; background: rgba(31, 58, 95, 0.06); }
+  .ocm-tag.q2 { color: #5a7090; background: rgba(90, 112, 144, 0.08); }
+  .ocm-tag.q3 { color: #a14545; background: rgba(161, 69, 69, 0.06); }
+  .ocm-tag.q4 { color: var(--crimson-deep); background: rgba(139, 26, 26, 0.06); }
+  .ocm-tag.qall { color: var(--ink-soft); background: var(--paper-warm); border-color: var(--rule); }
+  .ocm-tag.mgr { color: var(--sage); background: var(--sage-soft); }
+
+  .ocm-card-body {
+    padding: 20px 24px;
+  }
+
+  .ocm-block {
+    margin-bottom: 14px;
+  }
+
+  .ocm-block:last-child { margin-bottom: 0; }
+
+  .ocm-block-label {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    font-weight: 700;
+    margin-bottom: 6px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid var(--crimson);
+  }
+
+  .ocm-block-label.what { color: var(--crimson); border-color: var(--crimson); }
+  .ocm-block-label.when { color: var(--navy); border-color: var(--navy); }
+  .ocm-block-label.watch { color: var(--sage); border-color: var(--sage); }
+
+  .ocm-block p {
+    font-family: var(--serif-tc);
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: none;
+  }
+
+  .ocm-block ul {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+  }
+
+  .ocm-block ul li {
+    font-family: var(--serif-tc);
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .ocm-block ul li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--crimson);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  /* ============ RESPONSIVE ============ */
+
+  /* ---- Tablet & small desktop (≤ 1024px) ---- */
+  @media (max-width: 1024px) {
+    .cover, .chapter, .toc, .colophon { padding-left: 48px; padding-right: 48px; }
+    .cover h1 { font-size: 56px; }
+    .chapter-num { font-size: 64px; }
+    .chapter-title-group h2 { font-size: 34px; }
+    .chapter-title-group .en-subtitle { font-size: 19px; }
+    .mechanism-row {
+      grid-template-columns: 1fr 240px;
+      grid-template-areas:
+        "label  result"
+        "tools  result";
+      gap: 16px 20px;
+      padding: 16px 0;
+    }
+    .mechanism-label { grid-area: label; align-self: start; }
+    .mechanism-tools { grid-area: tools; }
+    .mechanism-result { grid-area: result; align-self: center; }
+    .mechanism-arrow::before, .mechanism-arrow::after { display: none; }
+    .matrix-wrapper { grid-template-columns: 1fr; gap: 12px; }
+    .matrix-y-axis { flex-direction: row; justify-content: space-between; padding: 0 8px; }
+    .matrix-y-axis .axis-label { writing-mode: horizontal-tb; transform: none; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    .pack-grid { grid-template-columns: 1fr; }
+    .key-points { grid-template-columns: 1fr; gap: 16px; }
+    .cover-footer { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .colophon-grid { grid-template-columns: 1fr; gap: 28px; }
+    .ocm-card { grid-template-columns: 200px 1fr; }
+    .system-layer { grid-template-columns: 140px 1fr; gap: 16px; }
+  }
+
+  /* ---- Tablet portrait & large phone (≤ 768px) ---- */
+  @media (max-width: 768px) {
+    body { font-size: 15px; }
+    .cover, .chapter, .toc, .colophon { padding-left: 32px; padding-right: 32px; }
+
+    /* Cover */
+    .cover { padding-top: 40px; padding-bottom: 36px; gap: 32px; }
+    .cover-header { font-size: 10px; gap: 12px; flex-wrap: wrap; }
+    .cover h1 { font-size: 44px; line-height: 1.12; }
+    .cover-abstract { font-size: 15.5px; padding-left: 18px; }
+    .cover-footer { grid-template-columns: 1fr 1fr; gap: 18px; padding-top: 20px; }
+    .cover-meta-value { font-size: 14px; }
+
+    /* TOC */
+    .toc { padding-top: 44px; padding-bottom: 44px; }
+    .toc-header { gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .toc-number { font-size: 18px; }
+    .toc-title { font-size: 28px; }
+    .toc-item { grid-template-columns: 40px 1fr auto; gap: 14px; padding: 14px 0; }
+    .toc-item:hover { padding-left: 0; }
+    .toc-item-num { font-size: 22px; }
+    .toc-item-content h3 { font-size: 17px; line-height: 1.4; }
+    .toc-item-content p { font-size: 12px; }
+    .toc-item-page { font-size: 11px; }
+
+    /* Chapter */
+    .chapter { padding-top: 48px; padding-bottom: 48px; }
+    .chapter-header { grid-template-columns: 1fr; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; }
+    .chapter-num { font-size: 48px; }
+    .chapter-title-group .label { font-size: 10px; letter-spacing: 0.2em; }
+    .chapter-title-group h2 { font-size: 28px; }
+    .chapter-title-group .en-subtitle { font-size: 16px; }
+    .chapter-intro { font-size: 15.5px; line-height: 1.75; margin-bottom: 28px; }
+    .chapter-intro .first-letter { font-size: 44px; padding-right: 8px; padding-top: 4px; }
+
+    /* Section */
+    .section { margin-bottom: 36px; }
+    .section h3 { font-size: 22px; }
+    .section h4 { font-size: 17px; }
+
+    /* Matrix */
+    .matrix-grid { aspect-ratio: auto; grid-template-columns: 1fr; }
+    .matrix-cell { padding: 18px 18px; min-height: 160px; }
+    .matrix-cell-title { font-size: 22px; }
+    .matrix-cell-desc { font-size: 12px; }
+    .matrix-cell-actions li { font-size: 12.5px; }
+
+    /* Framework */
+    .framework { padding: 20px 18px; }
+    .framework-header h4 { font-size: 20px; }
+    .mechanism-row {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "label"
+        "tools"
+        "result";
+      gap: 14px;
+      padding: 16px 0;
+    }
+    .mechanism-label { font-size: 16px; padding-left: 12px; }
+    .mechanism-tools { font-size: 13px; line-height: 1.75; }
+    .mechanism-result { flex-direction: row; gap: 10px; }
+    .mechanism-result .theory { flex: 1.4; font-size: 11.5px; padding: 8px 10px; }
+    .mechanism-result .output { flex: 1; padding: 10px 12px; }
+    .mechanism-result .output-main { font-size: 16px; }
+    .mechanism-result .output-main .en { font-size: 11px; }
+    .mechanism-result .output-add { font-size: 9.5px; }
+    .framework-outcome { font-size: 15px; padding: 14px; }
+    .framework-outcome .en { font-size: 12px; }
+
+    /* Tools grid */
+    .tools-grid { grid-template-columns: 1fr; }
+
+    /* OCM card */
+    .ocm-legend { padding: 14px 16px; margin-bottom: 20px; }
+    .ocm-legend-label { font-size: 10px; letter-spacing: 0.2em; }
+    .ocm-legend-tags { font-size: 12px; line-height: 1.9; }
+    .ocm-card { grid-template-columns: 1fr; margin-bottom: 14px; }
+    .ocm-card-sidebar { border-right: none; border-bottom: 1px solid var(--rule); padding: 16px 18px; }
+    .ocm-card-num { font-size: 28px; margin-bottom: 8px; }
+    .ocm-card-name-tc { font-size: 18px; }
+    .ocm-card-body { padding: 16px 18px; }
+    .ocm-block p, .ocm-block ul li { font-size: 13.5px; line-height: 1.7; }
+    .ocm-category-band { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+    .ocm-category-band .cat-en { margin-left: 0; flex-basis: 100%; }
+
+    /* Pack cards */
+    .pack-card { padding: 18px 18px; }
+    .pack-card-num { font-size: 28px; }
+    .pack-card h4 { font-size: 18px; }
+    .pack-card .scenario { font-size: 13px; }
+    .pack-card .actions { font-size: 12.5px; }
+
+    /* Table - horizontal scroll wrapper */
+    .mapping-table { display: block; overflow-x: auto; white-space: nowrap; font-size: 12.5px; }
+    .mapping-table thead, .mapping-table tbody, .mapping-table tr { display: table; width: 100%; table-layout: fixed; }
+    .mapping-table th, .mapping-table td { padding: 10px 12px; white-space: normal; }
+    .mapping-table .col-product { font-size: 13.5px; }
+
+    /* System diagram */
+    .system-diagram { padding: 20px 18px; }
+    .system-layer { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+    .system-layer-label { text-align: left; padding-right: 0; padding-left: 12px; border-right: none; border-left: 3px solid var(--crimson); font-size: 15px; }
+    .system-layer-content { font-size: 13.5px; }
+
+    /* Callout */
+    .callout { padding: 20px 22px; margin: 24px auto; }
+    .callout-quote { font-size: 19px; line-height: 1.55; }
+
+    /* Key points */
+    .key-points { gap: 14px; }
+    .key-point h5 { font-size: 16px; }
+    .key-point p { font-size: 13px; }
+
+    /* Inline h4 overrides */
+    h4[style*="margin: 36px 0 16px"] { margin: 24px 0 12px !important; font-size: 19px !important; }
+    h4[style*="margin: 0 0 16px"] { margin: 0 0 10px !important; font-size: 16px !important; }
+    h4[style*="margin: 20px 0 10px"] { margin: 16px 0 8px !important; font-size: 16px !important; }
+    .sub-section-heading { font-size: 19px; margin: 24px 0 12px; padding-left: 12px; }
+    .sub-section-heading::before { width: 3px; height: 18px; }
+
+    /* Colophon */
+    .colophon { padding-top: 36px; padding-bottom: 36px; }
+    .colophon-grid { gap: 24px; margin-bottom: 24px; }
+    .colophon-bottom { flex-direction: column; gap: 8px; font-size: 10px; letter-spacing: 0.1em; }
+    .colophon .ref-citation { font-size: 12.5px; }
+  }
+
+  /* ---- Small phone (≤ 480px) ---- */
+  @media (max-width: 480px) {
+    .cover, .chapter, .toc, .colophon { padding-left: 20px; padding-right: 20px; }
+
+    .cover { padding-top: 32px; padding-bottom: 28px; gap: 24px; }
+    .cover h1 { font-size: 34px; line-height: 1.15; }
+    .cover-en { font-size: 18px; }
+    .cover-abstract { font-size: 14.5px; padding-left: 14px; line-height: 1.75; }
+    .cover-footer { grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .toc { padding-top: 32px; padding-bottom: 32px; }
+    .toc-title { font-size: 22px; }
+    .toc-item { grid-template-columns: 28px 1fr; gap: 10px; padding: 12px 0; }
+    .toc-item-num { font-size: 18px; }
+    .toc-item-content h3 { font-size: 15px; }
+    .toc-item-content p { font-size: 11.5px; line-height: 1.5; }
+    .toc-item-page { display: none; }
+
+    .chapter { padding-top: 36px; padding-bottom: 36px; }
+    .chapter-num { font-size: 40px; }
+    .chapter-title-group h2 { font-size: 24px; }
+    .chapter-title-group .en-subtitle { font-size: 14px; }
+    .chapter-intro { font-size: 14.5px; }
+    .chapter-intro .first-letter { font-size: 36px; }
+
+    .section h3 { font-size: 19px; }
+    .section h4 { font-size: 16px; }
+
+    .matrix-cell { padding: 14px 14px; min-height: 140px; }
+    .matrix-cell-title { font-size: 19px; }
+
+    .framework { padding: 16px 14px; }
+    .framework-header h4 { font-size: 18px; }
+    .mechanism-result { flex-direction: column; }
+    .mechanism-result .theory { padding: 6px 10px; font-size: 11.5px; }
+    .mechanism-result .output { padding: 10px 12px; }
+
+    .ocm-card-sidebar { padding: 14px 14px; }
+    .ocm-card-body { padding: 14px 14px; }
+    .ocm-card-num { font-size: 24px; }
+    .ocm-card-name-tc { font-size: 17px; }
+    .ocm-card-name-en { font-size: 12px; }
+    .ocm-block p, .ocm-block ul li { font-size: 13px; }
+    .ocm-block ul li { padding-left: 14px; }
+
+    .pack-card { padding: 16px 14px; }
+    .pack-card h4 { font-size: 17px; }
+
+    .callout { padding: 18px 16px; }
+    .callout-quote { font-size: 17px; line-height: 1.55; }
+
+    .key-point h5 { font-size: 15px; }
+
+    .system-diagram { padding: 14px 12px; }
+    .system-layer-label { font-size: 14px; padding-left: 10px; }
+    .system-layer-content { font-size: 13px; }
+
+    .colophon { padding-top: 28px; padding-bottom: 28px; }
+    .colophon h5 { font-size: 10px; letter-spacing: 0.2em; }
+
+    /* OCM legend tags - keep readable */
+    .ocm-tag { font-size: 9.5px; padding: 3px 7px; margin: 0 3px 4px 0; }
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: white; }
+    .chapter, .toc { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<section class="cover">
+  <div class="cover-header">
+    <span class="institution">NSYSU</span>
+    <span>Vol. 01 ／ 2026 Edition</span>
+  </div>
+
+  <div class="cover-main">
+    <h1>
+      人才發展<span class="accent">實務</span><br>
+      Talent Development <span class="accent">in Practice</span>
+    </h1>
+    <p class="cover-abstract">
+      本講義整合情境領導四象限診斷、組織職涯管理（OCM）十五項實務方案、OCM-OCS 學術框架，並以業界常見的人才發展方案，建立一套從個體診斷到組織措施規劃的人才發展方案建議。
+    </p>
+  </div>
+
+  <div class="cover-footer">
+    <div>
+      <div class="cover-meta-label">Author</div>
+      <div class="cover-meta-value">王豫萱</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Institution</div>
+      <div class="cover-meta-value">國立中山大學</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Course</div>
+      <div class="cover-meta-value">績效管理與人才發展</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TABLE OF CONTENTS ==================== -->
+<section class="toc">
+  <div class="toc-header">
+    <span class="toc-number">Contents</span>
+    <span class="toc-title">目錄</span>
+  </div>
+
+  <div class="toc-list">
+    <a class="toc-item" href="#ch1">
+      <span class="toc-item-num">I</span>
+      <div class="toc-item-content">
+        <h3>診斷方法</h3>
+        <p>Diagnostic Methods ： Two-by-Two Matrices for People Assessment</p>
+      </div>
+      <span class="toc-item-page">p. 01</span>
+    </a>
+
+    <a class="toc-item" href="#ch2">
+      <span class="toc-item-num">II</span>
+      <div class="toc-item-content">
+        <h3>理論基礎</h3>
+        <p>Theoretical Foundation ： The OCM-OCS Integrated Framework</p>
+      </div>
+      <span class="toc-item-page">p. 02</span>
+    </a>
+
+    <a class="toc-item" href="#ch3">
+      <span class="toc-item-num">III</span>
+      <div class="toc-item-content">
+        <h3>方案清單</h3>
+        <p>Inventory of Practices ： Fifteen OCM Interventions</p>
+      </div>
+      <span class="toc-item-page">p. 03</span>
+    </a>
+
+    <a class="toc-item" href="#ch4">
+      <span class="toc-item-num">IV</span>
+      <div class="toc-item-content">
+        <h3>方案適用情境</h3>
+        <p>Fit & Context ： What It Is, Whom It Fits, What to Watch For</p>
+      </div>
+      <span class="toc-item-page">p. 04</span>
+    </a>
+
+    <a class="toc-item" href="#ch5">
+      <span class="toc-item-num">V</span>
+      <div class="toc-item-content">
+        <h3>實務案例</h3>
+        <p>Field Cases ： Eight Talent Development Playbooks</p>
+      </div>
+      <span class="toc-item-page">p. 05</span>
+    </a>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 1 ==================== -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">I</div>
+    <div class="chapter-title-group">
+      <div class="label">Diagnostic Methods ／ The Starting Point</div>
+      <h2>診斷方法</h2>
+      <div class="en-subtitle">Two-by-Two Matrices for People Assessment</div>
+    </div>
+  </div>
+
+  <p class="chapter-intro">
+    <span class="first-letter">人</span>才發展的起點不是方案，而是診斷。在投入任何發展資源之前，管理者必須先回答一個根本問題：眼前這位部屬，現在處於什麼位置？情境領導理論提醒我們，沒有放諸四海皆準的管理方式，員工在面對不同任務時，本就會落在不同象限。這個段落建立兩個基礎診斷方法：員工的能力 × 態度矩陣，以及主管的專業 × 管理矩陣。
+  </p>
+
+  <!-- Section 1.1 Employee Matrix -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 1.1</span>
+      <h3>員工四象限 ： 能力 × 態度</h3>
+    </div>
+    <p>橫軸為員工的能力高低，縱軸為員工的工作熱誠（態度）。同一位員工面對不同任務時，可能會落在不同象限，發展計畫應依任務情境設計。</p>
+
+    <div class="matrix-wrapper">
+      <div class="matrix-y-axis">
+        <span>良好 ↑</span>
+        <span class="axis-label">工 作 熱 誠</span>
+        <span>↓ 不佳</span>
+      </div>
+      <div>
+        <div class="matrix-grid">
+          <div class="matrix-cell type-3">
+            <div class="matrix-cell-tag">Type III</div>
+            <div class="matrix-cell-title">類型三</div>
+            <div class="matrix-cell-desc">能力不足 ／ 態度良好</div>
+            <ul class="matrix-cell-actions">
+              <li>實作指導，指派 mentor</li>
+              <li>增加頻繁的回饋次數</li>
+              <li>設定具體可達成的短期任務</li>
+              <li>給予直接可應用的教育訓練</li>
+              <li>重新規劃職務內容</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-1">
+            <div class="matrix-cell-tag">Type I</div>
+            <div class="matrix-cell-title">類型一</div>
+            <div class="matrix-cell-desc">能力足夠 ／ 態度良好</div>
+            <ul class="matrix-cell-actions">
+              <li>給予明確的獎勵</li>
+              <li>安排資深的 role model</li>
+              <li>規劃未來的發展方向</li>
+              <li>給予真誠且直接的回饋</li>
+              <li>請員工分享知識（當 mentor）</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-4">
+            <div class="matrix-cell-tag">Type IV</div>
+            <div class="matrix-cell-title">類型四</div>
+            <div class="matrix-cell-desc">能力不足 ／ 態度不佳</div>
+            <ul class="matrix-cell-actions">
+              <li>直接指出績效不彰問題</li>
+              <li>暫停加薪</li>
+              <li>降職</li>
+              <li>調職</li>
+              <li>解職</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-2">
+            <div class="matrix-cell-tag">Type II</div>
+            <div class="matrix-cell-title">類型二</div>
+            <div class="matrix-cell-desc">能力足夠 ／ 態度不佳</div>
+            <ul class="matrix-cell-actions">
+              <li>提供諮詢與關懷服務（EAP）</li>
+              <li>安排獨立作業（調職、專業升遷）</li>
+              <li>以團隊方式塑造友善氛圍</li>
+              <li>工作態度與動機的教育訓練</li>
+              <li>由第三方給予回饋</li>
+            </ul>
+          </div>
+        </div>
+        <div class="matrix-x-axis">
+          <span>← 不足</span>
+          <span class="axis-center">能 力</span>
+          <span>足夠 →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1.2 Manager Matrix -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">§ 1.2</span>
+      <h3>主管四象限 ： 專業 × 管理</h3>
+    </div>
+    <p>當對象從一般員工換成主管時，診斷軸線應該改變。橫軸是專業能力，縱軸是管理能力。主管的發展議題往往不是「能不能做事」，而是「能不能帶人」。</p>
+
+    <div class="matrix-wrapper">
+      <div class="matrix-y-axis">
+        <span>良好 ↑</span>
+        <span class="axis-label">管 理 能 力</span>
+        <span>↓ 不佳</span>
+      </div>
+      <div>
+        <div class="matrix-grid">
+          <div class="matrix-cell type-3">
+            <div class="matrix-cell-tag">Type III</div>
+            <div class="matrix-cell-title">類型三</div>
+            <div class="matrix-cell-desc">專業不足 ／ 管理良好</div>
+            <ul class="matrix-cell-actions">
+              <li>肯定正向態度與團隊關係</li>
+              <li>具體示範管理方法</li>
+              <li>避免「好人主管症候群」</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-1">
+            <div class="matrix-cell-tag">Type I</div>
+            <div class="matrix-cell-title">類型一</div>
+            <div class="matrix-cell-desc">專業足夠 ／ 管理良好</div>
+            <ul class="matrix-cell-actions">
+              <li>提供激勵性發展資源</li>
+              <li>擴大授權，保持回報機制</li>
+              <li>設定更高階的管理挑戰</li>
+              <li>留意流失與停滯風險</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-4">
+            <div class="matrix-cell-tag">Type IV</div>
+            <div class="matrix-cell-title">類型四</div>
+            <div class="matrix-cell-desc">專業不足 ／ 管理不佳</div>
+            <ul class="matrix-cell-actions">
+              <li>白紙黑字重申管理責任</li>
+              <li>用資料呈現認知差距</li>
+              <li>限期改善計畫（主管版 PIP）</li>
+              <li>無改善時啟動降階／調職</li>
+            </ul>
+          </div>
+          <div class="matrix-cell type-2">
+            <div class="matrix-cell-tag">Type II</div>
+            <div class="matrix-cell-title">類型二</div>
+            <div class="matrix-cell-desc">專業足夠 ／ 管理不佳</div>
+            <ul class="matrix-cell-actions">
+              <li>傾聽主管心聲，拆除防衛</li>
+              <li>用資料建立共同語言</li>
+              <li>找出態度不佳的真正原因</li>
+              <li>明確定義主管行為標準</li>
+            </ul>
+          </div>
+        </div>
+        <div class="matrix-x-axis">
+          <span>← 不足</span>
+          <span class="axis-center">專 業 能 力</span>
+          <span>足夠 →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="callout-quote">「同一個人，在不同任務情境下，可能屬於不同象限。診斷的對象不是人，而是人與任務的組合。」</p>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 2 ==================== -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">II</div>
+    <div class="chapter-title-group">
+      <div class="label">Theoretical Foundation</div>
+      <h2>理論基礎</h2>
+      <div class="en-subtitle">The OCM-OCS Integrated Framework</div>
+    </div>
+  </div>
+
+  <p class="chapter-intro">
+    <span class="first-letter">當</span>診斷完成，下一個問題是：要用什麼方案？而方案背後又有什麼運作邏輯？OCM-OCS 框架（Organizational Career Management → Objective Career Success）回答的正是這個問題。它把分散的人才發展方案，依運作機制歸納為三大類，並對應到不同的理論基礎。這套框架的最大貢獻，是讓 HR 不再只是方案的搬運工，而是機制的設計者。
+  </p>
+
+  <div class="framework">
+    <div class="framework-header">
+      <div class="label">Integrated Framework</div>
+      <h4>OCM-OCS 三大機制整合圖</h4>
+      <div class="en">Three Mechanisms Linking OCM Practices to Career Success</div>
+    </div>
+
+    <div class="mechanism-row">
+      <div class="mechanism-label">
+        <span class="num">Mechanism 01</span>
+        資訊機制
+        <span class="en">Informational</span>
+      </div>
+      <div class="mechanism-tools">
+        評鑑與發展中心（Assessment &amp; Development Centre）、績效考核（Performance Appraisal）、教育訓練（Training）、職涯路徑（Career Paths）、跨國任務（International Assignment）、內部職缺公告（Job Posting）、接班人計畫（Succession Planning）
+      </div>
+      <div class="mechanism-result">
+        <div class="theory">訊號理論<br><span class="en">Signalling Theory</span></div>
+        <div class="output">
+          <div class="output-main">資訊<br><span class="en">Information</span></div>
+          <div class="output-add">＋ 動機 Motivation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mechanism-row">
+      <div class="mechanism-label">
+        <span class="num">Mechanism 02</span>
+        發展機制
+        <span class="en">Developmental</span>
+      </div>
+      <div class="mechanism-tools">
+        <strong>人力資本路徑：</strong>教育訓練（Training）、外部研討會（External Seminars）、發展性任務（Developmental Assignment）、橫向調動（Lateral Moves）、工作輪調（Job Rotation）、跨國任務（International Assignment）、工作豐富化（Job Enrichment）<br>
+        <strong>社會學習路徑：</strong>師徒制（Mentoring）、人脈網絡（Networking）
+      </div>
+      <div class="mechanism-result">
+        <div class="theory">人力資本／社會學習理論<br><span class="en">Human Capital ／ Social Learning Theory</span></div>
+        <div class="output">
+          <div class="output-main">職能<br><span class="en">Competence</span></div>
+          <div class="output-add">＋ 動機 Motivation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mechanism-row">
+      <div class="mechanism-label">
+        <span class="num">Mechanism 03</span>
+        關係機制
+        <span class="en">Relational</span>
+      </div>
+      <div class="mechanism-tools">
+        <strong>發展性職涯路徑：</strong>師徒制（Mentoring）、人脈網絡（Networking）、職涯諮詢（Career Counselling）<br>
+        <strong>社會資本路徑：</strong>發展性任務（Developmental Assignment）、跨國任務（International Assignment）、職涯工作坊（Career Workshops）
+      </div>
+      <div class="mechanism-result">
+        <div class="theory">發展性職涯／社會資本理論<br><span class="en">Developmental Career ／ Social Capital Theory</span></div>
+        <div class="output">
+          <div class="output-main">關係<br><span class="en">Relationship</span></div>
+          <div class="output-add">＋ 動機 Motivation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="framework-outcome">
+      <span class="arrow">↓</span>
+      透過個人績效（Individual Performance）達成
+      <strong>客觀職涯成功</strong>
+      <span class="en">Objective Career Success</span>
+    </div>
+  </div>
+
+  <h4 class="sub-section-heading">重點提醒</h4>
+
+  <div class="key-points">
+    <div class="key-point">
+      <div class="key-point-num">Observation 01</div>
+      <h5>同一方案可橫跨多重機制</h5>
+      <p>例如跨國任務（International Assignment）同時出現在三大機制中；師徒制（Mentoring）同時屬於發展與關係機制。這暗示高槓桿方案（外派、師徒制、發展性任務）值得優先投資。</p>
+    </div>
+    <div class="key-point">
+      <div class="key-point-num">Observation 02</div>
+      <h5>動機是貫穿所有機制的隱形變項</h5>
+      <p>無論是資訊、職能或關係，最終都必須透過動機才能轉化為實際行為。沒有動機，再好的方案都會空轉。</p>
+    </div>
+    <div class="key-point">
+      <div class="key-point-num">Observation 03</div>
+      <h5>調節變項決定方案的效果</h5>
+      <p>個人特徵（職涯階段、性別）、組織特徵（主管支持、文化）與制度特徵（國家文化、勞動法規）會決定同一方案在不同情境下的效果差異。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 3 ==================== -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">III</div>
+    <div class="chapter-title-group">
+      <div class="label">Inventory of Practices</div>
+      <h2>方案清單</h2>
+      <div class="en-subtitle">Fifteen OCM Interventions in Practice</div>
+    </div>
+  </div>
+
+  <p class="chapter-intro">
+    <span class="first-letter">理</span>論之後，是方案。這個段落列舉 OCM 框架下最常被使用的十五項實務方案，依功能性質分為五大類：診斷評估、學習發展、實務歷練、關係支持、結構機制。每項方案皆對應前一段的三大機制之一或多個，是 HR 與業務主管在規劃人才發展時的選單。
+  </p>
+
+  <div class="tool-category"><span class="cat-letter">A</span><span class="cat-name-tc">診斷評估類</span><span class="cat-name-en">Assessment</span></div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-card-num">01</div>
+      <div class="tool-card-title">評鑑中心 ／ 發展中心</div>
+      <div class="tool-card-en">Assessment & Development Centre</div>
+      <div class="tool-card-desc">透過模擬演練、心理測驗、結構化面談，評估員工潛力並提供發展建議。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">02</div>
+      <div class="tool-card-title">職涯諮詢</div>
+      <div class="tool-card-en">Career Counselling</div>
+      <div class="tool-card-desc">一對一深度對談，協助員工釐清職涯方向與發展選擇。</div>
+    </div>
+    <div class="tool-card is-summary">
+      <div class="tool-card-num">—</div>
+      <div class="tool-card-title">類別小結</div>
+      <div class="tool-card-desc">提供員工關於自身能力與發展方向的客觀資訊，是所有發展計畫的起點。</div>
+    </div>
+  </div>
+
+  <div class="tool-category"><span class="cat-letter">B</span><span class="cat-name-tc">學習發展類</span><span class="cat-name-en">Learning</span></div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-card-num">03</div>
+      <div class="tool-card-title">教育訓練</div>
+      <div class="tool-card-en">Training</div>
+      <div class="tool-card-desc">針對特定知識技能的系統性課程。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">04</div>
+      <div class="tool-card-title">外部研討會 ／ 研習</div>
+      <div class="tool-card-en">External Seminars</div>
+      <div class="tool-card-desc">透過外部專業活動拓展視野與專業深度。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">05</div>
+      <div class="tool-card-title">職涯工作坊</div>
+      <div class="tool-card-en">Career Workshops</div>
+      <div class="tool-card-desc">團體式的職涯探索與規劃活動。</div>
+    </div>
+    <div class="tool-card is-summary">
+      <div class="tool-card-num">—</div>
+      <div class="tool-card-title">類別小結</div>
+      <div class="tool-card-desc">建構員工的知識與技能基底，從正式課程到自主探索都涵蓋其中。</div>
+    </div>
+  </div>
+
+  <div class="tool-category"><span class="cat-letter">C</span><span class="cat-name-tc">實務歷練類</span><span class="cat-name-en">Experience</span></div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-card-num">06</div>
+      <div class="tool-card-title">發展性任務</div>
+      <div class="tool-card-en">Developmental Assignment</div>
+      <div class="tool-card-desc">刻意設計具挑戰性的任務以促進能力成長。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">07</div>
+      <div class="tool-card-title">工作輪調</div>
+      <div class="tool-card-en">Job Rotation</div>
+      <div class="tool-card-desc">在不同職務間定期輪換，建立跨領域能力。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">08</div>
+      <div class="tool-card-title">工作豐富化</div>
+      <div class="tool-card-en">Job Enrichment</div>
+      <div class="tool-card-desc">垂直擴展職務內容，增加自主權與責任。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">09</div>
+      <div class="tool-card-title">橫向調動</div>
+      <div class="tool-card-en">Lateral Moves</div>
+      <div class="tool-card-desc">平行轉換到不同部門或職能。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">10</div>
+      <div class="tool-card-title">跨國任務 ／ 外派</div>
+      <div class="tool-card-en">International Assignment</div>
+      <div class="tool-card-desc">派駐海外，培養國際視野與跨文化能力。橫跨三大機制的高槓桿方案。</div>
+    </div>
+    <div class="tool-card is-summary">
+      <div class="tool-card-num">—</div>
+      <div class="tool-card-title">類別小結</div>
+      <div class="tool-card-desc">人力資本理論下最核心的能力建構方案群，透過做中學累積職能。</div>
+    </div>
+  </div>
+
+  <div class="tool-category"><span class="cat-letter">D</span><span class="cat-name-tc">關係支持類</span><span class="cat-name-en">Relationship</span></div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-card-num">11</div>
+      <div class="tool-card-title">師徒制</div>
+      <div class="tool-card-en">Mentoring</div>
+      <div class="tool-card-desc">資深者指導資淺者的長期關係。橫跨發展與關係機制。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">12</div>
+      <div class="tool-card-title">人脈網絡</div>
+      <div class="tool-card-en">Networking</div>
+      <div class="tool-card-desc">建立組織內外的專業連結，累積社會資本。</div>
+    </div>
+    <div class="tool-card is-summary">
+      <div class="tool-card-num">—</div>
+      <div class="tool-card-title">類別小結</div>
+      <div class="tool-card-desc">社會資本理論的具體方案，效果常在中長期顯現，難以短期量化。</div>
+    </div>
+  </div>
+
+  <div class="tool-category"><span class="cat-letter">E</span><span class="cat-name-tc">結構機制類</span><span class="cat-name-en">Structure</span></div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-card-num">13</div>
+      <div class="tool-card-title">職涯路徑</div>
+      <div class="tool-card-en">Career Paths</div>
+      <div class="tool-card-desc">組織預先規劃的職涯軌道與晉升路線，常見如雙軌制。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">14</div>
+      <div class="tool-card-title">內部職缺公告</div>
+      <div class="tool-card-en">Job Posting</div>
+      <div class="tool-card-desc">公開內部職缺，鼓勵內部流動。</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-card-num">15</div>
+      <div class="tool-card-title">接班人計畫</div>
+      <div class="tool-card-en">Succession Planning</div>
+      <div class="tool-card-desc">針對關鍵職位預先培養接班人選。</div>
+    </div>
+    <div class="tool-card is-summary">
+      <div class="tool-card-num">—</div>
+      <div class="tool-card-title">類別小結</div>
+      <div class="tool-card-desc">建立組織層級的人才流動制度與長期規劃，是其他方案得以持續運作的骨架。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 4 ：OCM DEEP DIVE ==================== -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">IV</div>
+    <div class="chapter-title-group">
+      <div class="label">Fit & Context</div>
+      <h2>方案適用情境</h2>
+      <div class="en-subtitle">What It Is, Whom It Fits, What to Watch For</div>
+    </div>
+  </div>
+
+  <p class="chapter-intro">
+    <span class="first-letter">前</span>一段列出了十五項 OCM 方案的概覽，但真正的決策困難不在於知道有哪些方案，而在於知道每項方案該用在誰身上、何時別用、用了之後可能踩到什麼坑。這個段落把每項方案拆成三個面向：內容是什麼（What）、適合哪些象限的人（When ／ Who）、執行上的風險（Watch-outs）。閱讀時建議搭配第一段的四象限矩陣與第二段的三大機制框架交叉對照。
+  </p>
+
+  <div class="ocm-legend">
+    <div class="ocm-legend-label">Reading Legend ／ 象限標籤對照</div>
+    <div class="ocm-legend-tags">
+      <span class="ocm-tag q1">員工 Q1 ：高能力高態度</span>
+      <span class="ocm-tag q2">員工 Q2 ：高能力低態度</span>
+      <span class="ocm-tag q3">員工 Q3 ：低能力高態度</span>
+      <span class="ocm-tag q4">員工 Q4 ：低能力低態度</span>
+      <span class="ocm-tag qall">員工全象限</span>
+      <span class="ocm-tag mgr">主管適用</span>
+    </div>
+  </div>
+
+  <!-- ============ A. 診斷評估類 ============ -->
+  <div class="ocm-category-band">
+    <span class="cat-num">A</span>
+    <span class="cat-name">診斷評估類</span>
+    <span class="cat-en">Assessment & Diagnostics</span>
+  </div>
+
+  <!-- 01 Assessment Centre -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">01</div>
+      <div class="ocm-card-name-tc">評鑑中心 ／ 發展中心</div>
+      <div class="ocm-card-name-en">Assessment & Development Centre</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag q3">Q3</span>
+        <span class="ocm-tag mgr">主管 Q1 ／ Q2</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>透過情境模擬演練（in-basket、role play、leaderless group discussion）、心理測驗、結構化面談等多元評估方法，由經過訓練的觀察員針對特定能力項目（如決策、領導、溝通、抗壓）做出標準化評分。產出包含個人能力雷達圖、發展建議報告，與後續訓練計畫。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>高潛人才（Q1）：用於識別接班候選人，提供差異化發展資源</li>
+          <li>有意願但能力待補的部屬（Q3）：找出能力缺口，設計針對性訓練</li>
+          <li>新晉主管或候選主管：驗證管理職轉換的準備度</li>
+          <li>不適用於 Q4，績效不彰時應直接走績效改善流程而非耗費評鑑資源</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>成本高昂，一場標準評鑑中心動輒新台幣數十萬以上，中小企業常難以負擔</li>
+          <li>評鑑結果若未連結後續發展資源，員工會將其視為「審判」而非「發展」</li>
+          <li>觀察員的訓練品質直接決定信效度，缺乏訓練的內部主管常產生月暈效應</li>
+          <li>受評者可能會「演戲」，需搭配工作現場的長期觀察才能交叉驗證</li>
+          <li>應避免把評鑑結果直接等同於升遷依據，否則會扭曲評鑑文化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Career Counselling -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">02</div>
+      <div class="ocm-card-name-tc">職涯諮詢</div>
+      <div class="ocm-card-name-en">Career Counselling</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q2">Q2</span>
+        <span class="ocm-tag q3">Q3</span>
+        <span class="ocm-tag qall">職涯轉換期</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>由 HR、外部顧問或受過訓練的主管，與員工進行一對一深度對談，協助員工釐清自身興趣、價值觀、能力，並對應到組織內的可能路徑。常見議題包含：是否轉換職能、是否走管理職、職涯停滯感的處理、退休前的角色調整。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>能力夠但動機低的員工（Q2）：可能源於職涯方向迷失，諮詢可幫助重新對焦</li>
+          <li>有熱誠但能力受限的員工（Q3）：探討是否需要轉換到更適合的職位</li>
+          <li>面臨職涯轉折點：升遷、調動、產假回任、屆退年齡</li>
+          <li>主管 Q2（專業足夠但管理不佳）：探討真正的管理意願與適配性</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>諮詢師若由直屬主管擔任，員工會擔心揭露內心想法影響評價，難以真誠對話</li>
+          <li>諮詢結果若無組織端的後續資源（如調動機會、訓練名額），會變成空談</li>
+          <li>未受訓練的諮詢者容易變成單方面說教，反而強化員工的離職念頭</li>
+          <li>對話內容的保密邊界要事先講清楚，例如哪些資訊會回傳給主管</li>
+          <li>不適合用在績效不彰的場景，那是績效面談而非職涯諮詢</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ B. 學習發展類 ============ -->
+  <div class="ocm-category-band">
+    <span class="cat-num">B</span>
+    <span class="cat-name">學習發展類</span>
+    <span class="cat-en">Learning & Education</span>
+  </div>
+
+  <!-- 03 Training -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">03</div>
+      <div class="ocm-card-name-tc">教育訓練</div>
+      <div class="ocm-card-name-en">Training</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q3">Q3</span>
+        <span class="ocm-tag qall">全員</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>針對特定知識、技能或行為的系統性課程設計，包含內訓、外訓、線上課程、認證學習等形式。可分為新人訓、職能訓、管理訓、合規訓四大類，每類有不同的教學設計邏輯。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>低能力高態度（Q3）：訓練效果最好的對象，動機已具備</li>
+          <li>新進員工：建立基本職能與組織社會化</li>
+          <li>職務轉換期：橫向調動或晉升前的銜接訓練</li>
+          <li>不適合 Q2（高能力低態度），訓練解決不了動機問題</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>訓練移轉率（learning transfer）平均不到 30％，課程結束後若無回到工作崗位的應用機制，多半淪為走過場</li>
+          <li>用訓練解決所有問題是 HR 最常見的反射動作，但能力缺口只是諸多原因之一</li>
+          <li>過度堆疊訓練時數會變成員工的「合規負擔」，傷害真正的學習意願</li>
+          <li>缺乏訓後成效追蹤，難以對經營層證明投資回報</li>
+          <li>應避免把訓練當成「員工福利」的修辭，會降低訓練的嚴肅性</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 External Seminars -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">04</div>
+      <div class="ocm-card-name-tc">外部研討會 ／ 研習</div>
+      <div class="ocm-card-name-en">External Seminars</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag mgr">主管 Q1</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>支持員工參與組織外的研討會、產業論壇、學術會議、認證課程或專業協會活動。除了取得新知，更重要的是建立外部專業網絡，並把外部觀點帶回組織。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>高能力高態度的員工（Q1）：擴展視野，避免陷入組織內部的視野侷限</li>
+          <li>關鍵人才與接班候選人：建立業界能見度與專業聲望</li>
+          <li>主管 Q1：透過外部高階交流維持其挑戰感與成長感</li>
+          <li>專業職員工：技術專家通過外部會議維持專業領先</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>名額分配若不透明，會被視為主管寵兒的特權，傷害組織公平感</li>
+          <li>外部會議的內容回饋若無分享機制，組織學習效益僅止於個人</li>
+          <li>過度頻繁的外部活動可能變成資深員工的「逃離工作機制」</li>
+          <li>差旅成本控管要清楚，避免變相的福利競賽</li>
+          <li>應要求參與者提交分享報告或內部分享會，把外部知識內化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Career Workshops -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">05</div>
+      <div class="ocm-card-name-tc">職涯工作坊</div>
+      <div class="ocm-card-name-en">Career Workshops</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q2">Q2</span>
+        <span class="ocm-tag q3">Q3</span>
+        <span class="ocm-tag qall">職涯規劃期</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>團體形式的職涯探索與規劃活動，包含自我評估工具（如 MBTI、Holland、職涯錨）、職涯路徑說明、目標設定、行動計畫等模組。透過同儕互動建立社會資本，同時讓員工系統性地思考自身職涯。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>需要重新對焦的員工（Q2）：透過群體討論看到不同的職涯可能性</li>
+          <li>對未來方向迷茫的員工（Q3）：建立職涯思考的結構</li>
+          <li>新人滿一年的階段性回顧</li>
+          <li>大規模組織變革或重組時期，協助員工集體調適</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>工作坊容易變成情緒抒發大會，需要有經驗的引導者控節奏</li>
+          <li>若組織並無真正的內部流動機制，工作坊反而會放大員工的失落感</li>
+          <li>群體規模過大（30 人以上）會降低深度互動的可能</li>
+          <li>應避免一次性活動，需要設計後續的追蹤與行動方案</li>
+          <li>同部門員工同時參與會抑制坦誠對話，建議跨部門混合編組</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ C. 實務歷練類 ============ -->
+  <div class="ocm-category-band">
+    <span class="cat-num">C</span>
+    <span class="cat-name">實務歷練類</span>
+    <span class="cat-en">Experiential Development</span>
+  </div>
+
+  <!-- 06 Developmental Assignment -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">06</div>
+      <div class="ocm-card-name-tc">發展性任務</div>
+      <div class="ocm-card-name-en">Developmental Assignment</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag mgr">主管 Q1</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>刻意設計超出員工目前能力範圍、具明確學習目的的挑戰性任務，例如：跨部門專案領導、新事業籌備、危機處理、客戶救援。屬於「做中學」典範，70-20-10 學習模型中的核心 70％。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>高潛人才（Q1）：透過真實挑戰加速能力成長</li>
+          <li>接班候選人：在實戰中驗證其管理潛力</li>
+          <li>主管 Q1：給予更高階的管理任務以防止停滯</li>
+          <li>不適合 Q3、Q4，能力差距過大會造成挫敗而非成長</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>失敗成本過高的任務不適合作為發展性任務，員工承擔不起</li>
+          <li>缺乏 mentor 或 sponsor 支援時，發展性任務會變成「丟到水裡看會不會游泳」</li>
+          <li>任務本身的「發展性」必須事先言明，否則員工只感受到工作量增加</li>
+          <li>需要明確的學習目標與回顧機制，否則做完就過了，沒有沉澱</li>
+          <li>原職務的職責應有適當調整，避免變成兩份工作的疊加</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 Job Rotation -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">07</div>
+      <div class="ocm-card-name-tc">工作輪調</div>
+      <div class="ocm-card-name-en">Job Rotation</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag q2">Q2</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>有計畫地讓員工在不同職務、部門或地點間定期輪換，通常 6 個月到 2 年一輪。常見於管培生計畫、儲備幹部養成、銀行業全行通才養成。目的是建立跨領域視野與通才能力。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>高潛人才（Q1）：建立未來高階管理者所需的跨領域視野</li>
+          <li>失去動機的資深員工（Q2）：透過環境改變重新激勵</li>
+          <li>儲備幹部、管培生：系統化的職能建構</li>
+          <li>銀行、製造業、零售業等需要通才管理者的產業</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>輪調期過短（少於 6 個月）會變成蜻蜓點水，無法產生實質學習</li>
+          <li>接收部門可能不歡迎輪調者，認為是麻煩而非貢獻者</li>
+          <li>輪調員工的績效評估標準需特別設計，否則會在過渡期被低估</li>
+          <li>專業導向的員工可能抗拒輪調，認為打斷專業累積</li>
+          <li>缺乏輪調後的整合性反思機制，會讓多年累積零散化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 Job Enrichment -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">08</div>
+      <div class="ocm-card-name-tc">工作豐富化</div>
+      <div class="ocm-card-name-en">Job Enrichment</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag q2">Q2</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>垂直擴展職務的深度，增加員工的自主性、責任範圍、決策權與整體性。源於 Hackman & Oldham 的工作特性模型（JCM），強調技能多樣性、任務完整性、任務重要性、自主性、回饋性五個核心面向。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>已有能力但動機下滑的員工（Q2）：透過增加自主權重新點燃投入</li>
+          <li>高潛人才（Q1）：在現職就先擴大責任範圍，預備晉升</li>
+          <li>長期在同一職位的資深員工：避免職涯停滯感</li>
+          <li>知識工作者：自主性是核心激勵因子</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>並非所有員工都歡迎更多責任，部分員工偏好工作邊界清楚</li>
+          <li>授權若不伴隨對應的權限與資源，會變成「責任轉嫁」而非豐富化</li>
+          <li>主管的放手能力是關鍵瓶頸，控制慾強的主管會讓豐富化失敗</li>
+          <li>薪資若無同步調整，員工會覺得是被剝削</li>
+          <li>應與 KPI 設計同步調整，否則員工承擔了新責任卻無對應評估</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 Lateral Moves -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">09</div>
+      <div class="ocm-card-name-tc">橫向調動</div>
+      <div class="ocm-card-name-en">Lateral Moves</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q2">Q2</span>
+        <span class="ocm-tag q3">Q3</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>平行轉換到不同部門或職能的調動，職等與薪資維持不變但工作內容改變。與工作輪調不同的是，橫向調動通常是永久性的職涯轉換，而非短期性的歷練。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>動機下滑但能力夠的員工（Q2）：環境改變可能重新激勵</li>
+          <li>有熱誠但目前職位不適配的員工（Q3）：找到更適合的舞台</li>
+          <li>升遷機會有限時的替代方案：以橫向擴展取代垂直晉升</li>
+          <li>面臨組織重組的部門：協助員工找到新位置</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>傳統職涯觀念認為橫向 = 不被重用，需透過溝通重塑認知</li>
+          <li>釋出員工的部門主管常不願放人，需建立組織層級的調動機制</li>
+          <li>新部門的同事可能會視調動者為「被打發過來的」，影響融入</li>
+          <li>學習曲線期間的績效落差，需要過渡期的考核保護</li>
+          <li>過度頻繁的橫向調動會被外界解讀為跳槽傾向，影響員工未來職涯</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 International Assignment -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">10</div>
+      <div class="ocm-card-name-tc">跨國任務 ／ 外派</div>
+      <div class="ocm-card-name-en">International Assignment</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag mgr">主管 Q1</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>派駐海外擔任特定職務，期間通常 2-5 年。是 OCM 方案中橫跨三大機制的最高槓桿方案：傳遞組織重視的訊號（資訊）、加速能力建構（發展）、建立跨國人脈（關係）。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>高潛人才（Q1）：作為晉升高階主管前的關鍵歷練</li>
+          <li>有國際視野潛力的接班候選人</li>
+          <li>主管 Q1：擴大其管理場域與文化複雜度</li>
+          <li>不適合 Q3、Q4，跨文化挑戰會放大現有問題</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>外派失敗率國際統計可達 20-40％，文化適應與家庭因素是主因</li>
+          <li>回任安置（repatriation）是最常被忽略的環節，許多外派員工回任後 2 年內離職</li>
+          <li>外派加給若處理不當，會造成內部員工的相對剝奪感</li>
+          <li>配偶就業、子女教育是隱藏成本，需事先處理</li>
+          <li>外派期間原團隊的關係斷裂，回任後常面臨「圈子已不在」的孤立感</li>
+          <li>應建立外派前的文化訓練、外派中的母國連結、外派後的回任安置三階段機制</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ D. 關係支持類 ============ -->
+  <div class="ocm-category-band">
+    <span class="cat-num">D</span>
+    <span class="cat-name">關係支持類</span>
+    <span class="cat-en">Relational Support</span>
+  </div>
+
+  <!-- 11 Mentoring -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">11</div>
+      <div class="ocm-card-name-tc">師徒制</div>
+      <div class="ocm-card-name-en">Mentoring</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag q3">Q3</span>
+        <span class="ocm-tag mgr">主管 Q3</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>由資深員工（mentor）與資淺員工（mentee）建立長期的一對一指導關係，提供兩種功能：職涯功能（指導、保護、能見度、挑戰性任務分配）與心理社會功能（角色示範、接納、諮詢、友誼）。可分為正式制度化與非正式自然形成兩類。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>新進員工或新人留任 90 天計畫：協助組織社會化</li>
+          <li>低能力高態度（Q3）：mentor 提供技能傳承</li>
+          <li>高潛人才（Q1）：mentor 提供職涯指導與內部能見度</li>
+          <li>新晉主管（主管 Q3）：學習管理方法的最佳途徑</li>
+          <li>女性或少數族群員工：協助突破隱形天花板</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>配對品質決定成敗，強制配對的失敗率遠高於雙向選擇</li>
+          <li>Mentor 若未受訓練，容易變成單向說教而非雙向關係</li>
+          <li>Mentor 的時間投入若無組織認可，會逐漸流失意願</li>
+          <li>跨層級的關係容易變成派系基礎，需注意組織政治效應</li>
+          <li>mentor 與部屬的直屬主管之間角色重疊，需事先界定邊界</li>
+          <li>正式制度化的師徒制若無持續活化，會淪為形式</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 Networking -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">12</div>
+      <div class="ocm-card-name-tc">人脈網絡</div>
+      <div class="ocm-card-name-en">Networking</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag qall">全員適用</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>組織透過跨部門專案、社團活動、Town Hall、興趣社群、線上協作平台等機制，協助員工建立組織內外的專業連結，累積社會資本。人脈網絡（Networking）既是方案也是結果，是社會資本理論在 OCM 中的具體呈現。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>跨部門合作頻繁的組織：建立非正式協作管道</li>
+          <li>高潛人才（Q1）：擴展其組織內部的能見度與資源連結</li>
+          <li>遠距或混合工作模式：填補實體互動不足造成的關係斷裂</li>
+          <li>新進員工：透過 networking 加速組織融入</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>內向型員工可能對 networking 活動產生抗拒，需設計多元形式</li>
+          <li>過度強調人脈會變相鼓勵組織政治，傷害實作型員工</li>
+          <li>networking 的成效難以量化，常被視為「軟性活動」而被預算優先砍除</li>
+          <li>若僅止於聚餐活動，無實質的協作機制，效果有限</li>
+          <li>應注意性別差異，某些 networking 形式（如球敘、酒局）會排除特定群體</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ E. 結構機制類 ============ -->
+  <div class="ocm-category-band">
+    <span class="cat-num">E</span>
+    <span class="cat-name">結構機制類</span>
+    <span class="cat-en">Structural Mechanisms</span>
+  </div>
+
+  <!-- 13 Career Paths -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">13</div>
+      <div class="ocm-card-name-tc">職涯路徑</div>
+      <div class="ocm-card-name-en">Career Paths</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag qall">全員適用</span>
+        <span class="ocm-tag q1">Q1 受益最深</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>組織預先規劃並公開的職涯軌道與晉升路線，包含每個職位的入門條件、晉升標準、發展時程。常見類型：單軌制（傳統管理階梯）、雙軌制（管理職 ＋ 專業職，又稱 dual ladder）、多軌制（管理、專業、專案）、無界限職涯（鼓勵跨領域流動）。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>所有員工：清楚的職涯路徑是基本資訊權利</li>
+          <li>技術導向組織：雙軌制讓技術專家不必當主管也能晉升</li>
+          <li>高潛人才（Q1）：清楚看到自己的發展時程</li>
+          <li>動機低落員工（Q2）：可能因看不見未來而失去動力</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>過度僵化的職涯路徑反而限制人才發展，需保留彈性</li>
+          <li>雙軌制的兩軌實際待遇若有明顯落差，會被視為形式工程</li>
+          <li>晉升標準若不夠透明或執行不一致，會嚴重打擊員工信任</li>
+          <li>組織扁平化趨勢下，傳統階梯式路徑越來越不適用</li>
+          <li>應每 3-5 年檢視一次，避免與組織實況脫節</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 Job Posting -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">14</div>
+      <div class="ocm-card-name-tc">內部職缺公告</div>
+      <div class="ocm-card-name-en">Internal Job Posting</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag qall">全員適用</span>
+        <span class="ocm-tag q2">Q2 重點對象</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>組織內部職缺對所有員工公開，鼓勵內部流動。員工可主動申請其他部門的職缺，無須透過主管推薦。是內部勞動市場（Internal Labor Market）的核心制度。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>動機下滑的員工（Q2）：給予自主探索新機會的途徑</li>
+          <li>高潛人才（Q1）：透過自我選擇展現主動性</li>
+          <li>組織快速擴張期：優先填補新職缺的內部來源</li>
+          <li>需要降低外部招聘成本的組織</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>原主管可能阻擋部屬申請，需有上級保護機制（如「不得拒絕面試」規則）</li>
+          <li>申請失敗若無妥善溝通，會傷害員工的工作意願</li>
+          <li>過度頻繁的內部流動會造成業務連續性問題，需設定最短任期</li>
+          <li>內部公告若實際上多為「裝飾」（職缺已內定），會徹底破壞員工信任</li>
+          <li>應與職涯路徑、內部 referral 制度搭配運作</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 Succession Planning -->
+  <div class="ocm-card">
+    <div class="ocm-card-sidebar">
+      <div class="ocm-card-num">15</div>
+      <div class="ocm-card-name-tc">接班人計畫</div>
+      <div class="ocm-card-name-en">Succession Planning</div>
+      <div class="ocm-card-quad-tags">
+        <div class="ocm-card-quad-label">適用象限</div>
+        <span class="ocm-tag q1">Q1</span>
+        <span class="ocm-tag mgr">主管 Q1</span>
+      </div>
+    </div>
+    <div class="ocm-card-body">
+      <div class="ocm-block">
+        <span class="ocm-block-label what">What ／ 內容</span>
+        <p>針對組織關鍵職位（key positions）系統性地識別、培養與儲備接班人選的長期機制。標準作法包含：盤點關鍵職位、識別 1-3 層接班候選人、評估候選人準備度（ready now / ready in 1-2 years / ready in 3-5 years）、設計差異化發展計畫、定期檢視與更新。</p>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label when">When ／ 適用對象</span>
+        <ul>
+          <li>關鍵職位上的高潛接班候選人（Q1）：差異化投入發展資源</li>
+          <li>家族企業傳承期：提前準備非家族成員的關鍵接班人</li>
+          <li>主管平均年齡偏高、面臨集體退休風險的組織</li>
+          <li>技術專家集中的關鍵職位：避免單點失敗風險</li>
+        </ul>
+      </div>
+      <div class="ocm-block">
+        <span class="ocm-block-label watch">Watch-outs ／ 執行風險</span>
+        <ul>
+          <li>「被指定為接班人」的標籤若公開，會傷害未被選中者的動機</li>
+          <li>但若完全保密，接班人本身也不知道，發展投入會缺乏方向感</li>
+          <li>現任者可能抗拒接班計畫，視之為對自己的取代威脅</li>
+          <li>接班人計畫常變成年度紙上作業，缺乏實質執行</li>
+          <li>過度聚焦既有人才，忽略外部接班可能，會陷入近親繁殖</li>
+          <li>應與發展性任務、師徒制（Mentoring）、外派等方案搭配，否則只是清單而非計畫</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="callout-quote">「同樣的方案，用在錯的象限上，不只是浪費資源，更可能加劇問題本身。」</p>
+  </div>
+
+  <h4 class="sub-section-heading">跨方案的共通原則</h4>
+
+  <div class="key-points">
+    <div class="key-point">
+      <div class="key-point-num">Principle 01</div>
+      <h5>動機是任何方案的前提</h5>
+      <p>所有發展方案都假設員工願意接收。如果動機已經崩壞，再多投資都是浪費。Q2 與 Q4 的處理應該先回到動機本身，而非繼續加方案。</p>
+    </div>
+    <div class="key-point">
+      <div class="key-point-num">Principle 02</div>
+      <h5>方案的有效性取決於配套</h5>
+      <p>單一方案的效果有限，需要前置（診斷、目標設定）與後置（追蹤、回顧、整合）的配套機制。沒有配套的方案導入幾乎都會失敗。</p>
+    </div>
+    <div class="key-point">
+      <div class="key-point-num">Principle 03</div>
+      <h5>主管的能力是天花板</h5>
+      <p>幾乎所有方案的執行都需要直屬主管的參與。主管自己若不具備教練、回饋、授權能力，員工發展方案再好也無法落地。先發展主管，才能談員工發展。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5 ==================== -->
+<section class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">V</div>
+    <div class="chapter-title-group">
+      <div class="label">Field Cases</div>
+      <h2>實務案例</h2>
+      <div class="en-subtitle">Eight Talent Development Playbooks</div>
+    </div>
+  </div>
+
+  <p class="chapter-intro">
+    <span class="first-letter">學</span>術方案一旦進入企業現場，往往需要重新包裝才能被買單。顧問業常見的做法是把零散方案，依組織實際需求設計成解決方案。以下幾組人才發展方案，每一組都對應一個具體的場景，但基本邏輯其實都來自前面段落的方案與理論。理解這個對應關係，HR 才能既說得出顧問語言，也有理論基礎支持。
+  </p>
+
+  <div class="pack-grid">
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">01</span>
+        <span class="pack-card-tag">New Graduate Retention</span>
+      </div>
+      <h4>新進員工 90 天留任計畫</h4>
+      <p class="scenario">場景 ： 新人留不住</p>
+      <ul class="actions">
+        <li>新人到職前 90 天的關鍵保留機制</li>
+        <li>強化組織社會化與早期 mentoring</li>
+        <li>對應 OCM：教育訓練（Training）＋師徒制（Mentoring）＋人脈網絡（Networking）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">02</span>
+        <span class="pack-card-tag">Performance Review</span>
+      </div>
+      <h4>績效面談</h4>
+      <p class="scenario">場景 ： 主管難以提供回饋</p>
+      <ul class="actions">
+        <li>結構化的績效對話流程與技巧訓練</li>
+        <li>傳遞組織期待，建立共同語言</li>
+        <li>對應 OCM：績效考核（Performance Appraisal，資訊機制核心方案）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">03</span>
+        <span class="pack-card-tag">Cross-functional Learning</span>
+      </div>
+      <h4>跨部門學習日</h4>
+      <p class="scenario">場景 ： 部門間互不理解</p>
+      <ul class="actions">
+        <li>定期的跨部門知識分享與輪訪</li>
+        <li>建立組織內部社會資本</li>
+        <li>對應 OCM：人脈網絡（Networking）＋短期工作輪調（Short-term Job Rotation）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">04</span>
+        <span class="pack-card-tag">Talent Review</span>
+      </div>
+      <h4>人才盤點與九宮格</h4>
+      <p class="scenario">場景 ： 不知道誰該被重點培養</p>
+      <ul class="actions">
+        <li>用績效 × 潛力九宮格盤點員工</li>
+        <li>識別高潛、核心、補強三類人才，作為後續發展依據</li>
+        <li>對應 OCM：評鑑中心（Assessment Centre）＋職涯諮詢（Career Counselling）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">05</span>
+        <span class="pack-card-tag">Manager Transition</span>
+      </div>
+      <h4>新手主管勝任計畫</h4>
+      <p class="scenario">場景 ： 新任主管不擅帶領</p>
+      <ul class="actions">
+        <li>從個人貢獻者到管理者的角色轉換訓練</li>
+        <li>搭配資深主管 mentor 陪跑半年至一年</li>
+        <li>對應 OCM：教育訓練（Training）＋師徒制（Mentoring）＋發展性任務（Developmental Assignment）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">06</span>
+        <span class="pack-card-tag">Veteran Reactivation</span>
+      </div>
+      <h4>資深員工再激勵方案</h4>
+      <p class="scenario">場景 ： 資深員工失去動力</p>
+      <ul class="actions">
+        <li>針對職涯停滯期員工的再激勵</li>
+        <li>結合工作豐富化與橫向調動，打破固化</li>
+        <li>對應 OCM：工作豐富化（Job Enrichment）＋橫向調動（Lateral Moves）＋職涯諮詢（Career Counselling）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">07</span>
+        <span class="pack-card-tag">Dual Career Ladder</span>
+      </div>
+      <h4>技術專家雙通道</h4>
+      <p class="scenario">場景 ： 技術人才不想當主管</p>
+      <ul class="actions">
+        <li>建立管理職與專業職的平行晉升通道</li>
+        <li>讓技術專家不必透過當主管才能升等</li>
+        <li>對應 OCM：職涯路徑雙軌制（Career Paths：Dual Ladder）</li>
+      </ul>
+    </div>
+
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <span class="pack-card-num">08</span>
+        <span class="pack-card-tag">Critical Role Succession</span>
+      </div>
+      <h4>關鍵職位繼任計畫</h4>
+      <p class="scenario">場景 ： 關鍵職位無人接</p>
+      <ul class="actions">
+        <li>盤點關鍵職位，建立 2-3 層接班人選</li>
+        <li>透過發展性任務提前驗證</li>
+        <li>對應 OCM：接班人計畫（Succession Planning）＋發展性任務（Developmental Assignment）</li>
+      </ul>
+    </div>
+  </div>
+
+  <table class="mapping-table">
+    <thead>
+      <tr>
+        <th>顧問方案</th>
+        <th>組織遇到的問題</th>
+        <th>對應 OCM 方案</th>
+        <th>對應四象限類型</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-product">新進員工 90 天留任</td>
+        <td class="col-scenario">新人留不住</td>
+        <td class="col-ocm">教育訓練（Training）、師徒制（Mentoring）、人脈網絡（Networking）</td>
+        <td class="col-quadrant">員工 ／ 類型三</td>
+      </tr>
+      <tr>
+        <td class="col-product">績效面談</td>
+        <td class="col-scenario">主管難以提供回饋</td>
+        <td class="col-ocm">績效考核（Performance Appraisal）</td>
+        <td class="col-quadrant">全員適用</td>
+      </tr>
+      <tr>
+        <td class="col-product">跨部門學習日</td>
+        <td class="col-scenario">部門間互不理解</td>
+        <td class="col-ocm">人脈網絡（Networking）、短期工作輪調（Short-term Rotation）</td>
+        <td class="col-quadrant">全員適用</td>
+      </tr>
+      <tr>
+        <td class="col-product">人才盤點與九宮格</td>
+        <td class="col-scenario">不知道誰該被重點培養</td>
+        <td class="col-ocm">評鑑中心（Assessment Centre）、職涯諮詢（Career Counselling)</td>
+        <td class="col-quadrant">全員適用 ／ 識別 Q1</td>
+      </tr>
+      <tr>
+        <td class="col-product">新手主管勝任計畫</td>
+        <td class="col-scenario">新任主管不擅帶領</td>
+        <td class="col-ocm">教育訓練（Training）、師徒制（Mentoring）、發展性任務（Developmental Assignment）</td>
+        <td class="col-quadrant">主管 ／ 類型三、類型四</td>
+      </tr>
+      <tr>
+        <td class="col-product">資深員工再激勵</td>
+        <td class="col-scenario">資深員工失去動力</td>
+        <td class="col-ocm">工作豐富化（Job Enrichment）、橫向調動（Lateral Moves）、職涯諮詢（Counselling）</td>
+        <td class="col-quadrant">員工 ／ 類型二</td>
+      </tr>
+      <tr>
+        <td class="col-product">技術專家雙通道</td>
+        <td class="col-scenario">技術人才不想當主管</td>
+        <td class="col-ocm">職涯路徑雙軌制（Career Paths：Dual Ladder）</td>
+        <td class="col-quadrant">員工 ／ 類型一</td>
+      </tr>
+      <tr>
+        <td class="col-product">關鍵職位繼任</td>
+        <td class="col-scenario">關鍵職位無人接</td>
+        <td class="col-ocm">接班人計畫（Succession Planning）、發展性任務（Developmental Assignment）</td>
+        <td class="col-quadrant">員工 ／ 類型一、主管 ／ 類型一</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ==================== COLOPHON ==================== -->
+<footer class="colophon">
+  <div class="colophon-grid">
+    <div>
+      <h5>Key Reference</h5>
+      <p class="ref-citation">Bagdadli, S., & Gianecchini, M. (2019). Organizational career management practices and objective career success ： A systematic review and framework. <span class="ref-journal">Human Resource Management Review</span>, 29(3), 353–370.</p>
+    </div>
+  </div>
+  <div class="colophon-bottom">
+    <span>© 2026 王豫萱 ／ National Sun Yat-sen University</span>
+  </div>
+</footer>
+
+</body>
+</html>
