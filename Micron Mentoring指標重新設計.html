@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Micron Mentoring Program 指標重新設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --mu-blue: #0077C8;
+  --mu-blue-dark: #00457C;
+  --mu-blue-deep: #002E5C;
+  --mu-blue-light: #4DA3D9;
+  --mu-blue-pale: #E8F3FB;
+  --mu-blue-tint: #F4F9FD;
+  --mu-accent-teal: #00A3A1;
+  --mu-accent-violet: #6B4EAA;
+  --mu-accent-orange: #F39200;
+  --ink: #0E1A2B;
+  --ink-soft: #2C3E50;
+  --ink-mute: #6B7C93;
+  --line: #DCE5EE;
+  --line-soft: #EDF2F7;
+  --paper: #FFFFFF;
+  --paper-warm: #FAFBFC;
+  --shadow-sm: 0 1px 2px rgba(14, 26, 43, 0.04), 0 1px 3px rgba(14, 26, 43, 0.06);
+  --shadow-md: 0 4px 12px rgba(14, 26, 43, 0.06), 0 2px 4px rgba(14, 26, 43, 0.04);
+  --shadow-lg: 0 12px 32px rgba(0, 119, 200, 0.10), 0 4px 8px rgba(14, 26, 43, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Noto Sans TC", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper-warm);
+  color: var(--ink);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Hero === */
+.hero {
+  background: linear-gradient(135deg, var(--mu-blue-deep) 0%, var(--mu-blue-dark) 45%, var(--mu-blue) 100%);
+  color: white;
+  padding: 56px 8% 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(77, 163, 217, 0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 163, 161, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.hero h1 {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+  max-width: 900px;
+}
+
+.hero h1 .accent {
+  color: #7FD4D2;
+  font-style: normal;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.65;
+  opacity: 0.85;
+  max-width: 720px;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.meta-value {
+  font-family: "IBM Plex Serif", serif;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+/* === Container === */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 8%;
+}
+
+/* === Principles section === */
+.principles {
+  padding: 56px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.section-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--mu-blue);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  font-size: 15px;
+  color: var(--ink-soft);
+  max-width: 720px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.principle-card {
+  border-left: 2px solid var(--mu-blue);
+  padding: 2px 0 2px 20px;
+}
+
+.principle-num {
+  font-family: "IBM Plex Serif", serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mu-blue);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.principle-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.principle-desc {
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  line-height: 1.65;
+}
+
+/* === Role legend === */
+.legend {
+  background: var(--mu-blue-tint);
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 28px;
+}
+
+@media (max-width: 700px) {
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.legend-card {
+  background: white;
+  padding: 22px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--mu-blue);
+  position: relative;
+}
+
+.legend-card.mentor { border-top-color: var(--mu-accent-teal); }
+.legend-card.mentee { border-top-color: var(--mu-blue); }
+.legend-card.owner { border-top-color: var(--mu-accent-violet); }
+
+.legend-badge {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-bottom: 12px;
+  color: white;
+  background: var(--mu-blue);
+}
+
+.legend-card.mentor .legend-badge { background: var(--mu-accent-teal); }
+.legend-card.owner .legend-badge { background: var(--mu-accent-violet); }
+
+.legend-name {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.legend-text {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+/* === Shared indicators === */
+.shared {
+  padding: 56px 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.shared-blocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.timeline-block {
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.timeline-header {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.timeline-header.short {
+  background: linear-gradient(90deg, var(--mu-blue-pale) 0%, transparent 100%);
+}
+
+.timeline-header.long {
+  background: linear-gradient(90deg, rgba(0, 163, 161, 0.10) 0%, transparent 100%);
+}
+
+.timeline-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  font-weight: 600;
+}
+
+.timeline-title {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.timeline-meta {
+  margin-left: auto;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 12px;
+  color: var(--ink-mute);
+  letter-spacing: 1px;
+}
+
+.indicator-list {
+  list-style: none;
+}
+
+.indicator-list li {
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  transition: background 0.15s;
+}
+
+.indicator-list li:last-child {
+  border-bottom: none;
+}
+
+.indicator-list li:hover {
+  background: var(--mu-blue-tint);
+}
+
+.indicator-text {
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+.role-tag {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.role-tag.mentor { background: rgba(0, 163, 161, 0.12); color: #007A78; }
+.role-tag.mentee { background: rgba(0, 119, 200, 0.12); color: var(--mu-blue-dark); }
+.role-tag.owner { background: rgba(107, 78, 170, 0.12); color: #5A3F8E; }
+.role-tag.system { background: rgba(243, 146, 0, 0.14); color: #B36900; }
+
+/* === Programs === */
+.programs {
+  padding: 56px 0 72px;
+  background: var(--paper-warm);
+}
+
+.program-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 36px;
+  padding: 14px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-pill {
+  font-family: "IBM Plex Sans", "Noto Sans TC", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.nav-pill:hover {
+  background: var(--mu-blue);
+  color: white;
+  border-color: var(--mu-blue);
+}
+
+.program-card {
+  background: white;
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 24px;
+  scroll-margin-top: 24px;
+}
+
+.program-head {
+  padding: 22px 32px;
+  background: linear-gradient(135deg, var(--mu-blue-deep) 0%, var(--mu-blue-dark) 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.program-head::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  background: radial-gradient(circle at right, rgba(77, 163, 217, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.program-num {
+  font-family: "IBM Plex Serif", serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.program-name {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.01em;
+}
+
+.program-subtitle {
+  font-size: 13.5px;
+  opacity: 0.85;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+
+.program-purpose {
+  padding: 14px 32px;
+  background: var(--mu-blue-tint);
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  line-height: 1.6;
+}
+
+.purpose-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mu-blue);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.program-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.program-block {
+  padding: 22px 32px;
+}
+
+.program-block.short {
+  border-right: 1px solid var(--line);
+}
+
+.block-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--mu-blue);
+}
+
+.program-block.long .block-header {
+  border-bottom-color: var(--mu-accent-teal);
+}
+
+.block-title {
+  font-family: "IBM Plex Serif", "Noto Sans TC", serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.block-period {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.program-indicator {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.program-indicator:last-child {
+  border-bottom: none;
+}
+
+.program-note {
+  padding: 14px 32px;
+  background: var(--paper-warm);
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink-mute);
+  line-height: 1.65;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.note-label {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mu-accent-orange);
+  font-weight: 600;
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+/* === Footer === */
+.footer {
+  background: var(--mu-blue-deep);
+  color: white;
+  padding: 32px 0 28px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer-brand {
+  font-family: "IBM Plex Serif", serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.footer-meta {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .shared-blocks {
+    grid-template-columns: 1fr;
+  }
+  
+  .program-body {
+    grid-template-columns: 1fr;
+  }
+  
+  .program-block.short {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  
+  .hero {
+    padding: 44px 6% 52px;
+  }
+  
+  .hero-meta {
+    gap: 24px;
+  }
+  
+  .container {
+    padding: 0 6%;
+  }
+  
+  .program-head,
+  .program-purpose,
+  .program-block,
+  .program-note {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  .indicator-list li {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Micron · Mentoring Program · Indicator Framework</span>
+    <h1>Micron Mentoring Program<br>成效指標<span class="accent">重新設計</span></h1>
+    <p class="hero-subtitle">九個 ERG／專案的指標重新依評估來源分工，由 Mentor、Mentee、Owner 各自填答其可觀察範圍內的題項，並區分季度與年度兩個追蹤時程。</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Programs</span>
+        <span class="meta-value">9</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">評估來源</span>
+        <span class="meta-value">3</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">時程切分</span>
+        <span class="meta-value">Q / Y</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Version</span>
+        <span class="meta-value">v1.0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Principles -->
+<section class="principles">
+  <div class="container">
+    <div class="section-label">Design Principles</div>
+    <h2 class="section-title">設計原則</h2>
+    <p class="section-desc">本次重新設計聚焦於四個面向：填答者角色清楚劃分、指標的可觀察性、評估時程與 program 階段的搭配、與既有資料系統的分工。以下五項原則回應這些面向。</p>
+    
+    <div class="principles-grid">
+      <div class="principle-card">
+        <span class="principle-num">01</span>
+        <div class="principle-title">填答者角色清楚劃分</div>
+        <div class="principle-desc">每項指標交由具備該題項觀察角度的角色填答，確保資料來源具備直接證據基礎。</div>
+      </div>
+      <div class="principle-card">
+        <span class="principle-num">02</span>
+        <div class="principle-title">短期問過程，長期問成果</div>
+        <div class="principle-desc">季度檢視互動是否實際發生，年度才評估行為改變與實質產出。</div>
+      </div>
+      <div class="principle-card">
+        <span class="principle-num">03</span>
+        <div class="principle-title">既有系統有資料就不重問</div>
+        <div class="principle-desc">論文、專利、留任率、360 回饋等資料如果能在既有系統中追蹤，應直接調用，避免請 mentor 重複評估。</div>
+      </div>
+      <div class="principle-card">
+        <span class="principle-num">04</span>
+        <div class="principle-title">跨 program 留共同題</div>
+        <div class="principle-desc">配對品質與整體滿意度等基礎題項各 program 共用，以維持彙整時的可比性。</div>
+      </div>
+      <div class="principle-card">
+        <span class="principle-num">05</span>
+        <div class="principle-title">敏感議題一律匿名</div>
+        <div class="principle-desc">Pride+ Allies 與 MWLN 涉及身份議題，mentee 端題項採匿名蒐集，以獲得相對真實回饋。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Legend -->
+<section class="legend">
+  <div class="container">
+    <div class="section-label">Rating Sources</div>
+    <h2 class="section-title">三類評估來源</h2>
+    <p class="section-desc">每個指標標明填答者來源，由具備第一手觀察角度的角色負責該題項。</p>
+    
+    <div class="legend-grid">
+      <div class="legend-card mentee">
+        <span class="legend-badge">Mentee</span>
+        <div class="legend-name">學員 / 受指導者</div>
+        <div class="legend-text">負責自身學習收穫、行為改變與感受面向的回饋，包含學習內容吸收度、信心變化、滿意度等僅本人可判斷的題項。</div>
+      </div>
+      <div class="legend-card mentor">
+        <span class="legend-badge">Mentor</span>
+        <div class="legend-name">導師</div>
+        <div class="legend-text">負責學員在 mentoring 場域中可被觀察的表現，包含學員準備程度、提問深度、討論進展等互動現象。</div>
+      </div>
+      <div class="legend-card owner">
+        <span class="legend-badge">Owner</span>
+        <div class="legend-name">Program 負責人</div>
+        <div class="legend-text">負責 program 整體的執行狀況與群體現象，例如出席率、配對留存、資源配置情形，不評估個別 mentee 的主觀感受。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Shared core indicators -->
+<section class="shared">
+  <div class="container">
+    <div class="section-label">Cross-Program Core</div>
+    <h2 class="section-title">跨 Program 共用核心指標</h2>
+    <p class="section-desc">以下題項在所有 program 共用，做法、量表與時點統一，以維持跨 program 彙整時的比較基準。</p>
+    
+    <div class="shared-blocks">
+      <div class="timeline-block">
+        <div class="timeline-header short">
+          <div>
+            <div class="timeline-label">Short Term</div>
+            <div class="timeline-title">短期共用指標</div>
+          </div>
+          <div class="timeline-meta">PER QUARTER</div>
+        </div>
+        <ul class="indicator-list">
+          <li>
+            <span class="indicator-text">配對關係建立度（與 mentor 關係建立程度）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </li>
+          <li>
+            <span class="indicator-text">互動頻率達成率（實際 ÷ 預期次數）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </li>
+          <li>
+            <span class="indicator-text">Mentor 投入感知（感受到 mentor 投入時間與心力）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </li>
+          <li>
+            <span class="indicator-text">互動頻率達成率（mentor 端紀錄）</span>
+            <span class="role-tag mentor">Mentor</span>
+          </li>
+          <li>
+            <span class="indicator-text">Mentee 投入感知（感受到 mentee 主動參與與準備）</span>
+            <span class="role-tag mentor">Mentor</span>
+          </li>
+          <li>
+            <span class="indicator-text">Program 整體執行順暢度（行政、資源、媒合）</span>
+            <span class="role-tag owner">Owner</span>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="timeline-block">
+        <div class="timeline-header long">
+          <div>
+            <div class="timeline-label">Long Term</div>
+            <div class="timeline-title">長期共用指標</div>
+          </div>
+          <div class="timeline-meta">PER YEAR</div>
+        </div>
+        <ul class="indicator-list">
+          <li>
+            <span class="indicator-text">整體 mentoring 滿意度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </li>
+          <li>
+            <span class="indicator-text">Mentor 推薦意願（推薦他人加入 program）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </li>
+          <li>
+            <span class="indicator-text">Mentor 持續意願（下一期是否續任）</span>
+            <span class="role-tag mentor">Mentor</span>
+          </li>
+          <li>
+            <span class="indicator-text">配對留存率（完成完整週期的配對比例）</span>
+            <span class="role-tag owner">Owner</span>
+          </li>
+          <li>
+            <span class="indicator-text">Program ROI 感知（投入資源 vs. 產出效益）</span>
+            <span class="role-tag owner">Owner</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Programs -->
+<section class="programs">
+  <div class="container">
+    <div class="section-label">Program-Specific Indicators</div>
+    <h2 class="section-title">九個 Program 差異化指標</h2>
+    <p class="section-desc">在共用題之外，各 program 依其專案目標另設差異化指標。</p>
+    
+    <nav class="program-nav">
+      <a href="#p1" class="nav-pill">Capable</a>
+      <a href="#p2" class="nav-pill">Mosaic</a>
+      <a href="#p3" class="nav-pill">MWLN</a>
+      <a href="#p4" class="nav-pill">MYP</a>
+      <a href="#p5" class="nav-pill">Pride+ Allies</a>
+      <a href="#p6" class="nav-pill">TLP</a>
+      <a href="#p7" class="nav-pill">校園專案</a>
+      <a href="#p8" class="nav-pill">New Hire</a>
+      <a href="#p9" class="nav-pill">Leader Dev</a>
+    </nav>
+
+    <!-- Program 1: Capable -->
+    <article class="program-card" id="p1">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 01</div>
+        <div class="program-name">Capable</div>
+        <div class="program-subtitle">大專院校身心障礙學生 Mentoring</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>協助身障學生在進入職場前建立信心與支持系統，涵蓋心理層面支持與生涯準備指引兩條主軸。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對 mentoring 內容的可吸收程度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對求助管道的清楚程度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學生實際參與 mentoring 次數與穩定度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學生主動發問與表達需求的頻率</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">媒合適配度（mentor 領域與學生需求匹配）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對未來職場的信心改變（pre-post）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">表達自身需求能力的改變</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">完成生涯規劃的具體下一步（履歷、實習、申請）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對美光雇主品牌的好感度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學生續留接洽美光意願（含實習轉正）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>原指標中整體穩定度提升與職場適應信心兩題語意相近，本次合併並改由 mentee 自評。心理狀態屬於 mentee 第一手感受，由本人填答可提升資料效度。</span>
+      </div>
+    </article>
+
+    <!-- Program 2: Mosaic -->
+    <article class="program-card" id="p2">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 02</div>
+        <div class="program-name">Mosaic</div>
+        <div class="program-subtitle">多元文化 ERG / Language Mentoring</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>協助外籍員工與本地員工互相學習語言與文化，並從中建立跨文化的工作人脈。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學習收穫感知</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">跨文化互動初步建立（實際對話、互動）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Mentee 學習投入度（練習頻率、準備程度）</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">語言／文化學習活動參與穩定度</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">跨文化人脈實質連結數（具名舉例 1–2 位）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">實際工作中應用跨文化能力的案例</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">跨文化協作成果（具體事件或專案）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">語言能力客觀變化（外部測驗或自評）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">ERG 跨部門協作影響力</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>溝通摩擦降低偏向抽象判斷，改為跨文化協作成果，由 mentee 提出實際發生的事件或專案作為佐證。語言能力部分建議搭配外部測驗結果共同評估。</span>
+      </div>
+    </article>
+
+    <!-- Program 3: MWLN -->
+    <article class="program-card" id="p3">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 03</div>
+        <div class="program-name">MWLN</div>
+        <div class="program-subtitle">Micron Women Leadership Network 女性領導</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>支援女性員工的職涯發展，並建立可長期延續的女性支持網絡，形式涵蓋 1-on-1 與 group mentoring。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">與 mentor 的互動品質</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">建立至少一位非直屬支持對象</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">職涯討論深度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">活動參與穩定度</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">主動爭取曝光／資源的具體行為（含具體案例）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">擔任新角色或被指派新責任</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對職涯下一步的清晰度改變（pre-post）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">女性支持網絡密度（互動對象數量與品質）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">ERG 對女性人才留任的整體貢獻</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">擔任新角色（HR 資料對照）</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>影響力角色浮現原由 owner 評估，mentee 在原職務場域的表現由 mentee 本人較易掌握。調整為 mentee 自陳具體事件，以可佐證的案例為計入依據。</span>
+      </div>
+    </article>
+
+    <!-- Program 4: MYP -->
+    <article class="program-card" id="p4">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 04</div>
+        <div class="program-name">MYP</div>
+        <div class="program-subtitle">Micron Young Professionals 青年領袖 / AI</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>協助年輕員工在 AI 議題上進行學習、應用與知識擴散，2025 年度主軸為 AI 相關 group mentoring。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">AI 工具／知識實際嘗試使用頻率</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">分享會出席與互動程度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">主動提問與討論行為</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學習活動穩定參與率</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">將 AI 應用於實際工作的具體案例</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">帶領團隊嘗試 AI 應用的具體事件</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">被部門視為 AI 議題的諮詢對象</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對外／對內知識分享次數與形式</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Program 對美光 AI 採用率的可見貢獻</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>流程導入情形與內部資源角色從學習到實際發生，通常需半年以上累積。Program 於五月啟動，這兩項指標移至長期區塊，與其展現時程一致。</span>
+      </div>
+    </article>
+
+    <!-- Program 5: Pride+ Allies -->
+    <article class="program-card" id="p5">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 05</div>
+        <div class="program-name">Pride+ Allies</div>
+        <div class="program-subtitle">LGBTQ 友善職場 ERG（2025 讀書會形式）</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>建立 LGBTQ 友善的職場環境與支持系統，現階段以讀書會形式進行，聚焦安全空間建立與 Ally 網絡擴展兩項階段性目標。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對 ERG 安全感的感知（匿名）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">能識別至少一位 Ally（匿名）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">讀書會／活動穩定出席率</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">成員在活動中的開放分享程度（聚合層面）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">ERG 是否成為成員實際支持來源（匿名）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對美光 DEI 氛圍的整體感知改變（匿名）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Ally 網絡覆蓋廣度（部門／層級）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">參與或推動具體友善職場行動</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">成員留任率（搭配 HR）</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>職場發聲跡象在當前台灣職場環境較難直接觀察，指標調整至 ERG 現階段可達成的範圍，例如安全感感知與 Ally 識別。Mentee 端題項採匿名蒐集，以確保資料效度。</span>
+      </div>
+    </article>
+
+    <!-- Program 6: TLP -->
+    <article class="program-card" id="p6">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 06</div>
+        <div class="program-name">TLP</div>
+        <div class="program-subtitle">Technical Leadership Program 技術領導</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>技術專業輔導，協助員工在論文、期刊、專利、競賽等領域的進展，並培養技術領導力。FY25 共 235 人參與，為第二大規模 program。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">技術問題突破的具體事件</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Mentor 給予技術方向建議的具體性</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">技術討論深度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Workday Activity 紀錄完成率（Hit rate）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">技術轉譯能力（向非技術同仁說明的事件）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">配對下一階段續任意願</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">技術領導行為（帶小型專案、指導他人）</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">TLP 對 R&amp;D 技術人才留任的整體貢獻</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">論文／專利／競賽成果</span>
+            <span class="role-tag system">既有系統</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>論文與專利等技術成果已於既有資料庫追蹤，可直接調用資料。此次調整將指標區分為既有系統可調用與需主觀評估兩類，明確各題項的資料來源，避免重複作業。</span>
+      </div>
+    </article>
+
+    <!-- Program 7: Campus -->
+    <article class="program-card" id="p7">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 07</div>
+        <div class="program-name">校園專案</div>
+        <div class="program-subtitle">外籍生半導體課程 × 美光 Mentor</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>協助外籍生在台求職，從履歷面試準備、職場文化理解到在地人脈建立三條主軸並進。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對美光職場文化的理解進度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">履歷／面試準備的階段性完成</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Mentor-Mentee 互動穩定度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">跨文化適應的初期狀況</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對美光雇主品牌的感知</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">是否與在地 mentor 持續互動（含結案後）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對台灣職場的整體理解度改變（pre-post）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">實際媒合／錄取結果（明確數字）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Program 對美光外籍人才招募漏斗的貢獻</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>本 program 原指標設計最為清楚，僅調整一處：在地 Mentor 建立原為二元判斷題卻套用 5 點量表，填答易產生混淆，改為評估持續互動的程度。</span>
+      </div>
+    </article>
+
+    <!-- Program 8: New Hire -->
+    <article class="program-card" id="p8">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 08</div>
+        <div class="program-name">New Hire</div>
+        <div class="program-subtitle">Rotation Program / FETA 新進工程師</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>新進工程師的 onboarding 與第一年適應。FY25 規模最大，FETA 共 832 人，由原單位 mentor 進行 OJT；Rotation 則跨部門輪調並配有新單位 mentor。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對 mentor 可近性的感知</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對部門／單位歸屬感的初期感受</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">求助窗口清楚度</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">新人 onboarding 進度達成率</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">新人主動提問與學習行為</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">跨部門人脈建立（Rotation 特別重要）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對新人 ramp-up 速度的整體貢獻（用人主管調查）</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">試用期通過率</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">一年留任率</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">新人第一年績效評估結果（聚合）</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>留任穩定度與適應速度已於 HR 系統中追蹤，可直接調用資料。另建議將用人主管納入為第四類填答來源，由其評估新人 ramp-up 速度，補足短期觀察視角。</span>
+      </div>
+    </article>
+
+    <!-- Program 9: Leader Dev -->
+    <article class="program-card" id="p9">
+      <div class="program-head">
+        <div class="program-num">PROGRAM 09</div>
+        <div class="program-name">Leader Dev</div>
+        <div class="program-subtitle">New Leader / Future Leader Development</div>
+      </div>
+      <div class="program-purpose">
+        <span class="purpose-label">Program 任務</span>
+        <span>新任主管與儲備主管的領導力發展，課程之外另配置資深主管擔任 mentor。</span>
+      </div>
+      <div class="program-body">
+        <div class="program-block short">
+          <div class="block-header">
+            <span class="block-title">短期指標</span>
+            <span class="block-period">QUARTERLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">對課程內容的可應用性感知</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Mentor 與學員的會議頻率與品質</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">學員的領導議題反思深度</span>
+            <span class="role-tag mentor">Mentor</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">課程出席與作業完成率</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+        </div>
+        <div class="program-block long">
+          <div class="block-header">
+            <span class="block-title">長期指標</span>
+            <span class="block-period">YEARLY</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">領導行為調整案例（自陳）</span>
+            <span class="role-tag mentee">Mentee</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">Program 對主管池儲備度的整體貢獻</span>
+            <span class="role-tag owner">Owner</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">360 回饋分數改變</span>
+            <span class="role-tag system">既有 360 系統</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">部屬對其領導行為改變的感知</span>
+            <span class="role-tag system">Employee Survey</span>
+          </div>
+          <div class="program-indicator">
+            <span class="indicator-text">被指派新領導角色／責任的比例</span>
+            <span class="role-tag system">HR System</span>
+          </div>
+        </div>
+      </div>
+      <div class="program-note">
+        <span class="note-label">調整說明</span>
+        <span>領導行為改變的觀察角度主要在部屬端與 360 系統。此次調整將相關題項對應至既有的 360 系統與 employee survey，由具備直接觀察的來源負責，owner 則聚焦於整體儲備度的判斷。</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">Micron Mentoring Program · Indicator Framework</div>
+      <div class="footer-meta">v1.0 · 9 Programs · 3 Roles · 2 Timeframes</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
