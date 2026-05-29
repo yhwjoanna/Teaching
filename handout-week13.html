@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>第 13 週：人才發展執行段 ｜ 績效管理與人才發展</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #8a8a8a;
+    --paper: #fbfaf7;
+    --paper-warm: #f4f1ea;
+    --rule: #e5e0d5;
+    --accent: #8b2c2c;
+    --accent-soft: #c9a8a8;
+    --highlight: #f3e7c4;
+    --callout-bg: #f6f2e8;
+    --callout-border: #d4c8a8;
+    --max-width: 880px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Serif TC", "Fraunces", serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.85;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  /* 整體 layout：.page 與 TOC 視為整體置中
+     計算邏輯：在 >=1240px 螢幕上，.page 與 TOC 一起置中（總寬約 880 + 32 + 200 = 1112px）
+     做法是把 .page 略偏左、TOC 略偏左，這樣兩者中間的距離還在，但整體往中間靠 */
+  .page {
+    max-width: var(--max-width);
+    margin-left: max(32px, calc(50vw - (var(--max-width) + 240px) / 2));
+    margin-right: auto;
+    padding: 0 32px;
+  }
+  .meta-bar {
+    background: var(--ink); color: var(--paper); padding: 14px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "Noto Sans TC", sans-serif; font-size: 13px; letter-spacing: 0.05em;
+  }
+  .meta-bar .course-id { font-family: "JetBrains Mono", monospace; color: var(--accent-soft); }
+  header { padding: 80px 0 60px; border-bottom: 1px solid var(--rule); margin-bottom: 60px; }
+  .eyebrow {
+    font-family: "Noto Sans TC", sans-serif; font-size: 13px; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--accent); }
+  h1 {
+    font-family: "Fraunces", "Noto Serif TC", serif; font-weight: 500; font-size: 52px;
+    line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 28px;
+    font-variation-settings: "opsz" 144;
+    /* 中文標題穩定斷行：確保長標題可換行、字數均衡 */
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .lede { font-size: 19px; line-height: 1.7; color: var(--ink-soft); }
+  .meta-row {
+    margin-top: 40px; display: flex; gap: 32px; flex-wrap: wrap;
+    font-family: "Noto Sans TC", sans-serif; font-size: 13px; color: var(--ink-muted);
+  }
+  .meta-row dt { display: inline; color: var(--ink-muted); margin-right: 6px; }
+  .meta-row dd { display: inline; color: var(--ink-soft); font-weight: 500; }
+  .takeaways {
+    background: var(--callout-bg); border-left: 3px solid var(--accent);
+    padding: 36px 40px; margin-bottom: 80px;
+  }
+  .takeaways-label {
+    font-family: "Noto Sans TC", sans-serif; font-size: 12px; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block;
+  }
+  .takeaways ol { list-style: none; counter-reset: takeaway; }
+  .takeaways li {
+    counter-increment: takeaway; padding: 12px 0 12px 44px; position: relative;
+    line-height: 1.7; border-bottom: 1px dashed var(--callout-border);
+  }
+  .takeaways li:last-child { border-bottom: none; }
+  .takeaways li::before {
+    content: counter(takeaway, decimal-leading-zero);
+    position: absolute; left: 0; top: 21px;
+    font-family: "JetBrains Mono", monospace; font-size: 13px;
+    line-height: 1; color: var(--accent); font-weight: 500;
+  }
+  .section { margin-bottom: 80px; }
+  .section-number {
+    font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--accent);
+    letter-spacing: 0.1em; margin-bottom: 12px; display: block;
+  }
+  h2 {
+    font-family: "Fraunces", "Noto Serif TC", serif; font-weight: 500; font-size: 36px;
+    line-height: 1.25; color: var(--ink); margin-bottom: 36px; letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 96; border-bottom: 1px solid var(--ink); padding-bottom: 12px;
+  }
+  h3 {
+    font-family: "Noto Serif TC", serif; font-weight: 600; font-size: 22px;
+    line-height: 1.4; color: var(--ink); margin: 48px 0 20px;
+  }
+  h4 {
+    font-family: "Noto Sans TC", sans-serif; font-weight: 600; font-size: 14px;
+    letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin: 32px 0 12px;
+  }
+  p { margin-bottom: 20px; }
+  p strong { background: linear-gradient(180deg, transparent 60%, var(--highlight) 60%); padding: 0 2px; font-weight: 600; }
+  a.inline-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); padding-bottom: 1px; }
+  a.inline-link:hover { border-bottom-color: var(--accent); }
+  .concept { background: var(--paper-warm); padding: 36px 40px; margin: 36px 0; border-radius: 2px; }
+  .concept-label {
+    font-family: "Noto Sans TC", sans-serif; font-size: 11px; letter-spacing: 0.25em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 16px; display: block;
+  }
+  .concept-term {
+    font-family: "Fraunces", "Noto Serif TC", serif; font-size: 24px; font-weight: 600;
+    color: var(--ink); margin-bottom: 14px; line-height: 1.3;
+  }
+  .concept-term .original {
+    font-family: "Fraunces", serif; font-weight: 400; color: var(--ink-soft);
+    font-size: 20px; margin-left: 8px;
+  }
+  .concept-def { color: var(--ink-soft); line-height: 1.8; }
+  .example { border-left: 2px solid var(--accent-soft); padding: 8px 28px; margin: 28px 0; color: var(--ink-soft); }
+  .grid-figure { margin: 36px 0; }
+  .grid-figure svg { width: 100%; height: auto; display: block; max-width: 620px; margin: 0 auto; }
+  .grid-figure figcaption { font-size: 14px; color: var(--ink-muted); line-height: 1.7; margin-top: 16px; text-align: center; max-width: 580px; margin-left: auto; margin-right: auto; }
+  .example-label {
+    font-family: "Noto Sans TC", sans-serif; font-size: 12px; letter-spacing: 0.15em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block;
+  }
+  .compare-table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 15px; }
+  .compare-table thead th {
+    background: var(--ink); color: var(--paper); padding: 14px 18px; text-align: left;
+    font-family: "Noto Sans TC", sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 0.05em;
+  }
+  .compare-table tbody td { padding: 16px 18px; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.65; }
+  .compare-table tbody tr:nth-child(even) td { background: var(--paper-warm); }
+  .compare-table tbody td:first-child { font-weight: 600; color: var(--ink); font-family: "Noto Serif TC", serif; }
+  .model-diagram { margin: 40px 0; padding: 36px 24px; background: var(--paper-warm); border-radius: 4px; text-align: center; }
+  .model-diagram svg { max-width: 100%; height: auto; }
+  .model-caption { margin-top: 16px; font-family: "Noto Sans TC", sans-serif; font-size: 13px; color: var(--ink-muted); }
+  .self-check { background: var(--ink); color: var(--paper); padding: 48px 44px; margin: 60px 0; border-radius: 2px; }
+  .self-check-label {
+    font-family: "Noto Sans TC", sans-serif; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--accent-soft); text-transform: uppercase; margin-bottom: 8px; display: block;
+  }
+  .self-check h3 { color: var(--paper); margin-top: 0; margin-bottom: 28px; font-size: 24px; }
+  .self-check ol { list-style: none; counter-reset: q; }
+  .self-check li {
+    counter-increment: q; padding: 16px 0 16px 48px; position: relative;
+    line-height: 1.7; border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .self-check li:last-child { border-bottom: none; }
+  .self-check li::before {
+    content: "Q" counter(q); position: absolute; left: 0; top: 20px;
+    font-family: "JetBrains Mono", monospace; line-height: 1;
+    color: var(--accent-soft); font-size: 13px;
+  }
+  .further { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--rule); }
+  .further ul { list-style: none; }
+  .further li { padding: 14px 0; border-bottom: 1px dashed var(--rule); font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+  .further li:last-child { border-bottom: none; }
+  .further .tag {
+    display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--accent); margin-right: 12px; padding: 2px 8px;
+    background: var(--callout-bg); border: 1px solid var(--callout-border); border-radius: 2px;
+  }
+  .further a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); padding-bottom: 1px; }
+  .further a:hover { border-bottom-color: var(--accent); }
+  footer {
+    margin: 100px 0 60px; padding-top: 40px; border-top: 2px solid var(--ink);
+    font-family: "Noto Sans TC", sans-serif; font-size: 13px; color: var(--ink-muted);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .toc {
+    position: fixed;
+    top: 80px;
+    right: 32px;
+    width: 200px;
+    font-family: "Noto Sans TC", sans-serif; font-size: 12px; color: var(--ink-muted);
+    border-left: 1px solid var(--rule); padding-left: 16px;
+    max-height: calc(100vh - 160px); overflow-y: auto;
+  }
+  /* 在大螢幕上，TOC 改為與內容區一起置中（落在內容區右側）
+     用 min() 避免在中等螢幕（1240-1440px）TOC 跑出螢幕外 */
+  @media (min-width: 1240px) {
+    .toc {
+      left: min(
+        calc(50vw + var(--max-width) / 2 + 60px),
+        calc(100vw - 232px)
+      );
+      right: auto;
+    }
+  }
+  .toc-label {
+    font-size: 10px; letter-spacing: 0.25em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 14px; display: block;
+  }
+  .toc a { display: block; color: var(--ink-muted); text-decoration: none; padding: 6px 0; line-height: 1.4; border-bottom: 1px dotted transparent; transition: all 0.2s; }
+  .toc a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .toc a.active { color: var(--ink); font-weight: 500; }
+  @media (max-width: 1240px) { .toc { display: none; } }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    h1 { font-size: 32px; letter-spacing: -0.01em; max-width: 100%; }
+    h2 { font-size: 28px; }
+    h3 { font-size: 20px; }
+    .meta-bar { font-size: 11px; padding: 12px 20px; flex-direction: column; gap: 6px; align-items: flex-start; }
+    header { padding: 48px 0 40px; }
+    .page { margin-left: auto; margin-right: auto; padding: 0 20px; }
+    .takeaways, .concept, .self-check { padding: 28px 24px; }
+    .compare-table { font-size: 13px; }
+    .compare-table thead th, .compare-table tbody td { padding: 12px 10px; }
+  }
+  @media (max-width: 400px) {
+    h1 { font-size: 30px; }
+  }
+  @media print {
+    .toc, .meta-bar { display: none; }
+    body { background: white; font-size: 12pt; }
+    .self-check { background: white; color: var(--ink); border: 2px solid var(--ink); }
+    .self-check h3, .self-check-label { color: var(--ink); }
+    h1 { font-size: 28pt; }
+    h2 { font-size: 20pt; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="meta-bar">
+  <span>績效管理與人才發展</span>
+  <span>2026 春季學期 ｜ Week 13</span>
+</div>
+<nav class="toc" id="toc">
+  <span class="toc-label">本週導覽</span>
+  <a href="#overview">本週重點</a>
+  <a href="#section-1">01 主管發展計畫</a>
+  <a href="#section-2">02 不想升遷的世代</a>
+  <a href="#section-3">03 俱樂部式文化</a>
+  <a href="#section-4">04 無疆界職涯與內部培育</a>
+  <a href="#section-5">05 Feedforward 前饋對話</a>
+  <a href="#self-check">自我檢核</a>
+  <a href="#further">延伸閱讀</a>
+</nav>
+<div class="page">
+  <header>
+    <div class="eyebrow">Week 13 ｜ 人才發展執行段</div>
+    <h1>從績效到發展：主管培育、職涯選擇與 Feedforward 對話</h1>
+    <p class="lede">當績效面談結束、人才四象限分類也完成，組織必須開始投入發展資源。本週聚焦執行段的關鍵議題：基層主管如何被培育為中高階接班人？面對員工不想升遷的新世代現象該如何應對？俱樂部式文化為什麼是組織的隱形危機？以及，如何透過 Feedforward 前饋對話，把回饋的重心從回顧過去轉為展望未來。</p>
+    <dl class="meta-row">
+      <div><dt>授課教師</dt> <dd>王豫萱</dd></div>
+      <div><dt>本週主題</dt> <dd>主管發展、職涯選擇、回饋對話</dd></div>
+    </dl>
+  </header>
+  <div class="takeaways" id="overview">
+    <span class="takeaways-label">本週重點</span>
+    <ol>
+      <li>主管發展不能只看單一部門的歷練。從基層主管開始，就應有意識地透過跨部門專案培養未來的中高階接班人。</li>
+      <li>新世代員工出現職涯極簡主義（Career Minimalism）傾向：Glassdoor 調查顯示 68% 的 Z 世代表示，除非主管職能帶來更高薪資或更具份量的職稱，否則不會追求管理職。原因多元：對上層工作的不嚮往、薪資差距不對等、自由度的價值高於穩定性。</li>
+      <li>俱樂部式文化是組織的隱形危機：主管人很好、團隊氣氛融洽，但績效持續不達標。這種模式只在獨佔市場或沒有競爭者時才能存活。</li>
+      <li>勞動市場進入長期人才稀缺狀態：台灣 90% 以上的公司反映找不到人，外部招募越來越困難，組織必須把更多資源投入內部既有員工的能力提升。</li>
+      <li>Feedforward 前饋對話：把回饋的重心從回顧過去的錯誤，轉為展望未來的改善。對話會更愉快、更有建設性。</li>
+    </ol>
+  </div>
+  <section class="section" id="section-1">
+    <span class="section-number">SECTION 01</span>
+    <h2>主管發展計畫</h2>
+    <p>上週討論員工依四象限分類後的訓練資源差別投資。本週的延伸是：<strong>同樣的邏輯也適用於主管</strong>。員工發展計畫聚焦在能力與態度的培養，主管發展計畫則多了管理職能、跨部門經驗與接班儲備。</p>
+    <h3>人才斷層的常見現象</h3>
+    <p>實務上常見的人才斷層發生在中階主管往高階走的過程中。原因是：原本歷練只在單一部門，當管轄幅度擴大、需要跨部門協調時就無力負荷。HR 出身的主管被派去管採購、業務出身的主管被要求接手品保 —— 這些跨領域任務通常會讓人卡住。</p>
+    <h4>解法：從基層主管就開始跨部門歷練</h4>
+    <p>不必等到要升遷才補課，<strong>從基層主管階段就應有意識地讓他們參與跨部門合作專案</strong>。這不是隨機分派，而是有篩選的：挑選有潛力、有領導意願的主管，讓他們在跨部門專案中累積經驗，順便驗證他們是否適合往上走。</p>
+    <h3>主管發展的另一個面向：資深主管帶新手主管</h3>
+    <p>同樣是經理層級的主管之間，資歷與管理經驗也有差距。資深經理可以帶剛升任的新手經理，類似 mentor 制度但專屬於管理階層。這個機制的價值在於：</p>
+    <div class="concept">
+      <span class="concept-label">主管發展工具</span>
+      <div class="concept-term">資深主管的經驗傳承機制</div>
+      <p class="concept-def">讓資深主管帶領剛上任的新手主管，分享如何處理跨部門衝突、如何給予部屬負面回饋、如何在績效壓力下穩定團隊。這些是課程教不來、必須透過實際情境演練的能力。</p>
+    </div>
+    <h3>KPI 與 OKR 的層級差異</h3>
+    <p>績效指標的設計也應隨層級調整。基層員工適用 KPI 這類量化、固定的指標。但隨著管理層級往上，工作越來越多探索性、跨部門協作的成分，<strong>OKR 這類更具挑戰性、可季度或月度調整的目標設定，更適合中高階主管</strong>。</p>
+    <p>當一位主管能持續在 OKR 框架下達成具挑戰性的目標，組織就能更快辨識出他承擔更高領導任務的潛力。</p>
+    <h3>能力好但管理能力不佳的主管</h3>
+    <p>還有一類常見情境：員工因專業能力突出而被升為主管，但管理能力沒有跟上。這往往發生在公司前端人才斷層之後 —— 沒有人可用，只能把專業好的人推上來。</p>
+    <div class="example">
+      <span class="example-label">實務案例</span>
+      <p>某工程主管所有事情都自己做，要報告就自己報告，下面員工做不好就算了，自己接過來扛。短期看績效都最高、老闆覺得很滿意。但長期會走向兩種結局：<strong>專案在他崩潰時瞬間癱瘓，或是部屬完全沒有成長機會、無法接班</strong>。組織不該獎勵這種「以個人犧牲換取績效」的模式。</p>
+    </div>
+    <p>對這類主管，發展計畫的重點不在專業 —— 他們專業夠了 —— 而在管理行為的補強：教練能力、回饋方式、情緒管理、授權技巧。如果多次輔導後仍無改善，<strong>降級轉調或轉成專業職（雙軌制）</strong>都是合理的選項。</p>
+  </section>
+  <section class="section" id="section-2">
+    <span class="section-number">SECTION 02</span>
+    <h2>不想升遷的世代</h2>
+    <p>過去的職涯邏輯是：員工努力工作，期待升遷帶來更高薪資與更大權限。但近年實務上出現一個新現象 —— <strong>有一群員工根本不想當更高階的主管</strong>。即使被推薦、被鼓勵，也明確表達拒絕。</p>
+    <h3>為什麼員工不想升遷</h3>
+    <p>研究與實務觀察整理出幾個主要原因：</p>
+    <table class="compare-table">
+      <thead>
+        <tr><th>拒絕升遷的理由</th><th>背後的考量</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>對上層主管的工作不嚮往</td><td>看到自己的主管每天的壓力、會議、責任，覺得不值得</td></tr>
+        <tr><td>薪資與責任不對等</td><td>升一級若沒有對應的薪資跳躍，多承擔的責任就只是免費勞動</td></tr>
+        <tr><td>挨罵與情緒勞動的增加</td><td>當主管要面對更多向上負責、被罵的情境</td></tr>
+        <tr><td>個人時間與自由度的重視</td><td>不願犧牲下班時間、不願接 LINE 訊息</td></tr>
+      </tbody>
+    </table>
+    <h3>新世代的職涯傾向：職涯極簡主義</h3>
+    <div class="concept">
+      <span class="concept-label">新興職涯現象</span>
+      <div class="concept-term">職涯極簡主義 <span class="original">Career Minimalism (Glassdoor, 2024)</span></div>
+      <p class="concept-def">職業平台 Glassdoor 在 2025 年 8 月發布的調查（樣本：1,000 多位美國職場專業人士）顯示，<strong>68% 的 Z 世代受訪者表示，除非主管職能帶來更高的薪資或更具份量的職稱，否則不會追求管理職</strong>。員工主動把職涯中不符合個人利益的部分剔除：不喜歡的工作不做、薪資與責任不對等的職位不接、下班後不回工作訊息。同份報告也指出 Z 世代對重視競爭與晉升的科技、顧問產業興趣下降，傳統的線性晉升模式正在被淘汰。</p>
+    </div>
+    <h3>玻璃心議題與管理風險</h3>
+    <p>另一個相關的世代現象是對職場互動的容忍度下降。同樣的話語、同樣的要求標準，在這個世代可能被視為霸凌。從 2025 年 7 月起職場霸凌防制相關規範也已啟動，組織必須花更多心力注意溝通方式。</p>
+    <p>這對主管造成的挑戰：傳統的嚴格要求、直接糾錯可能引發投訴；但完全不要求又無法達成績效目標。<strong>真正的解法不在於放鬆標準，而在於改變溝通的結構</strong> —— 這也是後段會討論的 Feedforward 前饋對話的價值所在。</p>
+    <h3>組織的應對方式</h3>
+    <p>面對這群不想升遷的員工，組織不應強推。可以做的是：</p>
+    <h4>建立雙軌制職涯路徑</h4>
+    <p>除了管理職的晉升路徑，同步建立專業職的發展路徑。讓不想當主管的人可以在專業上持續精進、獲得對應的薪資與地位，不必為了加薪就被迫接管理職。</p>
+    <h4>釐清升遷的真實誘因</h4>
+    <p>如果升遷帶來的權力、責任、學習機會無法吸引員工，問題就在於升遷本身的設計。<strong>主管的工作必須有足夠的吸引力，這群高潛力人才才願意接</strong>。</p>
+    <h4>留住不想升遷的明星員工</h4>
+    <p>有些人專業極強，但就是不想當主管。組織不該因此視之為人才流失預備軍，而是設計適合他們的環境。HBR 文章「留住你的銷售明星」（Toman &amp; Staples, 2022）就在處理這個議題：個人貢獻者的薪資、舞台、自主性都要被認真設計，否則他們會去自由工作市場找到更好的條件。</p>
+  </section>
+  <section class="section" id="section-3">
+    <span class="section-number">SECTION 03</span>
+    <h2>俱樂部式文化</h2>
+    <p>還有一類特殊的主管問題，比能力不足更難處理 —— 主管人非常好、跟團隊關係極佳，但<strong>績效持續不達標</strong>。員工都喜歡他、願意幫他做事、團隊氣氛融洽，但業績就是沒起色。</p>
+    <h3>什麼是俱樂部式文化</h3>
+    <div class="concept">
+      <span class="concept-label">學術概念</span>
+      <div class="concept-term">俱樂部式管理 <span class="original">Country Club Management (Blake &amp; Mouton, 1964)</span></div>
+      <p class="concept-def">出自 Blake 與 Mouton (1964) 提出的管理方格（Managerial Grid）模型中的 (1,9) 位置 —— 對人的關心極高、對生產的關心極低。借用美國鄉村俱樂部的意象：大家下班後喝啤酒、看球賽、聊天、相處愉快，但工作目標被擱置。組織內部以人際和諧為優先，犧牲了績效追求。員工不被挑戰、不被要求改善，因為主管不想破壞融洽氣氛。</p>
+    </div>
+
+    <figure class="grid-figure">
+      <svg viewBox="0 0 620 530" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="grid-title">
+        <title id="grid-title">Blake 與 Mouton 管理方格（Managerial Grid）</title>
+        <!-- 背景 -->
+        <rect x="0" y="0" width="620" height="530" fill="#fbfaf7"/>
+
+        <!-- Y 軸標題 -->
+        <text x="30" y="260" font-family="Noto Serif TC, serif" font-size="14" fill="#4a4a4a" transform="rotate(-90 30 260)" text-anchor="middle">對人的關心 (Concern for People)</text>
+
+        <!-- X 軸標題 -->
+        <text x="300" y="510" font-family="Noto Serif TC, serif" font-size="14" fill="#4a4a4a" text-anchor="middle">對生產的關心 (Concern for Production)</text>
+
+        <!-- 方格主體：原點在左下，每段 50px，9 交點 -->
+        <g transform="translate(100, 60)">
+          <!-- 背景方格：400x400，9 個交點（X=1..9），每段 50px -->
+          <rect x="0" y="0" width="400" height="400" fill="#f6f2e8" stroke="#d4c8a8" stroke-width="1"/>
+
+          <!-- 格線：內部 7 條 -->
+          <g stroke="#e5e0d5" stroke-width="0.5">
+            <line x1="50" y1="0" x2="50" y2="400"/>
+            <line x1="100" y1="0" x2="100" y2="400"/>
+            <line x1="150" y1="0" x2="150" y2="400"/>
+            <line x1="200" y1="0" x2="200" y2="400"/>
+            <line x1="250" y1="0" x2="250" y2="400"/>
+            <line x1="300" y1="0" x2="300" y2="400"/>
+            <line x1="350" y1="0" x2="350" y2="400"/>
+            <line x1="0" y1="50" x2="400" y2="50"/>
+            <line x1="0" y1="100" x2="400" y2="100"/>
+            <line x1="0" y1="150" x2="400" y2="150"/>
+            <line x1="0" y1="200" x2="400" y2="200"/>
+            <line x1="0" y1="250" x2="400" y2="250"/>
+            <line x1="0" y1="300" x2="400" y2="300"/>
+            <line x1="0" y1="350" x2="400" y2="350"/>
+          </g>
+
+          <!-- 軸刻度數字（X，1-9，從左到右） -->
+          <g font-family="Inter, sans-serif" font-size="11" fill="#8a8a8a" text-anchor="middle">
+            <text x="0" y="425">1</text>
+            <text x="50" y="425">2</text>
+            <text x="100" y="425">3</text>
+            <text x="150" y="425">4</text>
+            <text x="200" y="425">5</text>
+            <text x="250" y="425">6</text>
+            <text x="300" y="425">7</text>
+            <text x="350" y="425">8</text>
+            <text x="400" y="425">9</text>
+          </g>
+
+          <!-- 軸刻度數字（Y，1-9，從下到上） -->
+          <g font-family="Inter, sans-serif" font-size="11" fill="#8a8a8a" text-anchor="end">
+            <text x="-20" y="404">1</text>
+            <text x="-20" y="354">2</text>
+            <text x="-20" y="304">3</text>
+            <text x="-20" y="254">4</text>
+            <text x="-20" y="204">5</text>
+            <text x="-20" y="154">6</text>
+            <text x="-20" y="104">7</text>
+            <text x="-20" y="54">8</text>
+            <text x="-20" y="4">9</text>
+          </g>
+
+          <!-- 五個關鍵位置 -->
+          <!-- 對應：X=k 時 cx = (k-1)*50；Y=k 時 cy = 400 - (k-1)*50 -->
+          <!-- (1,1) Impoverished：左下 -->
+          <circle cx="0" cy="400" r="9" fill="#4a4a4a"/>
+          <text x="14" y="396" font-family="Noto Serif TC, serif" font-size="12" fill="#1a1a1a">(1,1) 放任式管理</text>
+          <text x="14" y="411" font-family="Noto Serif TC, serif" font-size="10" fill="#8a8a8a">Impoverished Management</text>
+
+          <!-- (9,1) Authority-Compliance：右下 -->
+          <circle cx="400" cy="400" r="9" fill="#4a4a4a"/>
+          <text x="388" y="396" font-family="Noto Serif TC, serif" font-size="12" fill="#1a1a1a" text-anchor="end">(9,1) 權威服從式管理</text>
+          <text x="388" y="411" font-family="Noto Serif TC, serif" font-size="10" fill="#8a8a8a" text-anchor="end">Authority-Compliance</text>
+
+          <!-- (1,9) Country Club：左上 —— 用 accent 紅色強調 -->
+          <circle cx="0" cy="0" r="14" fill="#8b2c2c" stroke="#fbfaf7" stroke-width="3"/>
+          <text x="22" y="-4" font-family="Noto Serif TC, serif" font-size="13" font-weight="700" fill="#8b2c2c">(1,9) 俱樂部式管理</text>
+          <text x="22" y="12" font-family="Noto Serif TC, serif" font-size="11" fill="#4a4a4a">Country Club Management</text>
+
+          <!-- (9,9) Team：右上 -->
+          <circle cx="400" cy="0" r="9" fill="#4a4a4a"/>
+          <text x="388" y="-4" font-family="Noto Serif TC, serif" font-size="12" fill="#1a1a1a" text-anchor="end">(9,9) 團隊式管理</text>
+          <text x="388" y="11" font-family="Noto Serif TC, serif" font-size="10" fill="#8a8a8a" text-anchor="end">Team Management</text>
+
+          <!-- (5,5) Middle-of-the-Road：中央 -->
+          <circle cx="200" cy="200" r="9" fill="#4a4a4a"/>
+          <text x="214" y="196" font-family="Noto Serif TC, serif" font-size="12" fill="#1a1a1a">(5,5) 中庸式管理</text>
+          <text x="214" y="211" font-family="Noto Serif TC, serif" font-size="10" fill="#8a8a8a">Middle-of-the-Road</text>
+        </g>
+      </svg>
+      <figcaption>管理方格（Managerial Grid）：俱樂部式管理位於 (1,9) 位置 —— 對人的關心極高，對生產的關心極低。Blake &amp; Mouton (1964) 將領導風格劃分為五種類型，俱樂部式管理只是其中一種失衡狀態。</figcaption>
+    </figure>
+    <h3>俱樂部文化能存活的條件</h3>
+    <p>這種文化看似溫馨，但其實只在一個條件下能持續存活：<strong>組織處於獨佔市場、沒有強大競爭者、毛利率高</strong>。當賺錢容易、競爭壓力不大時，人際和諧可以凌駕於績效追求。</p>
+    <div class="example">
+      <span class="example-label">經典案例</span>
+      <p>2022 年之前的 Google 是俱樂部文化的常見案例。在搜尋、廣告、地圖等核心業務上長期居於主導地位，員工福利優渥、文化寬鬆。但 2022 年 11 月 ChatGPT 推出後，Google 隨即啟動「code red」緊急應變機制 —— 執行長 Sundar Pichai 在多場訪談中承認 Google 對生成式 AI 的反應太慢，並請已於 2019 年卸下執行職務的兩位共同創辦人 Larry Page 與 Sergey Brin 回到第一線，協助制定 AI 戰略。組織重新進入緊張狀態，因為俱樂部文化禁不起真正的競爭。</p>
+    </div>
+    <h3>對主管的提醒</h3>
+    <p>如果發現自己的單位績效持續低落、員工卻都很開心、會議室裡聊天比討論工作多，這是俱樂部文化的警訊。處理方式不是破壞團隊和諧，而是<strong>重新引入挑戰性目標、引入外部標竿、明確區分專業表現與人際相處兩個維度</strong>。</p>
+    <p>能力高、態度佳的右上角人才，會在俱樂部文化中失去動力 —— 因為他們需要被挑戰、被認可的不只是相處愉快，更是工作上的卓越。組織若不能提供這個維度，這群人就會流失。</p>
+  </section>
+  <section class="section" id="section-4">
+    <span class="section-number">SECTION 04</span>
+    <h2>無疆界職涯與內部培育</h2>
+    <h3>勞動市場的結構性轉變</h3>
+    <p>台灣的勞動市場已進入長期缺工狀態 —— 90% 以上的公司都反映找不到人。傳統製造業、服務業比高科技業與金融業更難招募。原因是多重的：少子化、世代價值觀轉變、勞工選擇權增加。</p>
+    <h3>無疆界職涯：員工不再願意被組織綁定</h3>
+    <div class="concept">
+      <span class="concept-label">勞動市場新概念</span>
+      <div class="concept-term">無疆界職涯 <span class="original">Boundaryless Career (Arthur &amp; Rousseau, 1996)</span></div>
+      <p class="concept-def">員工不再追求在單一公司長期任職的傳統職涯路徑，而是用自由的方式組合自己的工作、收入、生活平衡與興趣。對這群人來說，<strong>自由度的價值高於薪資保障與生活穩定性</strong>。下一個世代對此的需求又比這個世代更高。</p>
+    </div>
+    <h3>多元職涯傾向</h3>
+    <div class="concept">
+      <span class="concept-label">勞動市場新概念</span>
+      <div class="concept-term">多元職涯傾向 <span class="original">Protean Career Orientation (Hall, 1976)</span></div>
+      <p class="concept-def">由 Hall (1976) 提出（後續由 Briscoe 與 Hall (2006) 重新概念化）。員工把自己當成職涯的主導者，依個人價值觀與成長需求主動選擇與調整工作。組織不再是唯一的職涯舞台，外部的副業、創業、自由工作都是合理選項。</p>
+    </div>
+    <p>這兩個概念都指向同一個結論：<strong>組織能留下員工的數量會持續下降</strong>。即使提供再好的福利，仍會有一群人選擇不被綁定。</p>
+    <h3>策略轉向：從外部招募到內部培育</h3>
+    <p>外部勞動市場稀缺、員工流動性提高，組織只剩兩條路：</p>
+    <h4>策略一：擴大員工技能投資</h4>
+    <p>既然留人困難，就把現有員工的能力做更大的提升。每個員工發揮的價值越高，組織對外部勞動市場的依賴就越低。</p>
+    <h4>策略二：用 AI 與自動化減少人力需求</h4>
+    <p>把重複性高的工作交給 AI 與自動化，把人的智力解放出來去做更高價值的事。從經濟學角度看，人本來就不該重複做大量例行工作。</p>
+    <p>當留人的成本越來越高、外部找人越來越困難，<strong>把內部既有員工培育起來是組織唯一可持續的策略</strong>。</p>
+  </section>
+  <section class="section" id="section-5">
+    <span class="section-number">SECTION 05</span>
+    <h2>Feedforward 前饋對話</h2>
+    <p>上週討論的 STAR+AR 框架，本質是回顧過去做了什麼、為什麼做不好、下次怎麼改善。它是有效的，但有一個結構性弱點 —— <strong>大部分對話時間都在討論過去的錯誤，這對主管和部屬都是壓力很大的情境</strong>。負面情緒容易被勾起，雙方都不愉快。</p>
+    <h3>Feedforward 的提出</h3>
+    <div class="concept">
+      <span class="concept-label">對話框架的轉向</span>
+      <div class="concept-term">Feedforward 前饋 <span class="original">(Goldsmith, 2002)</span></div>
+      <p class="concept-def">由領導力專家 Goldsmith (2002) 提出的對話替代方案。核心邏輯是把對話重心從<strong>回顧過去的錯誤</strong>轉為<strong>展望未來的改善</strong>。雖然仍會指出過去沒做好的地方，但大部分時間用於討論下一次怎麼做會更好。Goldsmith 的名言：「we can change the future, we can't change the past」（未來可以改變，過去無法）。</p>
+    </div>
+    <h3>Feedback 與 Feedforward 的對照</h3>
+    <table class="compare-table">
+      <thead>
+        <tr><th>面向</th><th>Feedback 回饋</th><th>Feedforward 前饋</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>時間焦點</td><td>過去發生的事情</td><td>未來可以怎麼做</td></tr>
+        <tr><td>情緒氛圍</td><td>壓力大、容易引發防衛</td><td>建設性、討論愉快</td></tr>
+        <tr><td>對話結構</td><td>「你那時為什麼沒...」</td><td>「下一次如果想得到 X 結果，你會怎麼做？」</td></tr>
+        <tr><td>受測者反應</td><td>常感到被批評、被否定</td><td>感到被支持、被引導</td></tr>
+        <tr><td>適合場景</td><td>事實釐清、責任歸屬</td><td>能力培養、行為改變</td></tr>
+      </tbody>
+    </table>
+    <h3>Feedforward 的對話範例</h3>
+    <div class="example">
+      <span class="example-label">應用示範</span>
+      <p>傳統 Feedback 的問法：你上次報告為什麼漏掉了財務數據？是不是沒專心準備？<br><br>Feedforward 改寫：下一次的報告，如果要讓主管一眼看到財務影響，你會怎麼安排內容順序？你需要哪些資料或時間來準備？<br><br>兩種問法的差異在於：<strong>前者把對話困在已發生的錯誤中，後者把對話導向具體可執行的下一步</strong>。對話結束後，部屬帶走的是可行動的改善計畫，而非挫敗感。</p>
+    </div>
+    <h3>需要注意的限制</h3>
+    <p>Feedforward 不是萬靈丹。它的有效前提是：</p>
+    <h4>當事人在意未來的成長</h4>
+    <p>若員工根本不在意工作、只想混過去，Feedforward 也無法讓他改變。對這類員工，主管仍需要走傳統的明確標準、追蹤、改善計畫、必要時退場機制。</p>
+    <h4>過去的錯誤必須先被指出</h4>
+    <p>Feedforward 不等於假裝過去沒事。錯誤仍要被點名、被理解，但<strong>不在那裡停留</strong>。指出之後立刻把對話導向未來：「我知道現在的狀況是這樣，那下一次我們要怎麼做？」</p>
+    <h4>持續性與耐心</h4>
+    <p>行為改變不會在一次對話後完成。Feedforward 需要透過持續對焦、引導、回顧，逐步形成新的工作模式。</p>
+  </section>
+
+  <div class="self-check" id="self-check">
+    <span class="self-check-label">Self Check</span>
+    <h3>自我檢核：是否能回答這些問題？</h3>
+    <ol>
+      <li>為什麼基層主管階段就應該開始跨部門歷練？這對組織的接班計畫有什麼意義？</li>
+      <li>KPI 與 OKR 在不同管理層級的適用性差異在哪？</li>
+      <li>專業能力突出、但管理能力不佳的主管，組織該如何處理？雙軌制的設計邏輯是什麼？</li>
+      <li>新世代員工拒絕升遷的主要原因有哪些？組織該強推還是接受？</li>
+      <li>什麼是職涯極簡主義？這個現象對 HR 的人才留任策略有什麼影響？</li>
+      <li>俱樂部式文化的特徵是什麼？為什麼說只有在獨佔市場才能存活？</li>
+      <li>無疆界職涯與多元職涯傾向分別在描述什麼？兩者對組織的共同警訊是什麼？</li>
+      <li>Feedforward 與 Feedback 的根本差異在哪？為什麼前者的對話氛圍會比較愉快？</li>
+      <li>Feedforward 的限制是什麼？什麼情況下仍需要傳統的 Feedback？</li>
+    </ol>
+  </div>
+
+  <section class="further" id="further">
+    <h2>延伸閱讀與資源</h2>
+    <ul>
+      <li><span class="tag">領導力</span><a href="https://marshallgoldsmith.com/articles/try-feedforward-instead-feedback/" target="_blank" rel="noopener">Goldsmith, M. (2002). Try Feedforward Instead of Feedback. Leader to Leader, Summer 2002.</a></li>
+      <li><span class="tag">勞動市場</span><a href="https://www.glassdoor.com/blog/why-gen-z-is-redefining-work/" target="_blank" rel="noopener">Glassdoor (2025). Why Gen Z is redefining the workplace with "career minimalism." Glassdoor Blog.（68% 數據與 Career Minimalism、Career Lily Pad 概念的官方來源）</a></li>
+      <li><span class="tag">勞動市場</span><a href="https://www.cw.com.tw/article/5137528" target="_blank" rel="noopener">Z 世代「職涯極簡主義」，拒升主管、做小副業，什麼邏輯？（天下雜誌，中文整理版）</a></li>
+      <li><span class="tag">職涯理論</span><a href="https://doi.org/10.1093/oso/9780195100143.001.0001" target="_blank" rel="noopener">Arthur, M. B., &amp; Rousseau, D. M. (1996). The Boundaryless Career: A New Employment Principle for a New Organizational Era. Oxford University Press.</a></li>
+      <li><span class="tag">職涯理論</span><a href="https://www.amazon.com/Careers-Organizations-Foresman-management-organizations/dp/0673160777" target="_blank" rel="noopener">Hall, D. T. (1976). Careers in Organizations. Scott Foresman.（Protean Career 概念首次提出）</a></li>
+      <li><span class="tag">職涯理論</span><a href="https://doi.org/10.1016/j.jvb.2005.09.002" target="_blank" rel="noopener">Briscoe, J. P., &amp; Hall, D. T. (2006). The interplay of boundaryless and protean careers: Combinations and implications. Journal of Vocational Behavior, 69(1), 4-18.</a></li>
+      <li><span class="tag">領導模型</span><a href="https://en.wikipedia.org/wiki/Managerial_grid_model" target="_blank" rel="noopener">Blake, R. R., &amp; Mouton, J. S. (1964). The Managerial Grid（Country Club Management 概念來源）</a></li>
+      <li><span class="tag">HBR 文章</span><a href="https://hbr.org/2022/04/how-to-retain-your-best-sales-talent" target="_blank" rel="noopener">Toman, N., &amp; Staples, J. (2022). How to Retain Your Best Sales Talent. Harvard Business Review.（中譯：留住你的銷售明星）</a></li>
+      <li><span class="tag">HBR 文章</span><a href="https://hbr.org/2021/08/let-your-top-performers-move-around-the-company" target="_blank" rel="noopener">Oakes, K. (2021). Let Your Top Performers Move Around the Company. Harvard Business Review.（中譯：讓你的頂尖員工在各部門輪調）</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>績效管理與人才發展 ｜ Week 13 講義</div>
+    <div>國立中山大學 ｜ 王豫萱</div>
+  </footer>
+</div>
+<script>
+  const sections = document.querySelectorAll('section[id], div[id="overview"], div[id="self-check"]');
+  const tocLinks = document.querySelectorAll('.toc a');
+  function updateActiveTOC() {
+    let current = '';
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 120) current = section.id;
+    });
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  }
+  window.addEventListener('scroll', updateActiveTOC);
+  updateActiveTOC();
+</script>
+</body>
+</html>
