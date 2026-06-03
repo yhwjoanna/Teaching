@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>集團跨公司工作週報系統</title>
+<style>
+:root{
+  --navy:#07213B; --navy2:#0E3358; --ink:#16202E; --muted:#6A7686;
+  --bg:#F4F2EC; --card:#FFFFFF; --line:#E3E0D7;
+  --green:#1F9D55; --green-bg:#E7F5EC; --amber:#D69A00; --amber-bg:#FBF1D8;
+  --red:#CE3B3B; --red-bg:#FBE7E7;
+  --accent:#C8A24B;
+  --shadow:0 1px 2px rgba(16,32,46,.06),0 8px 24px rgba(16,32,46,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans GB",-apple-system,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.6;
+  -webkit-font-smoothing:antialiased; padding-bottom:120px;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+  color:#fff; padding:34px 0 30px; position:relative; overflow:hidden;
+}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;
+  border:1px solid rgba(200,162,75,.25);border-radius:50%}
+header::before{content:"";position:absolute;right:10px;top:30px;width:140px;height:140px;
+  border:1px solid rgba(200,162,75,.18);border-radius:50%}
+.h-top{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:3px;
+  color:var(--accent);text-transform:uppercase;font-weight:600;margin-bottom:8px}
+h1{font-size:25px;font-weight:700;letter-spacing:.5px}
+.h-sub{color:#C5D2E0;font-size:13px;margin-top:8px;max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px}
+.meta label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:#A9BBD0;letter-spacing:1px}
+.meta input{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+  color:#fff;border-radius:8px;padding:8px 11px;font-size:14px;min-width:150px;font-family:inherit}
+.meta input::placeholder{color:#8da3bd}
+.meta input:focus{outline:none;border-color:var(--accent);background:rgba(255,255,255,.16)}
+.meta input[readonly]{background:rgba(255,255,255,.05);cursor:default;color:#cdd9e7}
+.meta input[readonly]:focus{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.05)}
+.meta select{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:8px;padding:8px 11px;font-size:14px;min-width:110px;font-family:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23A9BBD0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.meta select:focus{outline:none;border-color:var(--accent)}
+.meta select option{color:#16202E}
+
+/* card / section */
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  margin-top:20px;box-shadow:var(--shadow);overflow:hidden}
+.sec-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.sec-no{background:var(--navy);color:#fff;width:26px;height:26px;border-radius:7px;
+  display:grid;place-items:center;font-size:13px;font-weight:700;flex-shrink:0}
+.sec-title{font-size:16px;font-weight:700}
+.sec-desc{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;max-width:46%}
+.sec-body{padding:18px 20px}
+
+/* part1 allocation */
+.alloc-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.alloc-row .ent{flex:1;border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font-size:14px;font-family:inherit;background:#FCFBF8;color:var(--ink)}
+.alloc-row select.ent{cursor:pointer;appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236A7686' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.alloc-row select.ent:focus{border-color:var(--navy2)}
+.alloc-row .pctwrap{position:relative;width:104px}
+.alloc-row input.pct{width:104px;text-align:right;border:1px solid var(--line);border-radius:8px;
+  padding:9px 26px 9px 11px;font-size:14px;font-family:inherit;background:#FCFBF8}
+.alloc-row .pctwrap::after{content:"%";position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:13px;pointer-events:none}
+input:focus{outline:none;border-color:var(--navy2)}
+.del{background:none;border:none;color:#C0BCB0;cursor:pointer;font-size:18px;line-height:1;
+  padding:4px 6px;border-radius:6px;transition:.15s}
+.del:hover{color:var(--red);background:var(--red-bg)}
+.addbtn{background:none;border:1px dashed var(--line);color:var(--muted);cursor:pointer;
+  padding:8px 14px;border-radius:8px;font-size:13px;font-family:inherit;margin-top:4px;transition:.15s}
+.addbtn:hover{border-color:var(--navy2);color:var(--navy2);background:#FAFAF7}
+
+.gauge{margin-top:16px;background:#F0EEE7;border-radius:999px;height:14px;overflow:hidden;position:relative}
+.gauge-fill{height:100%;border-radius:999px;transition:width .4s cubic-bezier(.4,0,.2,1),background .3s}
+.gauge-info{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:13px}
+.gauge-num{font-weight:700;font-size:15px}
+.badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+.badge.ok{background:var(--green-bg);color:var(--green)}
+.badge.bad{background:var(--red-bg);color:var(--red)}
+
+/* part2 bsc */
+.persp{border:1px solid var(--line);border-radius:11px;margin-bottom:14px;overflow:hidden}
+.persp-head{display:flex;align-items:center;gap:9px;padding:10px 14px;background:#FAFAF7;border-bottom:1px solid var(--line)}
+.persp-tag{font-size:11px;font-weight:700;color:#fff;padding:3px 9px;border-radius:6px;letter-spacing:.5px}
+.persp-fin{background:#2C5F8A}.persp-cus{background:#4A7C59}.persp-proc{background:#8A6D3B}.persp-learn{background:#6B5B95}
+.persp-note{font-size:11px;color:var(--muted);margin-left:auto}
+.act{padding:13px 14px;border-bottom:1px dashed var(--line)}
+.act:last-child{border-bottom:none}
+.act-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.act-name{flex:1;min-width:180px;border:1px solid var(--line);border-radius:8px;padding:8px 11px;
+  font-size:14px;font-family:inherit;background:#FCFBF8;font-weight:600}
+.lights{display:flex;gap:6px}
+.lt{width:30px;height:30px;border-radius:50%;border:2px solid transparent;cursor:pointer;
+  position:relative;transition:.18s;opacity:.32}
+.lt.g{background:var(--green)}.lt.a{background:var(--amber)}.lt.r{background:var(--red)}
+.lt:hover{opacity:.7}
+.lt.on{opacity:1;transform:scale(1.12);box-shadow:0 0 0 3px #fff,0 0 0 5px currentColor}
+.lt.g.on{color:var(--green)}.lt.a.on{color:var(--amber)}.lt.r.on{color:var(--red)}
+.field{margin-top:10px}
+.field label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:4px}
+.field .cnt{font-variant-numeric:tabular-nums}
+.field .cnt.full{color:var(--red);font-weight:600}
+.field input.txt{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 11px;
+  font-size:13.5px;font-family:inherit;background:#FCFBF8}
+.field.locked{opacity:.5}
+.field.locked input{background:#F0EEE7;cursor:not-allowed;color:#9a9a90}
+.field.req label{color:var(--amber)}
+.field.reqr label{color:var(--red)}
+.out-lbl-g{color:var(--green)!important}
+
+/* part3 */
+.collab-card{border:1px solid var(--line);border-radius:11px;padding:13px 14px;margin-bottom:12px;background:#FCFBF8}
+.collab-co{font-size:13.5px;font-weight:700;margin-bottom:9px;color:var(--ink)}
+.collab-co .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:middle}
+.task-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+.task-txt{flex:1;min-width:220px;border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:13.5px;font-family:inherit;background:#fff}
+.cats{display:flex;gap:5px;flex-wrap:wrap}
+.cat-pill{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:5px 12px;font-size:12.5px;font-family:inherit;cursor:pointer;transition:.15s;white-space:nowrap}
+.cat-pill:hover{border-color:var(--navy2);color:var(--navy2)}
+.cat-pill.on{color:#fff;border-color:transparent}
+.cat-pill{position:relative}
+.cat-pill::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);background:#16202E;color:#fff;font-size:11.5px;font-weight:400;padding:7px 11px;border-radius:8px;width:max-content;max-width:210px;line-height:1.5;text-align:left;opacity:0;visibility:hidden;transition:.15s;pointer-events:none;z-index:60;box-shadow:0 6px 18px rgba(0,0,0,.22)}
+.cat-pill::before{content:"";position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#16202E;opacity:0;visibility:hidden;transition:.15s;z-index:60}
+.cat-pill:hover::after,.cat-pill:hover::before{opacity:1;visibility:visible}
+.cats .cat-pill:nth-last-child(-n+2)::after{left:auto;right:0;transform:none}
+.cats .cat-pill:nth-last-child(-n+2)::before{left:auto;right:18px;transform:none}
+.task-add{margin-top:2px}
+.collab-item{margin-bottom:12px}
+.collab-item label{font-size:13px;font-weight:600;display:block;margin-bottom:5px}
+.collab-item label .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:middle}
+.collab-item textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font-size:13.5px;font-family:inherit;background:#FCFBF8;resize:vertical;min-height:46px}
+textarea:focus{outline:none;border-color:var(--navy2)}
+.hint{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+
+/* part4 */
+.escalation .sec-head{background:var(--red-bg);border-bottom-color:#f2cccc}
+.escalation .sec-no{background:var(--red)}
+.escalation .sec-title{color:#9a2a2a}
+.esc-box{width:100%;border:1.5px solid #e7b3b3;border-radius:10px;padding:11px 13px;
+  font-size:14px;font-family:inherit;background:#FEF8F8;resize:vertical;min-height:64px}
+.esc-box:focus{outline:none;border-color:var(--red)}
+
+/* footer hr note */
+.hrnote{margin-top:20px;border:1px dashed var(--line);border-radius:12px;background:#FAFAF7}
+.hrnote summary{cursor:pointer;padding:14px 18px;font-size:13.5px;font-weight:600;color:var(--navy2);list-style:none}
+.hrnote summary::-webkit-details-marker{display:none}
+.hrnote summary::before{content:"▸ ";color:var(--accent)}
+.hrnote[open] summary::before{content:"▾ "}
+.hrnote .body{padding:0 18px 16px;font-size:13px;color:#3d4654;line-height:1.8}
+.hrnote code{background:#EEF0F2;padding:2px 7px;border-radius:5px;font-size:12.5px}
+
+/* copy bar */
+.copybar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:14px 0;z-index:40}
+.copybar .wrap{display:flex;align-items:center;gap:16px;justify-content:flex-end}
+.copybar .status{font-size:13px;color:var(--muted);margin-right:auto}
+.copybtn{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:13px 26px;
+  font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:.18s;
+  display:flex;align-items:center;gap:9px;box-shadow:0 4px 14px rgba(7,33,59,.28)}
+.copybtn:hover{background:var(--navy2);transform:translateY(-1px)}
+.copybtn:active{transform:translateY(0)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(16,32,46,.45);backdrop-filter:blur(2px);
+  display:none;align-items:center;justify-content:center;z-index:90;opacity:0;transition:opacity .2s}
+.overlay.show{display:flex;opacity:1}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:90%;padding:26px;
+  box-shadow:0 24px 60px rgba(16,32,46,.3);transform:translateY(12px) scale(.97);transition:.25s cubic-bezier(.34,1.4,.64,1)}
+.overlay.show .modal{transform:translateY(0) scale(1)}
+.modal .ico{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:24px;margin-bottom:14px}
+.modal.ok .ico{background:var(--green-bg);color:var(--green)}
+.modal.err .ico{background:var(--red-bg);color:var(--red)}
+.modal h3{font-size:18px;margin-bottom:8px}
+.modal p{font-size:14px;color:#46505f;margin-bottom:6px}
+.modal ul{margin:8px 0 4px;padding-left:18px;font-size:13.5px;color:var(--red)}
+.modal ul li{margin-bottom:3px}
+.modal .mbtn{margin-top:18px;width:100%;background:var(--navy);color:#fff;border:none;
+  border-radius:9px;padding:11px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
+.modal.ok .mbtn{background:var(--green)}
+.modal .mbtn:hover{opacity:.92}
+
+/* PDF report (print) */
+.copybtn.alt{background:#fff;color:var(--navy);border:1.5px solid var(--navy);box-shadow:none}
+.copybtn.alt:hover{background:#F2F4F7;transform:translateY(-1px)}
+#print-area{display:none}
+.rpt h1{font-size:20px;margin-bottom:6px;color:#07213B}
+.rpt-meta{font-size:12px;color:#555;margin-bottom:14px;border-bottom:2px solid #07213B;padding-bottom:9px}
+.rpt h2{font-size:15px;margin:16px 0 8px;color:#07213B;border-left:4px solid #C8A24B;padding-left:8px}
+.rpt h3{font-size:13px;margin:11px 0 4px;color:#16202E}
+.rpt-tbl{border-collapse:collapse;width:55%;margin-bottom:8px}
+.rpt-tbl th,.rpt-tbl td{border:1px solid #c8c8c8;padding:6px 10px;font-size:12.5px;text-align:left}
+.rpt-tbl th{background:#07213B;color:#fff}
+.rpt-tbl tr.tot td{font-weight:700;background:#f1f1f1}
+.rpt-tasks{margin:0 0 8px;padding-left:2px;list-style:none}
+.rpt-tasks li{font-size:12.5px;margin-bottom:5px;line-height:1.5}
+.rpt-tag{display:inline-block;color:#fff;font-size:11px;padding:1px 9px;border-radius:10px;margin-right:5px}
+.rpt-esc,.rpt-empty{font-size:12.5px}
+/* ---- responsive (tablet / mobile) ---- */
+@media(max-width:768px){
+  .sec-head{flex-wrap:wrap}
+  .sec-desc{flex-basis:100%;margin-left:38px;text-align:left;max-width:100%;margin-top:3px}
+  .meta input,.meta select{min-width:0}
+  .meta label{flex:1 1 calc(50% - 7px)}
+}
+@media(max-width:560px){
+  .wrap{padding:0 14px}
+  header{padding:22px 0 20px}
+  header::before,header::after{display:none}
+  h1{font-size:20px}
+  .meta{gap:10px;margin-top:16px}
+  .meta label{flex:1 1 100%}
+  .meta input,.meta select{width:100%}
+  .sec-head{padding:14px 16px}
+  .sec-title{font-size:15px}
+  .sec-body{padding:14px 16px}
+  .sec-desc{margin-left:36px;font-size:11.5px}
+  .alloc-row{gap:8px}
+  .alloc-row .pctwrap,.alloc-row input.pct{width:84px}
+  .alloc-row input.pct{padding:9px 22px 9px 9px}
+  .task-txt{flex:1 1 100%;min-width:0}
+  .cats{flex:1 1 auto;min-width:0}
+  .cat-pill{padding:7px 13px;font-size:13px}
+  .cat-pill::after,.cat-pill::before{display:none}
+  .copybar{padding:12px 0}
+  .copybar .wrap{padding:0 14px}
+  .copybar .status{display:none}
+  .copybtn{flex:1;justify-content:center;padding:14px}
+  body{padding-bottom:96px}
+}
+@media print{
+  body{background:#fff !important;padding:0 !important}
+  body>header,body>.wrap,body>.copybar,body>.overlay{display:none !important}
+  #print-area{display:block !important;padding:6px}
+  @page{margin:1.6cm}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>集團跨公司工作週報系統</h1>
+    <div class="meta">
+      <label>部門<select id="m-dept">
+        <option value="">請選擇</option>
+        <option>品牌</option><option>行銷</option><option>法務</option><option>人資</option><option>財務</option>
+      </select></label>
+      <label>主管姓名<input id="m-name" placeholder="王小明"></label>
+      <label>報告日期<input id="m-date" type="date"></label>
+      <label>報告週數（自動帶入）<input id="m-week" placeholder="選日期後自動帶入" readonly></label>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- PART 1 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-no">1</div>
+      <div class="sec-title">工時分配</div>
+      <div class="sec-desc">請填寫本週於各個公司工時分配比例・合計須＝100%</div>
+    </div>
+    <div class="sec-body">
+      <div id="alloc-list"></div>
+      <button class="addbtn" id="add-ent">＋ 新增公司</button>
+      <div class="gauge"><div class="gauge-fill" id="gauge-fill"></div></div>
+      <div class="gauge-info">
+        <span style="color:var(--muted)">工時分配合計</span>
+        <span><span class="gauge-num" id="gauge-num">0</span>% <span class="badge bad" id="gauge-badge">需等於 100%</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 2 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-no">2</div>
+      <div class="sec-title">跨集團協作與工作任務</div>
+      <div class="sec-desc">列出本週完成主要任務，每筆可標註所屬任務面向</div>
+    </div>
+    <div class="sec-body">
+      <div class="hint">依工時分配的公司，列出本週完成的主要任務（選擇部門後，主要任務欄可從下拉清單套用常用範本再修改）；每筆主要任務後可選一個任務面向（財務／顧客／內部流程／人才）。沒有可留空。</div>
+      <div id="collab-list"></div>
+    </div>
+  </section>
+
+  <!-- PART 4 -->
+  <section class="escalation">
+    <div class="sec-head">
+      <div class="sec-no">3</div>
+      <div class="sec-title">高層支援與決策需求</div>
+      <div class="sec-desc">向上管理快速通道・高層優先閱讀</div>
+    </div>
+    <div class="sec-body">
+      <textarea class="esc-box" id="escalation" placeholder="本週急需董事會／總經理／平行部門立即介入排除的障礙。若無，請填「無」。"></textarea>
+    </div>
+  </section>
+
+</div>
+
+<!-- copy bar -->
+<div class="copybar">
+  <div class="wrap">
+    <span class="status" id="status">填寫完成後，點擊匯出 PDF 下載報表</span>
+    <button class="copybtn" id="pdfbtn">⤓ 匯出 PDF</button>
+  </div>
+</div>
+
+<div id="print-area"></div>
+<datalist id="task-tpl"></datalist>
+
+<!-- modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="ico" id="m-ico">✓</div>
+    <h3 id="m-title"></h3>
+    <div id="m-content"></div>
+    <button class="mbtn" id="m-close">知道了</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- state ----------
+  var COMPANIES = ["酒店","餐飲","文旅","建設","藝術","微行旅"];
+  var entities = [
+    {name:"酒店", pct:40},
+    {name:"餐飲", pct:30},
+    {name:"文旅", pct:30}
+  ];
+  var CATS = [
+    {n:"財務", c:"#2563EB", d:"營收、成本、獲利、預算達成等財務成果"},
+    {n:"顧客", c:"#059669", d:"顧客滿意度、客訴處理、市場與客戶關係經營"},
+    {n:"內部流程", c:"#D97706", d:"營運效率、流程改善、專案執行與品質管理"},
+    {n:"人才", c:"#7C3AED", d:"人才培育、團隊發展、關鍵職位與能力建構"}
+  ];
+  var TEMPLATES = {
+    "品牌":["品牌活動企劃與執行","社群內容規劃與經營","品牌識別與形象維護","跨品牌行銷協作","年度品牌預算控管"],
+    "行銷":["行銷活動規劃與執行","廣告投放與成效分析","會員經營與回購提升","通路與異業合作洽談","行銷預算控管"],
+    "法務":["合約審閱與修訂","法律風險評估","爭議與訴訟處理","法遵政策制定與宣導","智慧財產權管理"],
+    "人資":["招募與面試作業","教育訓練規劃與執行","績效考核作業","薪酬與福利制度檢討","員工關係與溝通"],
+    "財務":["月結與財務報表編製","預算編列與控管","成本分析與管控","資金與現金流管理","稅務申報與法遵"]
+  };
+  var collab = {}; // entityName -> [{task, cat}]
+
+  var $ = function(s,el){return (el||document).querySelector(s)};
+  var ce = function(t,c){var e=document.createElement(t); if(c)e.className=c; return e};
+
+  // ---------- PART 1 render ----------
+  function renderAlloc(){
+    var list = $("#alloc-list"); list.innerHTML="";
+    entities.forEach(function(ent,i){
+      var row = ce("div","alloc-row");
+      var n = ce("select","ent");
+      COMPANIES.forEach(function(c){
+        var usedByOther = entities.some(function(e,j){return j!==i && e.name===c});
+        if(usedByOther) return;
+        var op=ce("option"); op.value=c; op.textContent=c;
+        if(ent.name===c) op.selected=true;
+        n.appendChild(op);
+      });
+      n.addEventListener("change",function(){ entities[i].name=n.value; renderAlloc(); syncCollab(); });
+      var pw = ce("div","pctwrap");
+      var p = ce("input","pct"); p.type="number"; p.min="0"; p.max="100"; p.value=ent.pct===0?"":ent.pct;
+      p.placeholder="0";
+      p.addEventListener("input",function(){ entities[i].pct = parseFloat(p.value)||0; updateGauge(); });
+      pw.appendChild(p);
+      var d = ce("button","del"); d.innerHTML="✕"; d.title="刪除";
+      d.addEventListener("click",function(){ entities.splice(i,1); renderAlloc(); updateGauge(); syncCollab(); });
+      row.appendChild(n); row.appendChild(pw); row.appendChild(d);
+      list.appendChild(row);
+    });
+    updateGauge();
+  }
+  function updateGauge(){
+    var sum = entities.reduce(function(a,e){return a+(parseFloat(e.pct)||0)},0);
+    sum = Math.round(sum*10)/10;
+    var fill = $("#gauge-fill"), num=$("#gauge-num"), badge=$("#gauge-badge");
+    num.textContent = sum;
+    fill.style.width = Math.min(sum,100)+"%";
+    var ok = (sum===100);
+    fill.style.background = ok ? "var(--green)" : "var(--red)";
+    badge.className = "badge "+(ok?"ok":"bad");
+    badge.textContent = ok ? "✓ 已達 100%" : "需等於 100%";
+  }
+
+  // ---------- PART 3 ----------
+  function syncCollab(){ renderCollab(); }
+  function getTasks(name){ if(!collab[name]||!collab[name].length) collab[name]=[{task:"",cat:""}]; return collab[name]; }
+  function renderCollab(){
+    var list=$("#collab-list"); list.innerHTML="";
+    entities.forEach(function(ent){
+      if(!ent.name) return;
+      var tasks=getTasks(ent.name);
+      var card=ce("div","collab-card");
+      var co=ce("div","collab-co"); co.innerHTML='<span class="dot"></span>'+escapeHtml(ent.name);
+      card.appendChild(co);
+      tasks.forEach(function(t,ti){ card.appendChild(renderTask(t,ti,tasks)); });
+      var add=ce("button","addbtn task-add"); add.textContent="＋ 新增主要任務";
+      add.addEventListener("click",function(){ tasks.push({task:"",cat:""}); renderCollab(); });
+      card.appendChild(add);
+      list.appendChild(card);
+    });
+    if(!list.children.length){ list.innerHTML='<div class="hint" style="margin:0">請先於工時分配新增公司。</div>'; }
+  }
+  function renderTask(t,ti,tasks){
+    var row=ce("div","task-row");
+    var inp=ce("input","task-txt"); inp.type="text"; inp.value=t.task; inp.placeholder="輸入主要任務，或從清單選取範本後修改…"; inp.setAttribute("list","task-tpl");
+    inp.addEventListener("input",function(){ t.task=inp.value; });
+    var cats=ce("div","cats");
+    CATS.forEach(function(C){
+      var pill=ce("button","cat-pill"); pill.type="button"; pill.textContent=C.n; pill.setAttribute("data-tip",C.d);
+      if(t.cat===C.n){ pill.className+=" on"; pill.style.background=C.c; pill.style.borderColor=C.c; }
+      pill.addEventListener("click",function(){ t.cat=(t.cat===C.n?"":C.n); renderCollab(); });
+      cats.appendChild(pill);
+    });
+    row.appendChild(inp); row.appendChild(cats);
+    if(tasks.length>1){
+      var d=ce("button","del"); d.innerHTML="✕"; d.title="刪除主要任務";
+      d.addEventListener("click",function(){ tasks.splice(ti,1); renderCollab(); });
+      row.appendChild(d);
+    }
+    return row;
+  }
+
+  function escapeHtml(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+  // ---------- validate ----------
+  function validate(){
+    var errs=[];
+    var sum=entities.reduce(function(a,e){return a+(parseFloat(e.pct)||0)},0);
+    sum=Math.round(sum*10)/10;
+    if(sum!==100) errs.push("工時分配合計為 "+sum+"%，必須等於 100% 才能產出報表。");
+    return errs;
+  }
+  // ---------- modal ----------
+  function modal(type,title,contentHtml){
+    var ov=$("#overlay"), m=$("#modal");
+    m.className="modal "+(type==="ok"?"ok":"err");
+    $("#m-ico").textContent = type==="ok"?"✓":"!";
+    $("#m-title").textContent=title;
+    $("#m-content").innerHTML=contentHtml;
+    ov.classList.add("show");
+  }
+  $("#m-close").addEventListener("click",function(){ $("#overlay").classList.remove("show"); });
+  $("#overlay").addEventListener("click",function(e){ if(e.target===this) this.classList.remove("show"); });
+
+  // ---------- date -> ISO week ----------
+  function isoWeek(d){
+    var dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+    var day=dt.getUTCDay()||7; dt.setUTCDate(dt.getUTCDate()+4-day);
+    var ys=new Date(Date.UTC(dt.getUTCFullYear(),0,1));
+    var wk=Math.ceil((((dt-ys)/86400000)+1)/7);
+    return {year:dt.getUTCFullYear(), week:wk};
+  }
+  $("#m-date").addEventListener("change",function(){
+    var v=$("#m-date").value;
+    if(!v){ $("#m-week").value=""; return; }
+    var w=isoWeek(new Date(v+"T00:00:00"));
+    $("#m-week").value="W"+w.week+" / "+w.year;
+  });
+
+  // ---------- add entity ----------
+  $("#add-ent").addEventListener("click",function(){
+    var used=entities.map(function(e){return e.name});
+    var avail=null;
+    for(var k=0;k<COMPANIES.length;k++){ if(used.indexOf(COMPANIES[k])<0){avail=COMPANIES[k];break;} }
+    if(!avail){ modal("err","已達上限","<p>酒店、餐飲、文旅、建設、藝術、微行旅共六個公司已全部加入，無法再新增。</p>"); return; }
+    entities.push({name:avail,pct:0}); renderAlloc(); syncCollab();
+  });
+
+  // ---------- export PDF ----------
+  function catColor(n){ for(var i=0;i<CATS.length;i++){ if(CATS[i].n===n) return CATS[i].c; } return "#888"; }
+  function buildReportHTML(){
+    var dept=$("#m-dept").value||"—", name=$("#m-name").value||"—", week=$("#m-week").value||"—", date=$("#m-date").value||"—";
+    var h='<div class="rpt"><h1>集團跨公司工作週報</h1>';
+    h+='<p class="rpt-meta">部門：'+escapeHtml(dept)+'　｜　主管：'+escapeHtml(name)+'　｜　週數：'+escapeHtml(week)+'　｜　日期：'+escapeHtml(date)+'</p>';
+    h+='<h2>一、工時分配</h2><table class="rpt-tbl"><tr><th>公司</th><th>工時分配</th></tr>';
+    var sum=0;
+    entities.forEach(function(e){ if(!e.name&&!e.pct)return; sum+=(parseFloat(e.pct)||0); h+='<tr><td>'+escapeHtml(e.name||"—")+'</td><td>'+(parseFloat(e.pct)||0)+'%</td></tr>'; });
+    h+='<tr class="tot"><td>合計</td><td>'+Math.round(sum*10)/10+'%</td></tr></table>';
+    h+='<h2>二、跨集團協作與工作任務</h2>';
+    var any=false;
+    entities.forEach(function(e){
+      if(!e.name) return;
+      var tasks=(collab[e.name]||[]).filter(function(t){return t.task.trim()});
+      if(!tasks.length) return; any=true;
+      h+='<h3>'+escapeHtml(e.name)+'</h3><ul class="rpt-tasks">';
+      tasks.forEach(function(t){
+        var tag=t.cat?'<span class="rpt-tag" style="background:'+catColor(t.cat)+'">'+escapeHtml(t.cat)+'</span>':'';
+        h+='<li>'+tag+escapeHtml(t.task.trim())+'</li>';
+      });
+      h+='</ul>';
+    });
+    if(!any) h+='<p class="rpt-empty">（本週無特別記錄）</p>';
+    h+='<h2>三、高層支援需求</h2>';
+    var e2=$("#escalation").value.trim();
+    h+='<p class="rpt-esc">'+(e2?escapeHtml(e2):"無")+'</p></div>';
+    return h;
+  }
+  $("#pdfbtn").addEventListener("click",function(){
+    var errs=validate();
+    if(errs.length){ modal("err","尚無法匯出","<p>請先修正以下項目：</p><ul>"+errs.map(function(e){return "<li>"+escapeHtml(e)+"</li>"}).join("")+"</ul>"); return; }
+    $("#print-area").innerHTML=buildReportHTML();
+    var ot=document.title;
+    var _dept=$("#m-dept").value||"部門", _name=$("#m-name").value||"姓名", _wk=($("#m-week").value||"週數").replace(/\//g,"-").replace(/\s/g,"");
+    document.title=_dept+"_"+_name+"_"+_wk;
+    window.print();
+    setTimeout(function(){document.title=ot;},800);
+  });
+
+  // ---------- task templates ----------
+  function fillTemplates(){
+    var list=TEMPLATES[$("#m-dept").value]||[];
+    var dl=$("#task-tpl"); dl.innerHTML="";
+    list.forEach(function(t){ var o=document.createElement("option"); o.value=t; dl.appendChild(o); });
+  }
+  $("#m-dept").addEventListener("change",fillTemplates);
+
+  // ---------- init ----------
+  renderAlloc(); renderCollab(); fillTemplates();
+})();
+</script>
+</body>
+</html>
