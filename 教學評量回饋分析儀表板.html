@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>教學評量回饋分析儀表板</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<style>
+:root{
+ --navy:#2E5A87; --navy-d:#234766; --red:#C0504D; --amber:#D99058; --sky:#9DB9D1;
+ --ink:#1f2630; --muted:#6b7785; --line:#e4e9ef; --bg:#eef1f5; --card:#ffffff;
+ --good:#2f8f5b; --radius:12px; --gap:18px;
+ --font:"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
+header.top{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;border-radius:var(--radius);padding:22px 26px;margin-bottom:var(--gap);box-shadow:0 6px 18px rgba(35,71,102,.18)}
+header.top h1{font-size:23px;font-weight:700;letter-spacing:.5px}
+header.top .sub{font-size:13px;opacity:.85;margin-top:5px}
+nav.tabs{display:flex;gap:8px;margin-bottom:var(--gap)}
+nav.tabs button{flex:0 0 auto;border:none;background:var(--card);color:var(--muted);font-family:inherit;font-size:14px;font-weight:600;padding:11px 22px;border-radius:10px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:.15s}
+nav.tabs button.active{background:var(--navy);color:#fff;box-shadow:0 3px 10px rgba(46,90,135,.3)}
+.page{display:none}.page.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--gap);margin-bottom:var(--gap)}
+.kpi{background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.07);border-left:4px solid var(--navy)}
+.kpi.warn{border-left-color:var(--red)} .kpi.good{border-left-color:var(--good)}
+.kpi .label{font-size:12.5px;color:var(--muted);letter-spacing:.3px}
+.kpi .val{font-size:30px;font-weight:800;color:var(--ink);margin-top:3px}
+.kpi .note{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi .val small{font-size:15px;font-weight:600;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--gap);margin-bottom:var(--gap)}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.card h3{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.card .cap{font-size:12px;color:var(--muted);margin-bottom:12px}
+.chart-box{position:relative;width:100%}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.toolbar label{font-size:12.5px;color:var(--muted)}
+.toolbar select{font-family:inherit;font-size:13px;padding:7px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+.rec{background:var(--card);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.07);margin-bottom:var(--gap)}
+.rec h3{font-size:16px;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.rec .col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.rec .col{grid-template-columns:1fr}}
+.rec h4{font-size:13.5px;font-weight:700;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.rec h4.s{color:var(--good)} .rec h4.w{color:var(--red)}
+.rec ul{list-style:none} .rec li{font-size:13.5px;padding:7px 0 7px 20px;position:relative;border-bottom:1px solid #f3f5f8}
+.rec li:last-child{border-bottom:none}
+.rec li::before{content:"";position:absolute;left:3px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--navy)}
+.rec li.w::before{background:var(--red)} .rec li.s::before{background:var(--good)}
+.rec li b{font-weight:700}
+.actions{margin-top:16px;background:#f6f9fc;border:1px solid #e0e9f2;border-radius:10px;padding:14px 16px}
+.actions h4{color:var(--navy);border:none;margin-bottom:8px}
+.actions ol{padding-left:20px} .actions li{font-size:13.5px;padding:5px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{position:sticky;top:0;background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;padding:10px 11px;text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+thead th.num{text-align:center}
+thead th:hover{background:var(--navy-d)}
+tbody td{padding:9px 11px;border-bottom:1px solid var(--line)}
+tbody td.num{text-align:center}
+tbody tr:nth-child(even){background:#f7fafc}
+tbody tr:hover{background:#eef4fa}
+.bar-cell{display:flex;align-items:center;gap:8px}
+.minibar{height:8px;border-radius:4px;background:var(--navy)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.tag.lo{background:#fbe7e6;color:var(--red)} .tag.hi{background:#e4f3ea;color:var(--good)} .tag.mid{background:#eef1f5;color:var(--muted)}
+.scroll{max-height:560px;overflow:auto;border-radius:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.q-full{font-size:13px;line-height:1.5}
+.foot{font-size:11.5px;color:var(--muted);text-align:center;padding:18px 0 6px}
+.note-box{font-size:12px;color:var(--muted);background:#f6f9fc;border-radius:8px;padding:10px 14px;margin-top:12px;border:1px solid #e6eef6}
+/* chart heights (class-based so media queries can override) */
+.ch-means{height:420px}.ch-dim{height:300px}.ch-dist{height:430px}
+.scroll{-webkit-overflow-scrolling:touch}
+/* tablet */
+@media(max-width:900px){
+ .wrap{padding:18px}
+ .ch-means{height:440px}.ch-dist{height:450px}
+}
+/* phone */
+@media(max-width:600px){
+ :root{--gap:14px;--radius:10px}
+ .wrap{padding:12px}
+ header.top{padding:16px 18px}
+ header.top h1{font-size:19px}
+ header.top .sub{font-size:12px}
+ .kpis{grid-template-columns:1fr 1fr;gap:12px}
+ .kpi{padding:13px 15px;border-left-width:3px}
+ .kpi .val{font-size:23px} .kpi .label{font-size:11.5px} .kpi .note{font-size:11px}
+ .card{padding:15px 15px} .card h3{font-size:14px}
+ .rec{padding:16px 16px} .rec h3{font-size:15px}
+ .ch-means{height:480px}.ch-dim{height:300px}.ch-dist{height:500px}
+ .toolbar{width:100%} .toolbar select{flex:1}
+ table{font-size:12px} thead th{padding:8px 9px;font-size:11.5px} tbody td{padding:8px 9px}
+ .scroll{max-height:72vh}
+ .q-full{min-width:180px}
+ .legend{font-size:11px;gap:8px}
+ .foot{font-size:11px}
+}
+/* small phone */
+@media(max-width:380px){
+ .kpis{grid-template-columns:1fr}
+ .kpi .val{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header class="top">
+  <h1>教學評量回饋分析儀表板</h1>
+  <div class="sub">回覆日期 2026-06-06　•　有效樣本 45 份</div>
+ </header>
+
+ <!-- PAGE 1 -->
+ <section class="page active" id="dash">
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid2">
+   <div class="card">
+    <h3>各題項平均分數排序（由高到低）</h3>
+    <div class="cap">量表 1 至 7 分，7 為最高；可用下方篩選依構面檢視</div>
+    <div class="toolbar">
+     <label for="dimFilter">構面篩選</label>
+     <select id="dimFilter"><option value="all">全部題項</option></select>
+    </div>
+    <div class="chart-box ch-means"><canvas id="meansChart"></canvas></div>
+   </div>
+   <div class="card">
+    <h3>五大構面平均</h3>
+    <div class="cap">主題式分群，非因素分析驗證之結構；長條上標平均，誤差線為 ±1 個標準差</div>
+    <div class="chart-box ch-dim"><canvas id="dimChart"></canvas></div>
+    <div class="note-box">教學態度與熱忱最高且最一致；教學技巧最低且離散最大。</div>
+   </div>
+  </div>
+
+  <div class="card" style="margin-bottom:var(--gap)">
+   <h3>各題項評分分布</h3>
+   <div class="cap">百分比堆疊，依平均由高到低排序，呈現低分集中於哪些題項</div>
+   <div class="chart-box ch-dist"><canvas id="distChart"></canvas></div>
+  </div>
+
+  <div class="rec">
+   <h3>分析建議</h3>
+   <div class="col">
+    <div>
+     <h4 class="s">優勢面向</h4>
+     <ul>
+      <li class="s"><b>教學態度獲高度一致肯定</b>：準備充分、樂於解答、極少遲到早退，給滿分比例多在 80% 以上，離散度全表最低。</li>
+      <li class="s"><b>課程價值受認可</b>：推薦意願 6.82，增加專業領域能力 6.60，顯示學生肯定學習成果。</li>
+      <li class="s"><b>量表品質良好</b>：Cronbach&#39;s &alpha; 0.92，內部一致性極佳，資料可信。</li>
+     </ul>
+    </div>
+    <div>
+     <h4 class="w">待改善面向</h4>
+     <ul>
+      <li class="w"><b>教學方法吸收度 6.24</b>：全表偏低且離散大，建議檢視講授節奏、範例設計與抽象概念的拆解方式。</li>
+      <li class="w"><b>課堂即時調整 6.18</b>：最低題，約 7% 落在 4 分，反映部分學生未被有效接住，可增加課中提問與回饋確認。</li>
+      <li class="w"><b>課程時間規劃 6.41</b>：標準差達 0.95，部分學生對進度或負荷感受不佳；建議檢視感受落差，對應到實際單元，調整負荷較重段落的進度安排。</li>
+     </ul>
+    </div>
+   </div>
+  </div>
+
+  <div class="card">
+   <h3>題項統計明細</h3>
+   <div class="cap">預設依平均由高到低；點選欄位標題可重新排序；4 分以下占比達 5% 者以紅標標示</div>
+   <div class="scroll"><table id="detailTable"></table></div>
+  </div>
+ </section>
+
+</div>
+
+<script>
+const D = {"meta": {"N": 45, "complete": 36, "alpha": 0.92, "grand": 6.61, "date": "2026-06-06"}, "stats": [{"idx": 1, "item": "教學內容與所定整體課程目標大致相符", "n": 45, "blank": 0, "mean": 6.73, "sd": 0.5, "med": 7, "minv": 5, "maxv": 7, "pct7": 75.6, "pct6up": 97.8, "pctlow": 0.0, "short": "教學內容符合課程目標"}, {"idx": 2, "item": "所使用的教材及講義內容豐富且架構清楚", "n": 44, "blank": 1, "mean": 6.61, "sd": 0.58, "med": 7.0, "minv": 5, "maxv": 7, "pct7": 65.9, "pct6up": 95.5, "pctlow": 0.0, "short": "教材豐富、架構清楚"}, {"idx": 3, "item": "老師能把握教學重點，並做有系統的介紹", "n": 44, "blank": 1, "mean": 6.59, "sd": 0.66, "med": 7.0, "minv": 5, "maxv": 7, "pct7": 68.2, "pct6up": 90.9, "pctlow": 0.0, "short": "把握重點、系統介紹"}, {"idx": 4, "item": "老師教學方法容易吸收，有助於我的學習", "n": 45, "blank": 0, "mean": 6.24, "sd": 0.86, "med": 6, "minv": 4, "maxv": 7, "pct7": 48.9, "pct6up": 77.8, "pctlow": 2.2, "short": "教學方法容易吸收"}, {"idx": 5, "item": "老師注意學生的學習反應而適當調整教學", "n": 44, "blank": 1, "mean": 6.18, "sd": 0.97, "med": 6.5, "minv": 4, "maxv": 7, "pct7": 50.0, "pct6up": 75.0, "pctlow": 6.8, "short": "注意反應、調整教學"}, {"idx": 6, "item": "整體而言，我滿意老師的教學技巧", "n": 45, "blank": 0, "mean": 6.33, "sd": 0.85, "med": 7, "minv": 4, "maxv": 7, "pct7": 55.6, "pct6up": 80.0, "pctlow": 2.2, "short": "整體滿意教學技巧"}, {"idx": 7, "item": "這門課能啟發我思考分析或解決相關問題的能力", "n": 44, "blank": 1, "mean": 6.45, "sd": 0.76, "med": 7.0, "minv": 5, "maxv": 7, "pct7": 61.4, "pct6up": 84.1, "pctlow": 0.0, "short": "啟發思考分析能力"}, {"idx": 8, "item": "這門課能讓我增加專業領域的能力", "n": 45, "blank": 0, "mean": 6.6, "sd": 0.69, "med": 7, "minv": 5, "maxv": 7, "pct7": 71.1, "pct6up": 88.9, "pctlow": 0.0, "short": "增加專業領域能力"}, {"idx": 9, "item": "老師教學準備充份，態度認真", "n": 43, "blank": 2, "mean": 6.86, "sd": 0.41, "med": 7, "minv": 5, "maxv": 7, "pct7": 88.4, "pct6up": 97.7, "pctlow": 0.0, "short": "準備充分、態度認真"}, {"idx": 10, "item": "老師樂於解答學生疑惑並討論", "n": 44, "blank": 1, "mean": 6.8, "sd": 0.41, "med": 7.0, "minv": 6, "maxv": 7, "pct7": 79.5, "pct6up": 100.0, "pctlow": 0.0, "short": "樂於解答與討論"}, {"idx": 11, "item": "老師很少遲到早退", "n": 44, "blank": 1, "mean": 6.95, "sd": 0.21, "med": 7.0, "minv": 6, "maxv": 7, "pct7": 95.5, "pct6up": 100.0, "pctlow": 0.0, "short": "很少遲到早退"}, {"idx": 12, "item": "整體而言，我滿意老師的教學熱忱", "n": 41, "blank": 4, "mean": 6.95, "sd": 0.22, "med": 7, "minv": 6, "maxv": 7, "pct7": 95.1, "pct6up": 100.0, "pctlow": 0.0, "short": "整體滿意教學熱忱"}, {"idx": 13, "item": "我會推薦他人修習此位教師的這門課程", "n": 45, "blank": 0, "mean": 6.82, "sd": 0.44, "med": 7, "minv": 5, "maxv": 7, "pct7": 84.4, "pct6up": 97.8, "pctlow": 0.0, "short": "會推薦他人修習"}, {"idx": 14, "item": "整體而言，我滿意課程時間的規劃", "n": 44, "blank": 1, "mean": 6.41, "sd": 0.95, "med": 7.0, "minv": 4, "maxv": 7, "pct7": 65.9, "pct6up": 81.8, "pctlow": 6.8, "short": "整體滿意時間規劃"}], "freq": {"1": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 1, "6": 10, "7": 34}, "2": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 2, "6": 13, "7": 29}, "3": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 4, "6": 10, "7": 30}, "4": {"1": 0, "2": 0, "3": 0, "4": 1, "5": 9, "6": 13, "7": 22}, "5": {"1": 0, "2": 0, "3": 0, "4": 3, "5": 8, "6": 11, "7": 22}, "6": {"1": 0, "2": 0, "3": 0, "4": 1, "5": 8, "6": 11, "7": 25}, "7": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 7, "6": 10, "7": 27}, "8": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 5, "6": 8, "7": 32}, "9": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 1, "6": 4, "7": 38}, "10": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 9, "7": 35}, "11": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 2, "7": 42}, "12": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 2, "7": 39}, "13": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 1, "6": 6, "7": 38}, "14": {"1": 0, "2": 0, "3": 0, "4": 3, "5": 5, "6": 7, "7": 29}}, "dims": [{"name": "課程設計與規劃", "idxs": [1, 2, 14], "mean": 6.59, "sd": 0.71, "n_items": 3}, {"name": "教學技巧", "idxs": [3, 4, 5, 6], "mean": 6.34, "sd": 0.85, "n_items": 4}, {"name": "學習成效", "idxs": [7, 8], "mean": 6.53, "sd": 0.72, "n_items": 2}, {"name": "教學態度與熱忱", "idxs": [9, 10, 11, 12], "mean": 6.89, "sd": 0.33, "n_items": 4}, {"name": "推薦意願", "idxs": [13], "mean": 6.82, "sd": 0.44, "n_items": 1}], "full_items": ["教學內容與所定整體課程目標大致相符", "所使用的教材及講義內容豐富且架構清楚", "老師能把握教學重點，並做有系統的介紹", "老師教學方法容易吸收，有助於我的學習", "老師注意學生的學習反應而適當調整教學", "整體而言，我滿意老師的教學技巧", "這門課能啟發我思考分析或解決相關問題的能力", "這門課能讓我增加專業領域的能力", "老師教學準備充份，態度認真", "老師樂於解答學生疑惑並討論", "老師很少遲到早退", "整體而言，我滿意老師的教學熱忱", "我會推薦他人修習此位教師的這門課程", "整體而言，我滿意課程時間的規劃"], "short": {"1": "教學內容符合課程目標", "2": "教材豐富、架構清楚", "3": "把握重點、系統介紹", "4": "教學方法容易吸收", "5": "注意反應、調整教學", "6": "整體滿意教學技巧", "7": "啟發思考分析能力", "8": "增加專業領域能力", "9": "準備充分、態度認真", "10": "樂於解答與討論", "11": "很少遲到早退", "12": "整體滿意教學熱忱", "13": "會推薦他人修習", "14": "整體滿意時間規劃"}};
+const FONT='"Noto Sans CJK TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+const C={navy:'#2E5A87',red:'#C0504D',amber:'#D99058',sky:'#9DB9D1',navyD:'#234766',good:'#2f8f5b'};
+Chart.defaults.font.family=FONT; Chart.defaults.font.size=12; Chart.defaults.color='#46505c';
+
+// ---- KPIs ----
+const dimByName={}; D.dims.forEach(d=>dimByName[d.name]=d);
+const topDim=[...D.dims].sort((a,b)=>b.mean-a.mean)[0];
+const lowDim=[...D.dims].sort((a,b)=>a.mean-b.mean)[0];
+const kpis=[
+ {label:'有效樣本',val:D.meta.N,note:'完整作答 '+D.meta.complete+' 份',cls:''},
+ {label:'總平均（滿分 7）',val:D.meta.grand.toFixed(2),note:'整體評價偏高',cls:'good'},
+ {label:'內部一致性 α',val:D.meta.alpha.toFixed(2),note:'Cronbach&#39;s alpha，極佳',cls:'good'},
+ {label:'最高構面',val:topDim.mean.toFixed(2),note:topDim.name,cls:'good'},
+ {label:'最低構面',val:lowDim.mean.toFixed(2),note:lowDim.name,cls:'warn'},
+];
+document.getElementById('kpis').innerHTML=kpis.map(k=>
+ `<div class="kpi ${k.cls}"><div class="label">${k.label}</div><div class="val">${k.val}</div><div class="note">${k.note}</div></div>`).join('');
+
+// ---- means chart (with dim filter) ----
+let meansChart;
+function buildMeans(filterIdxs){
+ let arr=D.stats.filter(s=>!filterIdxs||filterIdxs.includes(s.idx));
+ arr=[...arr].sort((a,b)=>b.mean-a.mean);
+ const mx=Math.max(...arr.map(s=>s.mean)), mn=Math.min(...arr.map(s=>s.mean));
+ const col=m=>m===mx?C.good:(m===mn?C.red:C.navy);
+ return {labels:arr.map(s=>s.short),data:arr.map(s=>s.mean),sd:arr.map(s=>s.sd),colors:arr.map(s=>col(s.mean))};
+}
+function renderMeans(filterIdxs){
+ const m=buildMeans(filterIdxs);
+ const ctx=document.getElementById('meansChart');
+ if(meansChart)meansChart.destroy();
+ meansChart=new Chart(ctx,{type:'bar',data:{labels:m.labels,datasets:[{data:m.data,backgroundColor:m.colors,borderRadius:4,barThickness:'flex',maxBarThickness:22}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:{duration:400},
+   scales:{x:{min:5,max:7,grid:{color:'#eef1f5'},title:{display:true,text:'平均分數'},ticks:{stepSize:1}},y:{grid:{display:false}}},
+   plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'平均 '+c.parsed.x.toFixed(2)+'　SD '+m.sd[c.dataIndex].toFixed(2)}},
+    annotation:false}}});
+}
+// dim filter options
+const sel=document.getElementById('dimFilter');
+D.dims.forEach(d=>{const o=document.createElement('option');o.value=d.name;o.textContent=d.name+'（'+d.n_items+' 題）';sel.appendChild(o);});
+sel.onchange=()=>{const v=sel.value;renderMeans(v==='all'?null:dimByName[v].idxs);};
+renderMeans(null);
+
+// ---- dimension chart ----
+const dimSorted=[...D.dims].sort((a,b)=>b.mean-a.mean);
+const dimErrPlugin={
+ id:'dimErr',
+ afterDatasetsDraw(chart){
+  const y=chart.scales.y, ctx=chart.ctx, meta=chart.getDatasetMeta(0), cap=8;
+  ctx.save();
+  meta.data.forEach((bar,i)=>{
+   const d=dimSorted[i], x=bar.x;
+   const yT=y.getPixelForValue(d.mean+d.sd), yB=y.getPixelForValue(d.mean-d.sd);
+   ctx.strokeStyle='#3a4754'; ctx.lineWidth=1.6; ctx.beginPath();
+   ctx.moveTo(x,yT); ctx.lineTo(x,yB);
+   ctx.moveTo(x-cap,yT); ctx.lineTo(x+cap,yT);
+   ctx.moveTo(x-cap,yB); ctx.lineTo(x+cap,yB);
+   ctx.stroke();
+   ctx.fillStyle='#ffffff'; ctx.font='700 13px '+FONT; ctx.textAlign='center'; ctx.textBaseline='bottom';
+   ctx.fillText(d.mean.toFixed(2), x, bar.base-8);
+  });
+  ctx.restore();
+ }
+};
+new Chart(document.getElementById('dimChart'),{type:'bar',
+ data:{labels:dimSorted.map(d=>d.name),datasets:[{data:dimSorted.map(d=>d.mean),
+  backgroundColor:dimSorted.map(d=>d.name===lowDim.name?C.red:(d.name===topDim.name?C.good:C.navy)),borderRadius:5,maxBarThickness:48}]},
+ options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},
+  scales:{y:{min:5,max:7.5,grid:{color:'#eef1f5'},ticks:{stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}},
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const d=dimSorted[c.dataIndex];return '平均 '+d.mean.toFixed(2)+'　SD '+d.sd.toFixed(2)+'　（區間 '+(d.mean-d.sd).toFixed(2)+' – '+(d.mean+d.sd).toFixed(2)+'）';}}}}},
+ plugins:[dimErrPlugin]});
+
+// ---- distribution stacked ----
+const bins=[4,5,6,7], binColor={4:C.red,5:C.amber,6:C.sky,7:C.navy};
+const distItems=[...D.stats].sort((a,b)=>b.mean-a.mean).map(s=>s.idx);
+const distDatasets=bins.map(b=>({label:b+' 分',backgroundColor:binColor[b],
+ data:distItems.map(idx=>{const f=D.freq[idx]||D.freq[String(idx)];const tot=Object.values(f).reduce((a,c)=>a+c,0);return +((f[b]||f[String(b)]||0)/tot*100).toFixed(1);})}));
+new Chart(document.getElementById('distChart'),{type:'bar',
+ data:{labels:distItems.map(i=>D.short[i]),datasets:distDatasets},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  scales:{x:{stacked:true,max:100,grid:{color:'#eef1f5'},title:{display:true,text:'回覆比例 (%)'}},y:{stacked:true,grid:{display:false}}},
+  plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+'：'+c.parsed.x+'%'}}}}});
+
+// ---- detail table (sortable) ----
+function tag(pct){if(pct>=5)return '<span class="tag lo">'+pct.toFixed(0)+'%</span>';return '<span class="tag mid">'+pct.toFixed(0)+'%</span>';}
+const detailCols=[['idx','題','num'],['short','原始題目',''],['n','n','num'],['mean','平均','num'],['sd','SD','num'],['med','中位','num'],['pct7','滿分占比','num'],['pctlow','4分以下','num']];
+function renderDetail(sortKey,asc){
+ let rows=[...D.stats];
+ if(sortKey){rows.sort((a,b)=>{let x=a[sortKey],y=b[sortKey];if(typeof x==='string')return asc?x.localeCompare(y,'zh-Hant'):y.localeCompare(x,'zh-Hant');return asc?x-y:y-x;});}
+ const head='<thead><tr>'+detailCols.map(c=>`<th class="${c[2]}" data-k="${c[0]}">${c[1]}</th>`).join('')+'</tr></thead>';
+ const body='<tbody>'+rows.map(s=>{
+  const maxw=Math.round((s.mean-5)/2.3*70)+8;
+  return '<tr>'+
+   `<td class="num">${s.idx}</td>`+
+   `<td class="q-full">${D.full_items[s.idx-1]}</td>`+
+   `<td class="num">${s.n}</td>`+
+   `<td class="num"><div class="bar-cell"><b>${s.mean.toFixed(2)}</b><span class="minibar" style="width:${maxw}px;background:${s.mean<6.3?C.red:C.navy}"></span></div></td>`+
+   `<td class="num">${s.sd.toFixed(2)}</td>`+
+   `<td class="num">${s.med}</td>`+
+   `<td class="num">${s.pct7.toFixed(0)}%</td>`+
+   `<td class="num">${tag(s.pctlow)}</td>`+
+  '</tr>';}).join('')+'</tbody>';
+ const t=document.getElementById('detailTable'); t.innerHTML=head+body;
+ t.querySelectorAll('th').forEach(th=>{th.onclick=()=>{const k=th.dataset.k;const na=(detailState.k===k)?!detailState.asc:true;detailState={k,asc:na};renderDetail(k,na);};});
+}
+let detailState={k:'mean',asc:false}; renderDetail('mean',false);
+</script>
+</body>
+</html>
