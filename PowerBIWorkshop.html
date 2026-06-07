@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Power BI 人資儀表板工作坊 · Part 1：資料清理與 Power Query 入門</title>
+<style>
+  :root{
+    --navy:#051C2C; --navy-700:#1b3a4b; --accent:#2251FF; --crimson:#9E1B32;
+    --grey-900:#1a1a1a; --grey-700:#3c4043; --grey-500:#666b70; --grey-300:#c8ccd1;
+    --grey-200:#e3e6e9; --grey-100:#f2f3f5; --grey-50:#fafafa; --rule:#cdd2d7;
+    --serif:Georgia,"Times New Roman","Songti TC","Noto Serif TC",serif;
+    --sans:"Noto Sans TC","Helvetica Neue",Arial,"Microsoft JhengHei",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#fff; color:var(--grey-900);
+    font-family:var(--sans);
+    line-height:1.75; font-size:16px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 24px 60px;}
+
+  /* Header — navy band */
+  header.hero{
+    background:var(--navy); color:#fff; padding:56px 24px 44px;
+  }
+  header.hero .inner{max-width:880px; margin:0 auto;}
+  .kicker{
+    display:inline-block; font-size:12px; letter-spacing:2px; font-weight:700;
+    text-transform:uppercase; color:#7fa8ff;
+    padding:0 0 14px; margin:0 0 16px; border-bottom:1px solid rgba(255,255,255,.25);
+  }
+  header.hero h1{font-family:var(--serif); font-size:32px; line-height:1.28; margin:0; font-weight:600; color:#fff;}
+  header.hero p.sub{font-size:18px; margin:8px 0 0; color:#aebfcc;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:0; margin-top:24px;}
+  .chip{
+    display:inline-flex; align-items:center; font-size:12px; font-weight:600; letter-spacing:.3px;
+    background:none; color:#cdd9e3; border:none; border-right:1px solid rgba(255,255,255,.25);
+    padding:2px 16px 2px 0; margin-right:16px;
+  }
+  .meta-row .chip:last-child{border-right:none;}
+
+  /* Executive-summary box */
+  .tldr{
+    background:var(--grey-50); border:1px solid var(--rule); border-top:3px solid var(--navy);
+    padding:22px 26px; margin:34px 0;
+  }
+  .tldr h2{margin:0 0 8px; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--navy);}
+  .tldr p{margin:0; color:var(--grey-700); font-size:16px;}
+
+  h2.section{
+    font-family:var(--serif); font-size:23px; font-weight:600; color:var(--navy);
+    margin:52px 0 16px; padding-bottom:10px; border-bottom:1px solid var(--navy);
+    display:flex; align-items:baseline; gap:12px;
+  }
+  h2.section .num{
+    flex:none; color:var(--accent); font-size:22px; font-weight:700;
+  }
+  h3.sub{font-family:var(--serif); font-size:19px; font-weight:600; margin:32px 0 8px; color:var(--navy);}
+  p{margin:12px 0;}
+  .lead{color:var(--grey-700);}
+
+  /* Objectives */
+  ul.goals{list-style:none; padding:0; margin:16px 0;}
+  ul.goals li{
+    position:relative; padding:9px 12px 9px 34px; margin:0; line-height:1.6;
+    background:none; border:none; border-bottom:1px solid var(--grey-200); border-radius:0;
+  }
+  ul.goals li:first-child{border-top:1px solid var(--grey-200);}
+  ul.goals li::before{
+    content:""; position:absolute; left:10px; top:17px;
+    width:8px; height:8px; background:var(--accent);
+  }
+
+  /* Steps */
+  .step{
+    background:#fff; border:1px solid var(--rule); border-radius:0;
+    padding:20px 24px; margin:14px 0;
+    border-left:2px solid var(--navy);
+  }
+  .step .stephead{display:flex; align-items:baseline; gap:12px; margin-bottom:4px;}
+  .step .badge{
+    flex:none; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+    color:var(--navy); background:none;
+    border:1px solid var(--navy); border-radius:0; padding:2px 9px;
+  }
+  .step .stepttl{font-size:17px; font-weight:700; color:var(--navy);}
+  ol.clean{margin:10px 0 4px; padding-left:22px;}
+  ol.clean li{margin:7px 0;}
+
+  /* path / ui hint */
+  .ui{
+    font-family:"Roboto Mono","SFMono-Regular",Consolas,monospace;
+    background:var(--grey-100); border:1px solid var(--grey-300); border-radius:0;
+    padding:1px 6px; font-size:14px; color:var(--navy); white-space:nowrap;
+  }
+  .arrow{color:var(--accent); font-weight:700; padding:0 2px;}
+  .pbicon{display:inline-flex; align-items:center; justify-content:center;
+    width:42px; height:42px; background:#fff; border:1px solid var(--rule);
+    border-radius:0;}
+
+  /* Callouts — minimal, left rule + uppercase label */
+  .callout{border-radius:0; padding:14px 18px; margin:18px 0; border:1px solid var(--rule); border-left:3px solid var(--navy); background:var(--grey-50);}
+  .callout .ctitle{font-weight:700; margin:0 0 4px; font-size:12px; letter-spacing:.8px; text-transform:uppercase;}
+  .callout p{margin:4px 0;}
+  .callout.tip{border-left-color:var(--accent);}
+  .callout.tip .ctitle{color:var(--accent);}
+  .callout.warn{border-left-color:var(--crimson);}
+  .callout.warn .ctitle{color:var(--crimson);}
+  .callout.check{border-left-color:var(--navy);}
+  .callout.check .ctitle{color:var(--navy);}
+  .callout.note{border-left-color:var(--grey-500);}
+  .callout.note .ctitle{color:var(--grey-700);}
+
+  /* Table — horizontal hairlines only */
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:15px; background:none;
+    border:none; border-top:2px solid var(--navy); border-bottom:1px solid var(--navy); border-radius:0; overflow:visible;}
+  th,td{text-align:left; padding:11px 16px 11px 0; border-bottom:1px solid var(--grey-200); vertical-align:top;}
+  th{background:none; font-weight:700; color:var(--navy); border-bottom:1px solid var(--navy);}
+  tr:last-child td{border-bottom:none;}
+
+  .files{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:0; margin:18px 0; border-top:1px solid var(--rule);}
+  .filecard{background:none; border-bottom:1px solid var(--rule); border-right:1px solid var(--rule); border-radius:0; padding:16px 18px;}
+  .filecard .fname{font-weight:700; font-size:15px; color:var(--navy);}
+  .filecard .fdesc{font-size:14px; color:var(--grey-500); margin-top:4px;}
+
+  .divider{height:1px; background:var(--rule); margin:40px 0; border:none;}
+
+  footer{margin-top:44px; padding:16px 0 0; background:none; border-top:2px solid var(--navy); border-radius:0; color:var(--grey-500); font-size:13.5px;}
+  footer strong{color:var(--navy);}
+
+  .pill-list{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0;}
+  .pill{font-size:12px; font-weight:600; background:none; border:1px solid var(--navy);
+    color:var(--navy); border-radius:0; padding:4px 11px;}
+  a{color:var(--accent); text-decoration:none;}
+
+  /* Tabs */
+  .tabbar{position:sticky; top:0; z-index:20; background:#fff; border-bottom:2px solid var(--navy);
+    display:flex; gap:4px; padding:0 24px;}
+  .tabbar .inner{max-width:880px; margin:0 auto; width:100%; display:flex; gap:0; flex-wrap:wrap;}
+  .tab{appearance:none; border:none; background:none; cursor:pointer; font-family:var(--sans);
+    font-size:14px; font-weight:700; color:var(--grey-500); padding:15px 20px 13px;
+    border-bottom:3px solid transparent; margin-bottom:-2px; transition:color .15s, border-color .15s;}
+  .tab:hover{color:var(--navy);}
+  .tab.active{color:var(--navy); border-bottom-color:var(--accent);}
+  .tabpage{display:none;}
+  .tabpage.active{display:block;}
+
+  /* Code block for M / DAX formulas */
+  .code{position:relative; background:var(--grey-100); color:var(--grey-900);
+    border:1px solid var(--rule); border-left:2px solid var(--navy); border-radius:0;
+    padding:34px 16px 14px; margin:12px 0; font-family:"Roboto Mono","SFMono-Regular",Consolas,monospace;
+    font-size:13.5px; line-height:1.6; overflow-x:auto; white-space:pre;}
+  .code .lbl{position:absolute; top:0; left:0; font-size:11px; font-weight:700; letter-spacing:.5px;
+    color:#fff; background:var(--navy); padding:3px 10px; border-radius:0;}
+  .code .copybtn{position:absolute; top:6px; right:6px; appearance:none; cursor:pointer;
+    font-family:var(--sans); font-size:12px; font-weight:600; color:var(--navy);
+    background:#fff; border:1px solid var(--navy); border-radius:0; padding:3px 10px;
+    transition:background .15s, color .15s;}
+  .code .copybtn:hover{background:var(--navy); color:#fff;}
+  .code .copybtn.copied{color:#fff; background:var(--accent); border-color:var(--accent);}
+
+  /* Collapsible formula explanation */
+  .explain{background:var(--grey-50); border:1px solid var(--rule); border-radius:0;
+    margin:0 0 6px; padding:0 16px;}
+  .explain summary{cursor:pointer; font-weight:700; font-size:14px; color:var(--navy);
+    padding:12px 0; list-style:none;}
+  .explain summary::-webkit-details-marker{display:none;}
+  .explain summary::before{content:"▸  ";}
+  .explain[open] summary::before{content:"▾  ";}
+  .explain .body{padding:2px 0 14px; font-size:14.5px; color:var(--grey-700);}
+  .explain .body p{margin:7px 0;}
+  .explain .body .note{color:var(--crimson);}
+  .explain code{background:var(--grey-100); border:1px solid var(--grey-300); border-radius:0;
+    padding:1px 5px; font-family:"Roboto Mono",Consolas,monospace; font-size:13px; color:var(--navy);}
+  p,li,td,th,.lead,.dsc,.fdesc,.cover-sub,.stepttl,.callout p,.callout .ctitle,.explain .body p,.tldr p,.agenda .ttl,.filecard .fdesc{text-wrap:pretty;}
+  h1,h2,h3,.stepttl,.ctitle{text-wrap:balance;}
+
+  /* Cover page */
+  .cover-hero{background:var(--navy); color:#fff; padding:80px 24px 64px;}
+  .cover-hero .inner{max-width:880px; margin:0 auto;}
+  .cover-kicker{font-size:13px; letter-spacing:3px; font-weight:700; text-transform:uppercase; color:#7fa8ff;}
+  .cover-title{font-family:var(--serif); font-size:46px; line-height:1.18; font-weight:600; margin:14px 0 0;}
+  .cover-rule{width:64px; height:3px; background:var(--accent); margin:24px 0;}
+  .cover-sub{font-size:18px; line-height:1.7; color:#b9c7d2; max-width:600px; margin:0;}
+  .cover-flow{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:30px 0 0; font-family:var(--serif); font-size:18px; color:#fff;}
+  .cover-flow .sep{color:#7fa8ff;}
+  .cover-org{margin-top:44px; padding-top:16px; border-top:1px solid rgba(255,255,255,.25); font-size:13px; letter-spacing:.5px; color:#cdd9e3;}
+  .cover-body{max-width:880px; margin:0 auto; padding:40px 24px 60px;}
+  .cover-body h2{font-family:var(--serif); font-size:20px; color:var(--navy); font-weight:600; margin:36px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--navy);}
+  .agenda{border-top:1px solid var(--rule);}
+  .agenda .row{display:flex; gap:18px; padding:16px 0; border-bottom:1px solid var(--rule); align-items:baseline;}
+  .agenda .ix{font-family:var(--serif); font-size:18px; font-weight:700; color:var(--accent); flex:none; width:74px; white-space:nowrap;}
+  .agenda .ttl{font-weight:700; color:var(--navy); font-size:16px;}
+  .agenda .dsc{color:var(--grey-700); font-size:14.5px; margin-top:2px;}
+  .agenda .upcoming .ttl, .agenda .upcoming .ix{color:var(--grey-500);}
+</style>
+</head>
+<body>
+
+<nav class="tabbar">
+  <div class="inner">
+    <button class="tab active" data-target="cover">首頁</button>
+    <button class="tab" data-target="part1">Part 1 · 員工基本資料</button>
+    <button class="tab" data-target="part2">Part 2 · 離職資料與日期表</button>
+    <button class="tab" data-target="part3">Part 3 · 資料模型與關聯</button>
+    <button class="tab" data-target="part4">Part 4 · DAX 量值</button>
+    <button class="tab" data-target="part5">Part 5 · 儀表板與離職分析</button>
+    <button class="tab" data-target="part6">Part 6 · 滿意度與 AI</button>
+  </div>
+</nav>
+
+<div id="cover" class="tabpage active">
+
+<header class="cover-hero">
+  <div class="inner">
+    <div class="cover-kicker">Power BI 工作坊 · 講義</div>
+    <h1 class="cover-title">人力資源數據分析應用</h1>
+    <div class="cover-rule"></div>
+    <p class="cover-sub">用 Power Query、DAX 與視覺化，把分散又雜亂的人資資料，整理成一份可互動的決策儀表板。</p>
+    <div class="cover-flow">資料清理 <span class="sep">›</span> 模型建立 <span class="sep">›</span> 儀表板製作</div>
+    <div class="cover-org">國立中山大學 · 人力資源管理研究所</div>
+  </div>
+</header>
+
+<div class="cover-body">
+
+  <h2>關於這份講義</h2>
+  <p class="lead">這份講義對應工作坊的實作流程，逐步從原始資料走到分析就緒的資料表。每個步驟都有可照做的操作、檢查點與重點提醒，公式區塊可一鍵複製。上方分頁可切換各單元。</p>
+
+  <h2>課程章節</h2>
+  <div class="agenda">
+    <div class="row">
+      <div class="ix">Part 1</div>
+      <div><div class="ttl">資料清理 · 員工基本資料</div><div class="dsc">介面導覽、找出髒資料、Power Query 清理、民國轉西元、縱向合併、新增年齡與年資。</div></div>
+    </div>
+    <div class="row">
+      <div class="ix">Part 2</div>
+      <div><div class="ttl">資料清理 · 離職資料與日期表</div><div class="dsc">分割資料行、橫向合併帶入部門與入職日、計算在職時長、建立連續日期表。</div></div>
+    </div>
+    <div class="row">
+      <div class="ix">Part 3</div>
+      <div><div class="ttl">資料模型與關聯</div><div class="dsc">隱藏來源表、關聯種類與篩選方向、建立三組關聯。</div></div>
+    </div>
+    <div class="row">
+      <div class="ix">Part 4</div>
+      <div><div class="ttl">DAX 量值</div><div class="dsc">量值語法、常用函數、時間智慧與快速量值、量值與計算資料行的差別。</div></div>
+    </div>
+    <div class="row">
+      <div class="ix">Part 5</div>
+      <div><div class="ttl">員工儀表板與離職分析</div><div class="dsc">卡片與 KPI、分布與組成圖表、矩陣與篩選器、整頁複製與鑽研。</div></div>
+    </div>
+    <div class="row">
+      <div class="ix">Part 6</div>
+      <div><div class="ttl">滿意度與 AI 功能</div><div class="dsc">構面平均與滿意%量值、動態交叉分析、關鍵影響因素、報告整合與導覽。</div></div>
+    </div>
+  </div>
+
+  <h2>課程檔案</h2>
+  <table>
+    <tr><th style="white-space:nowrap">檔案</th><th>用途</th></tr>
+    <tr><td style="white-space:nowrap">01–03 原始練習檔（xlsx）</td><td>員工、離職、滿意度三份原始資料，所有清理從這裡開始。</td></tr>
+    <tr><td style="white-space:nowrap">01_Cleaned.pbix</td><td>清理完成的預備檔；清洗卡住時改開這個檔案繼續，不影響後面的視覺化進度。</td></tr>
+    <tr><td style="white-space:nowrap">02_DAX_Ready.pbix</td><td>模型與 DAX 已建好的預備檔；量值卡住時改開這個檔案繼續。</td></tr>
+    <tr><td style="white-space:nowrap">03_SurveyDAX_Ready.pbix</td><td>滿意度量值已建好的預備檔；進入滿意度章節前可改開這個檔案接著做。</td></tr>
+    <tr><td style="white-space:nowrap">04_Final_Dashboard.pbix</td><td>成果檔：課堂演示、核對答案、解決疑難。</td></tr>
+    <tr><td style="white-space:nowrap">語法.xlsx、日期表語法.txt</td><td>全部 DAX 與 M 語法、日期表語法，照貼使用。</td></tr>
+  </table>
+  <div class="callout note">
+    <p class="ctitle">卡住怎麼辦</p>
+    <p>每個段落都有對應的預備檔。任何一步卡住，開啟下一個預備檔就能接上進度，不影響後續學習。</p>
+  </div>
+
+  <h2>完成後的成果</h2>
+  <p class="lead">一份完整的 HR 分析報告，包含三個儀表板頁面：</p>
+  <div class="files">
+    <div class="filecard"><div class="fname">人力結構儀表板</div><div class="fdesc">員工人數、部門分佈、年齡與年資結構。</div></div>
+    <div class="filecard"><div class="fname">離職分析儀表板</div><div class="fdesc">離職率趨勢、高風險部門、離職原因分類。</div></div>
+    <div class="filecard"><div class="fname">滿意度分析儀表板</div><div class="fdesc">各構面滿意度比較、背景資料交叉分析。</div></div>
+  </div>
+
+</div>
+</div><!-- /cover -->
+
+
+<div id="part1" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 1 · 資料清理：員工基本資料</h1>
+    <div class="meta-row">
+      <span class="chip">難度：入門</span>
+      <span class="chip">預估 50–60 分鐘</span>
+      <span class="chip">工具：Power BI Desktop</span>
+      <span class="chip">主題：資料清理</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>真實的人資資料通常很雜亂：性別欄中英文混雜、台灣用民國年、有空白列、也有重複的人。本單元從介面導覽開始，接著把員工基本資料從清理、修正日期、縱向合併，一路做到新增年齡與年資的計算欄位。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>說出 Power BI 三大檢視（報表、資料、模型）各自的用途。</li>
+    <li>把 Excel 多工作表資料匯入 Power Query，並讀懂查詢設定中的套用步驟。</li>
+    <li>判斷常見的資料品質問題，並用移除空白列、移除重複、欄位篩選清到 100% 有效。</li>
+    <li>把民國年轉成西元年，讓三張表欄位對齊後縱向合併成一張。</li>
+    <li>用取代值統一欄位寫法，並新增年齡、年資與分組區間欄位。</li>
+  </ul>
+
+  <h2 class="section">開始之前：怎麼開啟 Power Query</h2>
+  <p class="lead">Power Query 是 Power BI 內建的資料清理工具，所有清理動作都在它的獨立編輯器視窗完成。有兩個入口，依手邊有沒有資料而定。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">入口 A</span><span class="stepttl">還沒匯入資料時</span></div>
+    <ol class="clean">
+      <li>在 <span class="ui">常用</span> 功能區點 <span class="ui">取得資料</span> <span class="arrow">›</span> 選來源（例如 <span class="ui">從 Excel 活頁簿</span>）。</li>
+      <li>在導覽視窗勾選要的工作表後，按 <span class="ui">轉換資料</span>，就會開啟 Power Query 編輯器。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">入口 B</span><span class="stepttl">資料已經載入時</span></div>
+    <ol class="clean">
+      <li>直接在 <span class="ui">常用</span> 功能區點 <span class="ui">轉換資料</span>。</li>
+      <li>同樣會開啟 Power Query 編輯器，可以繼續調整既有的查詢。</li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">兩個關鍵動作</p>
+    <p>要清資料一律走轉換資料，不要按載入（載入會跳過清理直接把資料丟進報表）。在編輯器裡改完後，左上角按 <span class="ui">關閉並套用</span> 就會回到 Power BI 主畫面。</p>
+  </div>
+
+  <h2 class="section"><span class="num">1</span>先認識桌面：三大檢視</h2>
+  <p class="lead">打開 Power BI Desktop，看畫面最左邊那一排三個圖示，由上而下分別是會反覆切換的三個檢視。</p>
+
+  <table>
+    <tr><th>檢視</th><th>圖示</th><th>用來做什麼</th></tr>
+    <tr><td><strong>報表檢視</strong></td><td><span class="pbicon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5f6368" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,3.5 4,20 20.5,20"/><rect x="5.6" y="11" width="2.4" height="9"/><rect x="9.1" y="7.5" width="2.4" height="12.5"/><rect x="12.6" y="13" width="2.4" height="7"/><rect x="16.1" y="9" width="2.4" height="11"/></svg></span></td><td>實際擺放圖表、做視覺化。建立視覺化與儀表板時會大量用到。</td></tr>
+    <tr><td><strong>資料檢視</strong></td><td><span class="pbicon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5f6368" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="9.33" y1="4" x2="9.33" y2="20"/><line x1="14.67" y1="4" x2="14.67" y2="20"/><line x1="4" y1="9.33" x2="20" y2="9.33"/><line x1="4" y1="14.67" x2="20" y2="14.67"/></svg></span></td><td>匯入後在這裡看每張表的實際內容，像在看 Excel 的工作表。尚未匯入資料時是空白的。</td></tr>
+    <tr><td><strong>模型檢視</strong></td><td><span class="pbicon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#5f6368" stroke-width="1.4" stroke-linejoin="round"><line x1="9.3" y1="11.8" x2="14" y2="7"/><line x1="9.3" y1="11.8" x2="14" y2="17"/><rect x="2.8" y="8.3" width="6.6" height="7" rx="0.8" fill="#fff"/><line x1="2.8" y1="10.8" x2="9.4" y2="10.8"/><rect x="14" y="4" width="6.6" height="6" rx="0.8" fill="#fff"/><line x1="14" y1="6.3" x2="20.6" y2="6.3"/><rect x="14" y="14" width="6.6" height="6" rx="0.8" fill="#fff"/><line x1="14" y1="16.3" x2="20.6" y2="16.3"/></svg></span></td><td>當有多張表時，在這裡拉關聯、定義表與表之間的關係。</td></tr>
+  </table>
+
+  <h3 class="sub">功能區與常用面板</h3>
+  <table>
+    <tr><th style="white-space:nowrap">區域</th><th style="white-space:nowrap">位置</th><th>說明</th></tr>
+    <tr><td style="white-space:nowrap">功能區（Ribbon）</td><td style="white-space:nowrap">最上方</td><td>常用、插入、模型、檢視等索引標籤。</td></tr>
+    <tr><td style="white-space:nowrap">畫布（Canvas）</td><td style="white-space:nowrap">中央</td><td>放置視覺化元件的主要畫面。</td></tr>
+    <tr><td style="white-space:nowrap">視覺效果窗格（組建）</td><td style="white-space:nowrap">右側上方</td><td>選擇圖表類型、放入資料欄位。</td></tr>
+    <tr><td style="white-space:nowrap">欄位窗格</td><td style="white-space:nowrap">右側下方</td><td>顯示所有資料表與欄位，拖曳到圖表使用。</td></tr>
+    <tr><td style="white-space:nowrap">篩選條件窗格</td><td style="white-space:nowrap">右側（可摺疊）</td><td>設定頁面或視覺效果層級的篩選。</td></tr>
+    <tr><td style="white-space:nowrap">頁面索引標籤</td><td style="white-space:nowrap">視窗下方</td><td>切換報表頁面，可新增或重新命名。</td></tr>
+  </table>
+  <div class="callout tip">
+    <p class="ctitle">排版前先開兩個輔助</p>
+    <p>在檢視索引標籤開啟鎖定物件與對齊格線，後續排版會整齊很多。開啟 Power BI Desktop 後關閉歡迎畫面即可開始，不登入帳號也能完整操作。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>暖身：這份資料有什麼問題？</h2>
+  <p class="lead">先別急著匯入。打開 <span class="ui">01_Employee_Data</span> 這個 Excel，花兩分鐘觀察台灣這張表，想一個問題：如果待會要拿這份資料做分析，可能會卡在哪裡？</p>
+
+  <p>這份檔案實際藏了這些狀況，對照看看能找到幾個：</p>
+  <table>
+    <tr><th>問題</th><th>在這份資料裡長這樣</th></tr>
+    <tr><td><strong>格式不一致</strong></td><td>性別欄同時出現 Male、Female、男性、女性，四種寫法混在一起。</td></tr>
+    <tr><td><strong>不同源</strong></td><td>台灣的出生日期是民國年（例如 72/04/05），日本與美國是西元年。</td></tr>
+    <tr><td><strong>空值</strong></td><td>有人有員工編號，但姓名欄是空的（例如 EMP081）。</td></tr>
+    <tr><td><strong>重複資料</strong></td><td>同一筆資料被輸入了不只一次（例如 EMP064 出現兩次）。</td></tr>
+    <tr><td><strong>整列空白</strong></td><td>美國表裡夾了一整列完全沒填的空白列。</td></tr>
+  </table>
+
+  <div class="callout note">
+    <p class="ctitle">延伸：其他常見的資料毛病</p>
+    <p>除了上面這些，真實場景還常遇到兩種。一是遺漏值：例如某個國家應該交回的資料筆數對不上，少了一塊。二是複合資料：一個欄位塞了一種以上的資訊，最常見的是地址（高雄市 + 三民區 + 街道全擠在一格），但實際上只想要城市。複合資料通常要用拆分欄位處理，屬於後續單元的進階主題。</p>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">為什麼要先看資料</p>
+    <p>發問卷或收名單時，資料很難完全乾淨，紙本回收尤其明顯。匯入前先檢查原始資料，能省下後面大量除錯的時間。資料格式不對，計算行為就會跟著錯：日期若被當成文字，就算不出兩個日期差幾天。</p>
+  </div>
+
+  <h2 class="section"><span class="num">3</span>把資料匯進 Power Query</h2>
+  <p class="lead">本單元只處理員工基本資料這個檔案；離職資料與滿意度調查於後續單元使用。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-1</span><span class="stepttl">從 Excel 取得資料</span></div>
+    <ol class="clean">
+      <li>在常用功能區點 <span class="ui">取得資料</span> <span class="arrow">›</span> <span class="ui">從 Excel 活頁簿</span>。</li>
+      <li>找到剛剛下載的 <span class="ui">01_Employee_Data</span> 檔案，開啟。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-2</span><span class="stepttl">三張表全部勾選</span></div>
+    <ol class="clean">
+      <li>導覽視窗會出現三個工作表：<span class="ui">Taiwan</span>、<span class="ui">Japan</span>、<span class="ui">US</span>。</li>
+      <li>三個都打勾。</li>
+      <li>下方有兩個按鈕，不要按載入，請按 <span class="ui">轉換資料</span>。</li>
+    </ol>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">別按錯按鈕</p>
+    <p>這裡要按轉換資料，不是載入。轉換資料會進入 Power Query 編輯器去清理；直接載入則會把髒資料原封不動丟進報表。這一步錯了，後面整段都會跟著歪。</p>
+  </div>
+
+  <h2 class="section"><span class="num">4</span>認識 Power Query 編輯器</h2>
+  <p class="lead">轉換資料之後會進到一個新視窗，這就是 Power Query 編輯器。先別動手，花一分鐘認識三個區塊。</p>
+
+  <table>
+    <tr><th>區塊</th><th>位置</th><th>作用</th></tr>
+    <tr><td><strong>查詢窗格</strong></td><td style="white-space:nowrap">最左邊</td><td>列出目前載入的所有表，這裡會看到 Taiwan、Japan、US 三張。點不同的表就切換，類似 Excel 切換工作表。</td></tr>
+    <tr><td><strong>資料預覽</strong></td><td style="white-space:nowrap">中間</td><td>顯示目前選到那張表的內容。點欄位標題可以選取整欄。</td></tr>
+    <tr><td><strong>查詢設定</strong></td><td style="white-space:nowrap">最右邊</td><td>下方的套用步驟會記錄做過的每一個動作，可回放、可刪除、可修改。</td></tr>
+    <tr><td><strong>公式列</strong></td><td style="white-space:nowrap">預覽區上方</td><td>顯示每個步驟的 M 語言公式，可直接編輯。</td></tr>
+  </table>
+
+  <h3 class="sub">讀懂套用步驟</h3>
+  <p>先點查詢窗格裡的 <span class="ui">Japan</span>，看右邊套用步驟，預設通常會有四步。它們是 Power BI 自動產生的，理解它在做什麼很重要：</p>
+
+  <table>
+    <tr><th>步驟</th><th>發生了什麼事</th></tr>
+    <tr><td><strong>來源 Source</strong></td><td>讀取資料來源。點旁邊的齒輪設定圖示，會看到檔案路徑。改這裡的來源，後面所有步驟會自動套用到新檔案，這就是資料能無痛更新的原因。看完記得取消，不要改。</td></tr>
+    <tr><td><strong>導覽 Navigation</strong></td><td>從活頁簿裡定位到所選的那張工作表。</td></tr>
+    <tr><td><strong>已將標頭升階</strong></td><td>原本第一列被當成一般資料，這步把第一列升級成欄位名稱。</td></tr>
+    <tr><td><strong>已變更類型</strong></td><td>讀進來時每欄是未定型（欄位標題顯示 ABC123）。這步自動偵測並分流成正確類型，例如日期欄會出現日曆圖示。</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <p class="ctitle">看一個小細節</p>
+    <p>點欄位標題左邊的小圖示：ABC 代表文字、123 代表數字、日曆代表日期。類型對不對，直接影響後面能不能做運算。這是判斷資料健康的第一個快速指標。</p>
+  </div>
+
+  <h2 class="section"><span class="num">5</span>動手清理：空白列與重複</h2>
+  <p class="lead">以下是真正的實作。先點 <span class="ui">Taiwan</span> 這張表，跟著做。先打開一個幫手，再清掉空白列與重複資料。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-1</span><span class="stepttl">打開資料行品質</span></div>
+    <ol class="clean">
+      <li>點上方的 <span class="ui">檢視表</span> 功能區。</li>
+      <li>把 <span class="ui">資料行品質</span> 打勾。</li>
+      <li>每個欄位標題下方會出現一條綠色品質列，顯示這一欄有多少是有效、錯誤、空白。沒填滿、有黑色或缺口的，代表這欄有問題。</li>
+    </ol>
+  </div>
+
+  <p>目標很單純：把每一欄的綠色品質列清到 100% 有效。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-2</span><span class="stepttl">移除空白列</span></div>
+    <ol class="clean">
+      <li>回到 <span class="ui">常用</span> 功能區。</li>
+      <li>點 <span class="ui">縮減資料列</span> <span class="arrow">›</span> <span class="ui">移除資料列</span> <span class="arrow">›</span> <span class="ui">移除空白資料列</span>。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-3</span><span class="stepttl">移除重複項目</span></div>
+    <ol class="clean">
+      <li>同樣在 <span class="ui">縮減資料列</span> <span class="arrow">›</span> <span class="ui">移除資料列</span> <span class="arrow">›</span> <span class="ui">移除重複項目</span>。</li>
+      <li>這會把整列完全一樣的重複資料清掉。</li>
+    </ol>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">移除空白列清不掉「半空白」</p>
+    <p>移除空白資料列只認整列都是空的情況。但台灣表裡的 EMP081 有員工編號、只有姓名是空的，它不算整列空白，所以還會留著。這種半空白要靠下一步的欄位篩選處理。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">測試帳號</p>
+    <p>除了空白與重複，實務上也常有測試帳號，例如姓名是 test、或明顯非真實員工的列。發現時在這個階段一併用篩選或移除列刪掉。本範例資料沒有測試帳號，但收回來的真實資料經常會有。</p>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-4</span><span class="stepttl">用篩選清掉姓名為 null 的列</span></div>
+    <ol class="clean">
+      <li>在 <span class="ui">姓名</span> 欄位標題右邊，點那個向下的篩選箭頭。</li>
+      <li>把清單裡的 <span class="ui">(null)</span> 取消勾選，確定。</li>
+      <li>回頭看品質列，姓名欄現在應該是 100% 有效。</li>
+    </ol>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>停下來看台灣表的每一欄品質列。全部都顯示 100% 有效，沒有空白或錯誤，這張表就過關了。台灣表清完應該是 80 筆左右。</p>
+  </div>
+
+  <h2 class="section"><span class="num">6</span>三張表都要做一次</h2>
+  <p class="lead">同樣的三個動作，請在 <span class="ui">Japan</span> 和 <span class="ui">US</span> 各做一遍，三張表都要確認完成。</p>
+  <div class="pill-list">
+    <span class="pill">移除空白資料列</span>
+    <span class="pill">移除重複項目</span>
+    <span class="pill">必要時用篩選清掉 null</span>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">小提醒</p>
+    <p>有編號但姓名空白的半空白情況只出現在台灣表，所以只有台灣需要多做步驟 4-4 的姓名篩選。日本和美國用移除空白列加移除重複項目就夠了。不管哪張表，最後都用品質列逐欄確認到 100%。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>三張表的所有欄位品質列都是 100% 有效，才算完成本節。</p>
+  </div>
+
+  <h2 class="section"><span class="num">7</span>把民國年轉成西元年</h2>
+  <p class="lead">台灣的出生日期是民國年（例如 72/04/05）。Power BI 會把 72 誤判成西元 1972，所以要先拆掉錯誤的偵測，再自己換算。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-1</span><span class="stepttl">刪除自動的變更類型步驟</span></div>
+    <ol class="clean">
+      <li>點 <span class="ui">Taiwan</span> 表，在右邊查詢設定找到第四個套用步驟 <span class="ui">已變更類型</span>。</li>
+      <li>把這個步驟刪除。如果跳出會影響後續步驟的提示，選擇刪除即可。</li>
+      <li>回到最新步驟，出生日期會恢復成原本的民國年文字。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-2</span><span class="stepttl">新增自訂資料行做換算</span></div>
+    <ol class="clean">
+      <li>上方點 <span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">自訂資料行</span>。</li>
+      <li>欄位名稱填 <span class="ui">BirthDate_西元</span>。</li>
+      <li>打開練習檔的語法表，找到民國轉西元那一項，複製整段 M 公式文字，貼進公式框：</li>
+    </ol>
+    <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>Date.FromText(
+    Text.From(Number.From(Text.BeforeDelimiter([BirthDate],"/"))+1911)
+    &"/"&
+  Text.AfterDelimiter([BirthDate],"/",0)
+)</div>
+    <details class="explain">
+      <summary>這段公式在做什麼（逐行說明）</summary>
+      <div class="body">
+        <p>以 <code>72/04/05</code> 為例，由內往外讀：</p>
+        <p><code>Text.BeforeDelimiter([BirthDate],"/")</code> 取第一個斜線前的文字，得到 <code>72</code>。</p>
+        <p><code>Number.From(...)</code> 把文字 72 轉成數字。</p>
+        <p><code>+1911</code> 是民國轉西元的核心：西元等於民國加 1911，所以 72＋1911＝1983。</p>
+        <p><code>Text.From(...)</code> 把 1983 轉回文字，再用 <code>&"/"&</code> 跟後半段接起來。</p>
+        <p><code>Text.AfterDelimiter([BirthDate],"/",0)</code> 取第一個斜線之後的文字，得到 <code>04/05</code>。</p>
+        <p>組合後是文字 <code>1983/04/05</code>，最外層的 <code>Date.FromText(...)</code> 再把這串文字變成真正的日期值。</p>
+      </div>
+    </details>
+    <ol class="clean" start="4">
+      <li>確定後，最右邊會長出一欄 <span class="ui">BirthDate_西元</span>。</li>
+    </ol>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">只貼文字，不要連欄位一起貼</p>
+    <p>從語法表複製時，只複製公式文字本身。如果把欄位名稱或格式一起貼進去，公式會跑掉、甚至多冒出幾欄。貼完看公式框下方，要顯示綠色勾與未偵測到任何語法錯誤，才按確定。連同後面的右括號都要貼齊。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>看第一位員工：原本是民國 72 年，換算後 BirthDate_西元 應顯示 1983/04/05。對得起來就成功了。</p>
+  </div>
+
+  <h2 class="section"><span class="num">8</span>整理欄位與步驟名稱</h2>
+  <p class="lead">換算好之後，把舊欄位清掉、欄位順序對齊其他表，並幫步驟取名字。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-1</span><span class="stepttl">移除原本的民國生日欄</span></div>
+    <ol class="clean">
+      <li>在原本的 <span class="ui">BirthDate</span> 欄位標題上按右鍵 <span class="arrow">›</span> 移除。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-2</span><span class="stepttl">讓三張表的日期欄同名又同型別</span></div>
+    <ol class="clean">
+      <li>把新欄 <span class="ui">BirthDate_西元</span> 重新命名回 <span class="ui">BirthDate</span>。附加查詢是依欄位名稱對齊（不是依順序），這樣台灣的出生日期欄就跟日本、美國同名，另外兩張表完全不用動。</li>
+      <li>剛剛刪掉台灣的已變更類型後，台灣整張表的欄位會退回未定型。把台灣的 <span class="ui">BirthDate</span> 和 <span class="ui">HireDate</span> 都重新設成日期型別。</li>
+      <li>確認三張表的 <span class="ui">BirthDate</span> 與 <span class="ui">HireDate</span> 型別都是日期，合併與後面的計算才不會出錯。</li>
+    </ol>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">對齊靠名稱，不是順序</p>
+    <p>常見誤解是以為欄位要排成一樣的順序才能合併。實際上附加查詢是用欄位名稱配對：名稱對得上就會併到同一欄，對不上就會各自長出一欄、其餘補 null。所以重點是同名，順序只是方便閱讀。</p>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-3</span><span class="stepttl">幫步驟重新命名</span></div>
+    <ol class="clean">
+      <li>在查詢設定的套用步驟上按右鍵 <span class="arrow">›</span> 重新命名。</li>
+      <li>把新增自訂的那步改成 <span class="ui">民國轉西元</span>，移除欄位那步改成 <span class="ui">移除民國生日</span>。</li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">為什麼要命名步驟</p>
+    <p>套用步驟會完整記下做過的每個動作。預設名稱像已新增自訂看不出用途；改成看得懂的名字，日後回頭維護時，一眼就知道每一步在做什麼。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>確認三張表的出生日期欄都叫 BirthDate、且為日期型別，HireDate 也是日期，欄位名稱都對得起來。</p>
+  </div>
+
+  <h2 class="section"><span class="num">9</span>合併三張表</h2>
+  <p class="lead">把台灣、日本、美國併成一張大表。在 Power Query 裡不需要手動剪貼，用附加查詢就行。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 3-1</span><span class="stepttl">附加為新查詢</span></div>
+    <ol class="clean">
+      <li>到 <span class="ui">常用</span> 功能區，點 <span class="ui">附加查詢</span> 旁的小箭頭 <span class="arrow">›</span> <span class="ui">將查詢附加為新查詢</span>。</li>
+      <li>選擇三個或以上資料表，把 Taiwan、Japan、US 都加進來，確定。</li>
+      <li>會產生一張新表 <span class="ui">附加1</span>，把它重新命名為 <span class="ui">員工基本資料</span>。</li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">兩種附加的差別</p>
+    <p>直接用附加查詢會把其他表併進台灣這張原表、改動原始查詢。將查詢附加為新查詢則是另外長出一張新表，三張原始表都原封不動保留。這裡選後者。</p>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">合併的前提：欄位要對得起來</p>
+    <p>三張表的欄位數要相同、欄位名稱要一一對應（出生日期欄都叫 BirthDate、姓名對姓名、編號對編號），而且同一欄的資料類型要一致。特別注意日期：BirthDate 與 HireDate 在三張表都要是日期型別。若哪一欄沒被辨識成日期，回去把它改成日期類型，否則合併或後面的年齡、年資計算會出錯。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">原始三張表為什麼沒變</p>
+    <p>新查詢就像長出一張全新的表，後續的值轉換都在這張新表上做，原始三表不會被動到。也因此 Part 1 裡某些清理只在台灣表做，因為其他兩張表沒有那個問題。</p>
+  </div>
+
+  <h2 class="section"><span class="num">10</span>統一欄位的不同寫法</h2>
+  <p class="lead">合併後，性別欄同時有 Male、Female、男性、女性。用取代值把它統一。這些動作都在新表員工基本資料上做。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-1</span><span class="stepttl">取代性別值</span></div>
+    <ol class="clean">
+      <li>點 <span class="ui">Gender</span> 欄，到 <span class="ui">轉換</span> 功能區 <span class="arrow">›</span> <span class="ui">取代值</span>。</li>
+      <li>先把 <span class="ui">Female</span> 取代成 <span class="ui">女性</span>，再把 <span class="ui">Male</span> 取代成 <span class="ui">男性</span>。</li>
+      <li>點欄位標題的篩選小箭頭，確認清單裡只剩男性與女性。若混入「是」這類輸入錯誤的值，依實際狀況一併取代或修正。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-2</span><span class="stepttl">練習：統一 IsManager</span></div>
+    <ol class="clean">
+      <li>同樣用取代值，把 <span class="ui">IsManager</span> 欄的 <span class="ui">Yes</span> 與 <span class="ui">No</span> 改成 <span class="ui">是</span> 與 <span class="ui">否</span>。</li>
+      <li>用篩選箭頭確認只剩是與否兩種值。</li>
+    </ol>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">為什麼這裡要統一成中文</p>
+    <p>後面 Part 3 的 DAX 量值會直接比對欄位值，例如判斷 IsManager 是否等於是。欄位值在這裡統一好，後面的公式才接得起來。</p>
+  </div>
+
+  <h2 class="section"><span class="num">11</span>新增年齡與年資</h2>
+  <p class="lead">原始檔沒有年齡和年資，要自己算。一樣用新增資料行的自訂資料行，貼上語法表的公式。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-1</span><span class="stepttl">新增年齡欄</span></div>
+    <ol class="clean">
+      <li><span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">自訂資料行</span>，命名 <span class="ui">年齡</span>。</li>
+      <li>貼上年齡公式，看到綠色勾再確定：</li>
+    </ol>
+    <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>Date.Year(DateTime.LocalNow()) - Date.Year([BirthDate])</div>
+    <details class="explain">
+      <summary>這段公式在做什麼（逐行說明）</summary>
+      <div class="body">
+        <p><code>DateTime.LocalNow()</code> 取現在的日期時間。</p>
+        <p><code>Date.Year(...)</code> 從中抽出年份，例如 2026。</p>
+        <p><code>Date.Year([BirthDate])</code> 抽出出生年份，例如 1983。</p>
+        <p>兩者相減：2026 − 1983 ＝ 43。</p>
+        <p class="note">注意：這是純年份相減、不看月日。如果今年生日還沒到，算出來會比實際歲數多 1。要精確就得改用完整日期比較，教學用這個近似即可。</p>
+      </div>
+    </details>
+    <p>概念很單純：用今年的年份直接減掉出生年份，不用真的去數日期。</p>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-2</span><span class="stepttl">新增年資欄</span></div>
+    <ol class="clean">
+      <li>再新增一個自訂資料行，命名 <span class="ui">年資</span>。</li>
+      <li>貼上年資公式，確定：</li>
+    </ol>
+    <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>Number.Round(
+    Duration.Days(
+        Date.From(DateTime.LocalNow()) - [HireDate]) / 365, 1)</div>
+    <details class="explain">
+      <summary>這段公式在做什麼（逐行說明）</summary>
+      <div class="body">
+        <p><code>DateTime.LocalNow()</code> 取現在，<code>Date.From(...)</code> 去掉時間、只留日期。</p>
+        <p>減掉 <code>[HireDate]</code> 得到一段時間長度（Duration）。</p>
+        <p><code>Duration.Days(...)</code> 把這段時間換算成總天數，例如 3450 天。</p>
+        <p><code>/ 365</code> 把天數換成年，約 9.45。</p>
+        <p><code>Number.Round(..., 1)</code> 四捨五入到小數一位，得 9.5。</p>
+        <p class="note">注意：除以 365 沒有計入閏年，會有極小誤差，對人資分析的呈現沒有影響。</p>
+      </div>
+    </details>
+    <p>概念是把到職日到今天的天數除以 365，再四捨五入取小數一位。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">公式與語法表一致</p>
+    <p>步驟 8 已把日期欄改名回 BirthDate，公式直接用 [BirthDate]，與語法表完全一致。若欄位另有命名，中括號裡的名稱要跟著改，否則公式會報錯。</p>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">算之前先確認資料類型</p>
+    <p>所有運算都要靠欄位的資料類型才會正確。公式報錯時，先點欄位標題左邊的類型圖示檢查：日期欄要是日期、數字欄要是數字、文字欄要是文字。這跟在統計軟體裡設定變數是連續或類別是同一個道理，型別設對，運算才對。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>最右邊應該多出年齡與年資兩欄，年資是帶一位小數的數字（例如 7.4）。</p>
+  </div>
+
+  <h2 class="section"><span class="num">12</span>把數值切成分組區間</h2>
+  <p class="lead">做分析時不會用連續數字呈現年齡或年資，而是分組。這裡改用條件資料行，把算好的數值轉成區間標籤。</p>
+
+  <div class="callout note">
+    <p class="ctitle">自訂資料行 vs 條件資料行</p>
+    <p>前面算年齡、年資用的是自訂資料行，要輸入公式去算值。這一段用的是條件資料行，不寫公式，而是用一條條的條件（小於等於多少就給哪個標籤）來分組。</p>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">新增年齡區間</span></div>
+    <ol class="clean">
+      <li>點 <span class="ui">年齡</span> 欄，<span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">條件資料行</span>，命名 <span class="ui">年齡區間</span>。</li>
+      <li>依序設定條件：欄位選年齡、運算子用小於等於，逐一建立每個區間，最後用 else 收尾。</li>
+    </ol>
+    <table>
+      <tr><th>條件（年齡）</th><th>輸出標籤</th></tr>
+      <tr><td>小於等於 18</td><td>18含以下</td></tr>
+      <tr><td>小於等於 24</td><td>18~24</td></tr>
+      <tr><td>小於等於 29</td><td>25~29</td></tr>
+      <tr><td>小於等於 34</td><td>30~34</td></tr>
+      <tr><td>小於等於 39</td><td>35~39</td></tr>
+      <tr><td>小於等於 44</td><td>40~44</td></tr>
+      <tr><td>小於等於 49</td><td>45~49</td></tr>
+      <tr><td>小於等於 54</td><td>50~54</td></tr>
+      <tr><td>小於等於 59</td><td>55~59</td></tr>
+      <tr><td>小於等於 64</td><td>60~64</td></tr>
+      <tr><td>其他（else）</td><td>65含以上</td></tr>
+    </table>
+    <details class="explain">
+      <summary>方法二：用自訂資料行寫 if 條件式（順便解決排序）</summary>
+      <div class="body">
+        <p>同樣結果可用自訂資料行一次寫完。在標籤前加數字前綴，之後圖表依文字排序自然就是正確順序。</p>
+        <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>if [年齡] &lt;= 18 then "01. 18歲以下"
+else if [年齡] &lt;= 24 then "02. 18-24歲"
+else if [年齡] &lt;= 29 then "03. 25-29歲"
+else if [年齡] &lt;= 34 then "04. 30-34歲"
+else if [年齡] &lt;= 39 then "05. 35-39歲"
+else if [年齡] &lt;= 44 then "06. 40-44歲"
+else if [年齡] &lt;= 49 then "07. 45-49歲"
+else if [年齡] &lt;= 54 then "08. 50-54歲"
+else if [年齡] &lt;= 59 then "09. 55-59歲"
+else if [年齡] &lt;= 64 then "10. 60-64歲"
+else "11. 65歲以上"</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-2</span><span class="stepttl">新增年資區間</span></div>
+    <ol class="clean">
+      <li>點 <span class="ui">年資</span> 欄，<span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">條件資料行</span>，命名 <span class="ui">年資區間</span>。</li>
+      <li>用小於來分組（以年為單位，三個月等於 0.25 年），最後用 else 收尾。</li>
+    </ol>
+    <table>
+      <tr><th>條件（年資）</th><th>輸出標籤</th></tr>
+      <tr><td>小於 0.25</td><td>3個月以下</td></tr>
+      <tr><td>小於 1</td><td>3~12個月</td></tr>
+      <tr><td>小於 3</td><td>1~3年</td></tr>
+      <tr><td>小於 5</td><td>3~5年</td></tr>
+      <tr><td>小於 10</td><td>5~10年</td></tr>
+      <tr><td>小於 15</td><td>10~15年</td></tr>
+      <tr><td>小於 20</td><td>15~20年</td></tr>
+      <tr><td>其他（else）</td><td>20年以上</td></tr>
+    </table>
+    <details class="explain">
+      <summary>方法二：用自訂資料行寫 if 條件式（順便解決排序）</summary>
+      <div class="body">
+        <p>標籤加數字前綴的寫法。操作講義把年資欄命名為「年資（年）」，本講義沿用語法表的「年資」，DAX 量值才對得上；公式中的欄名依實際命名調整。</p>
+        <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>if [年資] &lt; 0.25 then "01. 3個月以下"
+else if [年資] &lt; 1 then "02. 3~12個月"
+else if [年資] &lt; 3 then "03. 1~3年"
+else if [年資] &lt; 5 then "04. 3~5年"
+else if [年資] &lt; 10 then "05. 5~10年"
+else if [年資] &lt; 15 then "06. 10~15年"
+else if [年資] &lt; 20 then "07. 15~20年"
+else "08. 20年以上"</div>
+      </div>
+    </details>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">區間級距可依需求調整</p>
+    <p>上面的級距是常見範例，實際分幾組、切在哪由分析需求決定。重點是把連續數值轉成有意義的分組，後面在圖表上才好比較與篩選。</p>
+  </div>
+
+  <div class="callout warn">
+    <p class="ctitle">區間欄位的排序</p>
+    <p>年齡區間、年資區間這類文字欄位放到圖表軸上時，預設會依文字排序，例如「10到20年」會排在「3個月以下」前面。要讓順序正確，需在資料行工具用排序方式指定一個排序用的數字欄位，或另建一張排序對照表。最終儀表板就是用一張年資區間排序表來控制順序，這一步通常在製作視覺化時處理。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>員工基本資料現在應該有年齡、年資、年齡區間、年資區間四個新欄位，且性別與主管職都已統一。確認沒問題就可以準備載入了。</p>
+  </div>
+
+  <h2 class="section"><span class="num">13</span>關閉並套用、存檔</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">套用變更</span></div>
+    <ol class="clean">
+      <li>左上角點 <span class="ui">關閉並套用</span>。</li>
+      <li>Power BI 會把清理結果載入回報表，畫面會出現三張乾淨的表。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-2</span><span class="stepttl">存成自己的檔案</span></div>
+    <ol class="clean">
+      <li>存檔，取一個好辨識的名字。</li>
+      <li>養成隨手存檔的習慣，每個段落結束就存一次。</li>
+    </ol>
+  </div>
+
+  
+  <hr class="divider">
+
+  <h2 class="section">接下來：離職資料與日期表</h2>
+  <p class="lead">員工基本資料已清理、合併並補上計算欄位。接著處理離職資料，並建立支援時間運算的日期表：</p>
+  <table>
+    <tr><th>接下來的任務</th><th>解決的問題</th></tr>
+    <tr><td>分割資料行</td><td>把離職類別與離職原因拆成兩欄，方便分組分析。</td></tr>
+    <tr><td>橫向合併（Merge）</td><td>把部門名稱、主管，以及員工的入職日帶進離職表。</td></tr>
+    <tr><td>新增在職時長</td><td>用離職日減入職日，算出每位離職者的留任長度。</td></tr>
+    <tr><td>建立日期表</td><td>做出一張連續日期表，支援去年同期、累計等時間智慧運算。</td></tr>
+  </table>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 1 員工基本資料</strong></p>
+    <p>核心觀念：先看、後清、再算。欄位名稱與資料類型對齊好，縱向合併與後續計算才會順。</p>
+  </footer>
+
+</div>
+</div><!-- /part1 -->
+
+
+<div id="part2" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 2 · 資料清理：離職資料與日期表</h1>
+    <div class="meta-row">
+      <span class="chip">難度：初階進階</span>
+      <span class="chip">預估 30–40 分鐘</span>
+      <span class="chip">工具：Power BI Desktop · Power Query</span>
+      <span class="chip">主題：分割、橫向合併、日期表</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>員工基本資料完成後，換處理第二張表：離職資料。重點是把綁在一起的離職類別與原因拆開，再用橫向合併把部門、主管與員工的入職日帶進來，算出在職時長。最後建立一張連續日期表，供後面的時間智慧運算使用。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>用分割資料行把一欄裡的兩種資訊拆成兩欄。</li>
+    <li>說出橫向合併六種聯結的差別，並選對這次要用的左方外部。</li>
+    <li>用合併查詢把對照表與另一張表的欄位帶進主表並展開。</li>
+    <li>新增在職時長計算欄位。</li>
+    <li>用空白查詢與進階編輯器建立一張連續日期表。</li>
+  </ul>
+
+  <div class="callout note">
+    <p class="ctitle">開始之前</p>
+    <p>承接員工基本資料單元，清理合併都已完成。本單元用到的離職明細與部門對照都在 02_Turnover_Data.xlsx 裡，所有 M 公式同樣取自練習檔的語法表，照貼即可。</p>
+  </div>
+
+  <h2 class="section"><span class="num">1</span>匯入離職資料</h2>
+  <p class="lead">離職資料來自一個檔案裡的兩張工作表：離職明細與部門對照。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-1</span><span class="stepttl">匯入兩張工作表</span></div>
+    <ol class="clean">
+      <li>常用功能區點 <span class="ui">取得資料</span> <span class="arrow">›</span> <span class="ui">從 Excel 活頁簿</span>，選 <span class="ui">02_Turnover_Data</span>。</li>
+      <li>在導覽視窗把 <span class="ui">離職明細</span> 與 <span class="ui">部門對照</span> 兩張都打勾，按 <span class="ui">轉換資料</span>。</li>
+      <li>點 <span class="ui">部門對照</span> 表，<span class="ui">轉換</span> <span class="arrow">›</span> <span class="ui">使用第一個資料列作為標頭</span>，把表頭升階。</li>
+    </ol>
+  </div>
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>匯入後，左側查詢窗格應該有六張表：Taiwan、Japan、US、員工基本資料、離職明細、部門對照。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>分割資料行：拆開離職類別與原因</h2>
+  <p class="lead">TerminationCategory 欄把離職類別和原因綁在一起，例如 非自願離職-退休。中間以一個減號分隔，先把這一欄拆成兩欄。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-1</span><span class="stepttl">依分隔符號分割</span></div>
+    <ol class="clean">
+      <li>點 <span class="ui">離職明細</span> 表，選取 <span class="ui">TerminationCategory</span> 欄。</li>
+      <li>上方 <span class="ui">常用</span>（或轉換）<span class="arrow">›</span> <span class="ui">分割資料行</span> <span class="arrow">›</span> <span class="ui">依分隔符號</span>。</li>
+      <li>分隔符號選 <span class="ui">自訂</span>、輸入減號，分割位置選 <span class="ui">最左邊的分隔符號</span>，拆成兩欄。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-2</span><span class="stepttl">幫兩欄改名</span></div>
+    <ol class="clean">
+      <li>在新長出的兩欄標題各點兩下改名：第一欄改 <span class="ui">離職類別</span>，第二欄改 <span class="ui">離職原因</span>。</li>
+    </ol>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">分割位置的選擇</p>
+    <p>分割位置很實用。如果只想保留前段、不要後面的資訊，可以只選最左邊的分隔符號，後段就不會被拆出來。這份資料剛好只有一個分隔符號，所以結果一樣。</p>
+  </div>
+
+  <h2 class="section"><span class="num">3</span>橫向合併（Merge）：六種聯結</h2>
+  <p class="lead">縱向合併（附加）是把結構相同的表上下疊起來；橫向合併（Merge）則是把另一張表對應的欄位左右接上來，概念類似 Excel 的 VLOOKUP，但會留下步驟、可自動重跑。合併時要先選一種聯結方式，依據是要保留哪一張表的資料。</p>
+  <table>
+    <tr><th>聯結種類</th><th>保留什麼</th></tr>
+    <tr><td><strong>左方外部</strong>（最常用）</td><td>保留左表全部列，右表有對應就補入，無對應填 null。</td></tr>
+    <tr><td><strong>右方外部</strong></td><td>保留右表全部列，左表有對應就補入，無對應填 null。</td></tr>
+    <tr><td><strong>完整外部</strong></td><td>左右兩表全部保留，彼此無對應的欄位互相填 null。</td></tr>
+    <tr><td><strong>內部</strong></td><td>只保留兩表都有對應的列，任一方無對應就刪除。</td></tr>
+    <tr><td><strong>左反</strong>（Left Anti）</td><td>只保留左表中、在右表找不到對應的列。</td></tr>
+    <tr><td><strong>右反</strong>（Right Anti）</td><td>只保留右表中、在左表找不到對應的列。</td></tr>
+  </table>
+
+  <h2 class="section"><span class="num">4</span>合併部門對照：帶入部門與主管</h2>
+  <p class="lead">離職明細只有部門代碼，沒有部門名稱和主管。用左方外部聯結，把部門對照的資訊接上來。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-1</span><span class="stepttl">先確認合併鍵型態一致</span></div>
+    <ol class="clean">
+      <li>分別在離職明細與部門對照選取 <span class="ui">DepartmentCode</span> 欄。</li>
+      <li>右鍵 <span class="arrow">›</span> 變更類型 <span class="arrow">›</span> 文字。兩張表都要做，型態一致才比對得起來。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-2</span><span class="stepttl">執行合併</span></div>
+    <ol class="clean">
+      <li>選 <span class="ui">離職明細</span> 查詢，常用 <span class="arrow">›</span> <span class="ui">合併查詢</span> <span class="arrow">›</span> <span class="ui">將查詢合併為新查詢</span>。</li>
+      <li>上方選離職明細的 <span class="ui">DepartmentCode</span>，下方選部門對照的 <span class="ui">DepartmentCode</span>。</li>
+      <li>聯結種類選 <span class="ui">左方外部</span>，確定。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-3</span><span class="stepttl">展開帶入的欄位</span></div>
+    <ol class="clean">
+      <li>找到最右側新長出的 Table 欄，點右上角的展開圖示。</li>
+      <li>只勾 <span class="ui">Department</span> 與 <span class="ui">ManagerName</span>，取消勾選使用原始資料行名稱作為前置詞，確定。</li>
+      <li>把這張新查詢重新命名為 <span class="ui">離職資料</span>。</li>
+    </ol>
+  </div>
+  <div class="callout warn">
+    <p class="ctitle">展開後欄位變成 Column1 怎麼辦</p>
+    <p>如果部門對照的表頭沒有被升階，展開時會看到 Column1、Column2 而不是 Department、ManagerName。回到部門對照表，轉換 <span class="arrow">›</span> 使用第一個資料列作為標頭，再回到合併步驟，點來源旁的設定齒輪重設對應即可。</p>
+  </div>
+
+  <h2 class="section"><span class="num">5</span>合併員工基本資料：帶入入職日</h2>
+  <p class="lead">要算在職時長需要入職日，但離職資料只有離職日。再做一次合併，把員工基本資料的 HireDate 接進來。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-1</span><span class="stepttl">合併員工基本資料</span></div>
+    <ol class="clean">
+      <li>選 <span class="ui">離職資料</span>，常用 <span class="arrow">›</span> <span class="ui">合併查詢</span>（這次直接在原表上做，不另開新查詢）。</li>
+      <li>下方選 <span class="ui">員工基本資料</span>，兩邊都用 <span class="ui">EmployeeID</span> 比對，聯結種類選 <span class="ui">左方外部</span>，確定。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-2</span><span class="stepttl">只展開入職日</span></div>
+    <ol class="clean">
+      <li>點新 Table 欄的展開圖示，只勾 <span class="ui">HireDate</span>，取消前置詞，確定。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">6</span>新增在職時長</h2>
+  <p class="lead">有了離職日與入職日，就能算出每位離職者待了多久。一樣用自訂資料行貼公式。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">新增在職時長欄</span></div>
+    <ol class="clean">
+      <li><span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">自訂資料行</span>，命名 <span class="ui">在職時長</span>。</li>
+      <li>貼上語法表的在職時長公式，看到綠色勾再確定：</li>
+    </ol>
+    <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>Number.Round(
+    Duration.TotalDays([TerminationDate] - [HireDate]) / 365, 1)</div>
+    <details class="explain">
+      <summary>這段公式在做什麼（逐行說明）</summary>
+      <div class="body">
+        <p><code>[TerminationDate] - [HireDate]</code> 得到離職日到入職日之間的時間長度。</p>
+        <p><code>Duration.TotalDays(...)</code> 把這段時間換算成總天數。</p>
+        <p><code>/ 365</code> 把天數換成年。</p>
+        <p><code>Number.Round(..., 1)</code> 四捨五入到小數一位。</p>
+        <p class="note">單位說明：本講義採語法表與成果檔的版本，以年為單位（除以 365），成果檔卡片即「平均留任時長(年)」。操作講義另提供以月為單位的版本（除以 30、欄名「在職時長（月）」），兩者擇一即可，量值與圖表標籤要跟所選單位一致。</p>
+      </div>
+    </details>
+  </div>
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>離職資料現在應有離職類別、離職原因、Department、ManagerName、HireDate、在職時長等欄位，且離職日與入職日都是日期型別。</p>
+  </div>
+
+  <h2 class="section"><span class="num">7</span>建立日期表</h2>
+  <p class="lead">時間智慧函數（去年同期、累計等）需要一張完整且連續的日期表才能正確運作，例如算年度離職人數、月增減人數。用空白查詢貼上語法即可生成。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 7-1</span><span class="stepttl">用空白查詢貼上日期表語法</span></div>
+    <ol class="clean">
+      <li>常用 <span class="arrow">›</span> <span class="ui">新來源</span> <span class="arrow">›</span> <span class="ui">空白查詢</span>。</li>
+      <li>常用 <span class="arrow">›</span> <span class="ui">進階編輯器</span>，把日期表語法整段全選貼上，取代原本內容：</li>
+    </ol>
+    <div class="code"><span class="lbl">Power Query · M</span><button class="copybtn" type="button">複製</button>let
+  Today = Date.From(DateTime.LocalNow()),
+  StartDate = #date(2020, 1, 1),
+  EndDate = Date.EndOfYear(Today),
+  #"List of Dates" = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1, 0, 0, 0)),
+  #"Converted to Table" = Table.FromList(#"List of Dates", Splitter.SplitByNothing(), type table [Date = Date.Type]),
+  #"Insert Year" = Table.AddColumn(#"Converted to Table", "年", each Date.Year([Date]), Int64.Type),
+  #"Insert Quarter Number" = Table.AddColumn(#"Insert Year", "季度數字", each Date.QuarterOfYear([Date]), Int64.Type),
+  #"Added Quarter" = Table.AddColumn(#"Insert Quarter Number", "季度", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+  #"Add Year-Quarter" = Table.AddColumn(#"Added Quarter", "年-季度", each Text.From(Date.Year([Date])) & "-Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+  #"Insert Month Number" = Table.AddColumn(#"Add Year-Quarter", "月份數字", each Date.Month([Date]), Int64.Type),
+  #"Insert Month Name" = Table.AddColumn(#"Insert Month Number", "月份", each Date.MonthName([Date], "TW-zh"), type text),
+  #"Insert Month-Year" = Table.AddColumn(#"Insert Month Name", "年-月份", each Date.ToText([Date], "yyyy MMM"), type text),
+  #"Insert YYYY-MM" = Table.AddColumn(#"Insert Month-Year", "YYYY-MM", each Date.ToText([Date], "yyyy-MM"), type text),
+  #"Rename Column" = Table.RenameColumns(#"Insert YYYY-MM", {{"Date", "日期"}})
+in
+  #"Rename Column"</div>
+    <details class="explain">
+      <summary>這段語法逐行在做什麼</summary>
+      <div class="body">
+        <p><code>Today</code> 取現在的日期，當作日期表的結束依據。</p>
+        <p><code>StartDate = #date(2020, 1, 1)</code> 把日期表從 2020 年元旦起算，<code>EndDate</code> 抓到今年年底。</p>
+        <p><code>List of Dates</code> 用 <code>List.Dates</code> 從起始日逐日列到結束日，確保中間連續不漏；再轉成資料表。</p>
+        <p>接著從每一個日期衍生出維度欄位：年、季度數字、季度（Q1 到 Q4）、年-季度、月份數字、月份、年-月份、YYYY-MM。這些之後都能當成篩選與分組的維度。</p>
+        <p><code>Rename Column</code> 最後把 Date 欄改名為日期。</p>
+        <p class="note">重點：連續且不間斷的日期是時間智慧運算的前提。選某一年時，整份報表會透過關聯一起篩到該年的資料；這條關聯會在 Part 3 建立。</p>
+      </div>
+    </details>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 7-2</span><span class="stepttl">命名並確認日期型別</span></div>
+    <ol class="clean">
+      <li>把這個查詢重新命名為 <span class="ui">日期表</span>。</li>
+      <li>點 <span class="ui">日期</span> 欄標題左邊的型別圖示，確認是日期型別。</li>
+    </ol>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">日期表為什麼從 2020 起算</p>
+    <p>語法把起始日設在 2020-01-01、結束日抓到今年年底，產生一段連續不漏的日期。時間智慧運算最怕日期斷層，連續的日期表能確保去年同期、累計這類計算對得準。起始年份可依資料涵蓋範圍自行調整。</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section"><span class="num">8</span>關閉並套用</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-1</span><span class="stepttl">套用並存檔</span></div>
+    <ol class="clean">
+      <li>左上角點 <span class="ui">關閉並套用</span>，把離職資料與日期表載入回模型。</li>
+      <li>存檔。到這裡，Part 1 的資料清理就全部完成了。</li>
+    </ol>
+  </div>
+
+  <h2 class="section">接下來：Part 2</h2>
+  <p class="lead">三張資料都清理好、日期表也建好了。Part 2 進入員工儀表板製作，主軸是資料模型與 DAX：</p>
+  <table>
+    <tr><th>Part 2 的任務</th><th>用途</th></tr>
+    <tr><td>建立資料模型關聯</td><td>在模型檢視把員工基本資料、離職資料、日期表用工號與日期串起來。</td></tr>
+    <tr><td>撰寫 DAX 量值</td><td>在職人數、離職率、平均年資、女性主管比等人資指標。</td></tr>
+    <tr><td>視覺化與互動設計</td><td>用卡片、長條圖、矩陣與交叉篩選器，做出可互動的人力結構與離職分析儀表板。</td></tr>
+  </table>
+
+  <h2 class="section">本單元會用到的檔案</h2>
+  <div class="files">
+    <div class="filecard">
+      <div class="fname">02_Turnover_Data.xlsx</div>
+      <div class="fdesc">離職資料，含離職明細與部門對照兩張工作表。本單元主角。</div>
+    </div>
+    <div class="filecard">
+      <div class="fname">日期表語法.txt</div>
+      <div class="fdesc">建立日期表用的 M 語法，貼進空白查詢的進階編輯器。</div>
+    </div>
+    <div class="filecard">
+      <div class="fname">語法.xlsx</div>
+      <div class="fdesc">各階段的 M 與 DAX 語法清單，照貼即可。</div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 2 離職資料與日期表</strong></p>
+    <p>核心觀念：縱向合併疊資料、橫向合併接欄位。合併鍵的型態要一致，聯結方式則看要保留哪張表的資料。</p>
+  </footer>
+
+</div>
+</div><!-- /part2 -->
+
+<div id="part3" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 3 · 資料模型與關聯</h1>
+    <div class="meta-row">
+      <span class="chip">難度：進階</span>
+      <span class="chip">預估 25–35 分鐘</span>
+      <span class="chip">工具：Power BI Desktop · 模型檢視</span>
+      <span class="chip">主題：資料模型與關聯</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>資料清理完成後，進入儀表板製作。第一步是把三張表在模型檢視裡串起來：先隱藏不再需要的來源表，再建立關聯，讓日期篩選能連動整份報表、各表的欄位也能一起運算。關聯設定正確，後面的 DAX 量值與視覺化才能正常運作。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>隱藏已合併、不再需要的來源表，讓模型保持乾淨。</li>
+    <li>說出關聯種類（一對一、一對多、多對多）與篩選方向（單向、雙向）的差別。</li>
+    <li>在模型檢視建立三組關聯，並用正確的鍵欄位與基數設定。</li>
+    <li>理解作用中與非作用中關聯，知道何時要靠 DAX 啟用另一條關聯。</li>
+  </ul>
+
+  <div class="callout note">
+    <p class="ctitle">開始之前</p>
+    <p>承接資料清理完成的檔案。此時模型裡會有員工基本資料、離職資料、日期表，以及尚未隱藏的來源表（Taiwan、Japan、US、部門對照）。所有操作都在模型檢視進行。</p>
+  </div>
+
+  <h2 class="section"><span class="num">1</span>隱藏不需要的來源表</h2>
+  <p class="lead">Taiwan、Japan、US 已經合併成員工基本資料，部門對照也已併入離職資料。做報表時不再需要這些來源表，隱藏它們能讓模型更乾淨、欄位窗格更好找。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-1</span><span class="stepttl">隱藏來源表</span></div>
+    <ol class="clean">
+      <li>在欄位窗格或模型檢視，對 <span class="ui">Taiwan</span>、<span class="ui">Japan</span>、<span class="ui">US</span>、<span class="ui">部門對照</span> 各按右鍵 <span class="arrow">›</span> <span class="ui">在報表檢視中隱藏</span>。</li>
+      <li>隱藏後，模型應只剩三張要用的表：員工基本資料、離職資料、日期表。</li>
+    </ol>
+  </div>
+  <div class="callout note">
+    <p class="ctitle">隱藏不是刪除</p>
+    <p>隱藏只是讓報表檢視看不到，原始查詢與資料仍在、重新整理時照樣會更新。需要時隨時可以取消隱藏。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>認識關聯：種類與篩選方向</h2>
+  <p class="lead">建立關聯前，先搞懂兩個概念：兩張表的數量關係（關聯種類），以及篩選從哪邊流向哪邊（篩選方向）。設對了，DAX 才會算對。</p>
+
+  <h3 class="sub">關聯種類</h3>
+  <table>
+    <tr><th>種類</th><th>意義與例子</th></tr>
+    <tr><td style="white-space:nowrap"><strong>一對多</strong>（1 : N）</td><td>主表每筆對應子表多筆，一端的鍵欄位需為唯一值。最常見。例：日期表的每一天是唯一值，對到員工或離職資料中同一天的多筆紀錄。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>一對一</strong>（1 : 1）</td><td>兩表嚴格一對一，兩邊鍵欄位都唯一。例：一位員工最多一筆離職紀錄，員工基本資料對離職資料。較少見。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>多對多</strong>（N : N）</td><td>雙方都可對應多筆，兩邊鍵都不唯一。容易效能不佳、篩選邏輯打架，盡量避免。</td></tr>
+  </table>
+
+  <h3 class="sub">篩選方向</h3>
+  <table>
+    <tr><th>方向</th><th>說明</th></tr>
+    <tr><td style="white-space:nowrap"><strong>單向</strong>（預設）</td><td>篩選從一端流向多端。選定某年度，自動篩出該年的對應紀錄。多數情境用單向即可。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>雙向</strong></td><td>篩選可雙向流動。複雜模型容易造成循環錯誤，盡量避免。</td></tr>
+  </table>
+
+  <h2 class="section"><span class="num">3</span>建立三組關聯</h2>
+  <p class="lead">主表都從員工基本資料出發。在 <span class="ui">模型檢視</span> 點 <span class="ui">管理關聯</span>，依序建立以下三組。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">關聯 1</span><span class="stepttl">日期表 對 員工基本資料</span></div>
+    <ol class="clean">
+      <li>新增關聯，上方選 <span class="ui">日期表</span> 的 <span class="ui">日期</span>，下方選 <span class="ui">員工基本資料</span> 的 <span class="ui">HireDate</span>。</li>
+      <li>基數一對多（日期表為一端），交叉篩選方向選單向，確定。</li>
+      <li>用意：選某一年，就能帶出該年入職的員工資料。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">關聯 2</span><span class="stepttl">員工基本資料 對 離職資料</span></div>
+    <ol class="clean">
+      <li>新增關聯，兩邊都用 <span class="ui">EmployeeID</span> 比對。</li>
+      <li>因兩邊的 EmployeeID 都是唯一值，系統會自動偵測為一對一。本課保留系統偵測結果。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">關聯 3</span><span class="stepttl">日期表 對 離職資料</span></div>
+    <ol class="clean">
+      <li>新增關聯，上方選 <span class="ui">日期表</span> 的 <span class="ui">日期</span>，下方選 <span class="ui">離職資料</span> 的 <span class="ui">TerminationDate</span>。</li>
+      <li>基數一對多（日期表為一端）。這組可能會被建立成非作用中（呈虛線），確定即可。</li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">建議使用員工編號，不要用姓名</p>
+    <p>員工基本資料與離職資料要用 EmployeeID 串接，不要用姓名。組織一大，姓名很可能重複（例如三個王曉明），會錯接資料。這也是清理階段建議三表欄位用相同名稱的原因。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">作用中與非作用中關聯</p>
+    <p>兩張表之間同時只能有一個作用中關聯。日期表已透過員工基本資料間接連到離職資料，因此日期表直接對離職日期那條會被設為非作用中（虛線），避免路徑模糊。需要用離職日期做時間運算時，再在 DAX 裡用 USERELATIONSHIP 指定啟用它。</p>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">自動偵測關聯</p>
+    <p>Power BI 有自動偵測關聯的功能，欄位命名一致時很好用。本課改用手動建立，是為了看清楚每一組關聯怎麼設。若自動多連了不想要的關聯，點線按右鍵刪除即可。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">用拖曳也能建關聯</p>
+    <p>除了管理關聯對話框，直接在模型檢視把一張表的欄位拖到另一張表的對應欄位上（例如 EmployeeID 拖到 EmployeeID）也會建立關聯，建好後雙擊關聯線可檢視基數與篩選方向。版面建議採星狀結構：日期表放中央、其他表向外排列，模型比較好讀。</p>
+  </div>
+
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>模型檢視應出現三條關聯線：日期表對員工基本資料（一對多）、員工基本資料對離職資料、日期表對離職資料（可能為虛線、非作用中）。把游標移到線上可檢視該關聯的設定。</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section">接下來</h2>
+  <p class="lead">模型關聯建好後，接著就能進行計算與視覺化：</p>
+  <table>
+    <tr><th>接下來的任務</th><th>用途</th></tr>
+    <tr><td>撰寫 DAX 量值</td><td>在職人數、員工人數成長率、離職率、平均年資、女性主管比等人資指標。</td></tr>
+    <tr><td>視覺化與互動設計</td><td>卡片、長條圖、矩陣與交叉篩選器，組成可互動的人力結構與離職分析儀表板。</td></tr>
+  </table>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 3 資料模型與關聯</strong></p>
+    <p>核心觀念：關聯是模型的基礎。鍵欄位用唯一的編號、方向盡量單向，兩表之間只留一條作用中關聯，DAX 才不會算錯。</p>
+  </footer>
+
+</div>
+</div><!-- /part3 -->
+
+
+<div id="part4" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 4 · DAX 量值</h1>
+    <div class="meta-row">
+      <span class="chip">難度：進階</span>
+      <span class="chip">預估 40–50 分鐘</span>
+      <span class="chip">工具：Power BI Desktop</span>
+      <span class="chip">主題：DAX 量值與時間智慧</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>模型串好之後，用 DAX 把人資指標算出來：在職人數、離職率、平均年資、去年同期與成長率。本單元先讀懂量值語法的結構，再照語法表把整批量值建立起來，最後分清楚量值與計算資料行各自的使用時機。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>讀懂量值語法的組成：量值名稱、函數、欄位與量值引用、除零替代值。</li>
+    <li>用新增量值搭配語法表，把人資指標量值整批建立。</li>
+    <li>用快速量值產出去年同期、上月相比這類時間智慧計算。</li>
+    <li>用 AI 描述資料結構，產生可直接使用的 DAX。</li>
+    <li>說出量值與計算資料行的差別與使用時機。</li>
+  </ul>
+
+  <div class="callout note">
+    <p class="ctitle">開始之前</p>
+    <p>承接 Part 3 建好的模型。所有量值公式都在語法表，照貼即可；其中在職人數與離職人數的公式較複雜，先理解概念、課後再細讀，不影響操作。</p>
+  </div>
+
+  <h2 class="section"><span class="num">1</span>量值語法解剖</h2>
+  <p class="lead">DAX（Data Analysis Expressions）是 Power BI 的計算語言，長得像 Excel 函數，但以整欄、整表為單位運算。先用離職率拆解一條量值的結構。</p>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>離職率 = DIVIDE( COUNTROWS('離職資料'), [員工人數], 0 )</div>
+  <details class="explain">
+    <summary>這條量值的每一段是什麼</summary>
+    <div class="body">
+      <p><code>離職率</code> 是量值名稱。寫 Excel 公式時無法為公式命名；DAX 每條量值都要先取名字，之後用名字引用。</p>
+      <p><code>DIVIDE</code> 是 DAX 函數，全部大寫，這裡做的是安全除法。</p>
+      <p><code>COUNTROWS('離職資料')</code> 計算離職資料表的總列數，也就是離職人數。資料表引用用單引號。</p>
+      <p><code>[員工人數]</code> 是量值引用：方括號內放量值名稱、不寫資料表名稱，代表引用先前算好的另一條量值。</p>
+      <p><code>0</code> 是除零替代值：分母為零時顯示 0，而不是報錯。</p>
+    </div>
+  </details>
+  <div class="callout tip">
+    <p class="ctitle">與 Excel 公式最大的不同</p>
+    <p>Excel 的公式是對一格計算、要往下填滿整欄；DAX 一條公式就是對整欄或整表計算，不需要填滿。寫好之後也可以自由換行排版，Power BI 不受換行影響，巢狀公式因此能寫得清楚易讀。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>撰寫規則</h2>
+  <table>
+    <tr><th style="white-space:nowrap">規則</th><th>說明</th></tr>
+    <tr><td style="white-space:nowrap"><strong>量值名稱</strong></td><td>自訂、每條公式都要命名，名稱不含空格。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>函數名稱</strong></td><td>全大寫，如 CALCULATE、DIVIDE，輸入時有 IntelliSense 自動補全與參數提示。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>欄位引用</strong></td><td>格式是 '資料表名稱'[資料行名稱]，例如 '員工基本資料'[年資]，輸入單引號即可呼叫清單。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>量值引用</strong></td><td>格式是 [量值名稱]，不寫資料表名稱，輸入左方括號即可呼叫。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>括號配對</strong></td><td>每個函數都有一組括號，巢狀時特別注意對稱，少一個就報錯。先乘除後加減的優先順序也靠括號控制。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>換行排版</strong></td><td>可自由換行增加可讀性，巢狀公式比較好讀，計算不受影響。</td></tr>
+  </table>
+
+  <h2 class="section"><span class="num">3</span>常用函數</h2>
+  <table>
+    <tr><th style="white-space:nowrap">函數</th><th>用途</th></tr>
+    <tr><td style="white-space:nowrap"><strong>COUNTROWS(表)</strong></td><td>計算資料表總列數。COUNTROWS('員工基本資料') 就是員工總人數。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>DISTINCTCOUNT(欄)</strong></td><td>計算欄位不重複值的數量，重複的值會被排除。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>AVERAGE(欄) / SUM(欄)</strong></td><td>平均與加總，用法同 Excel。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>CALCULATE(運算式, 篩選…)</strong></td><td>在指定篩選條件下重新計算，最核心的函數。例如只算在職者、只算某部門。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>FILTER(表, 條件)</strong></td><td>從資料表篩出符合條件的子集。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>DIVIDE(分子, 分母, 替代值)</strong></td><td>安全除法，分母為零回傳替代值不報錯。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>SAMEPERIODLASTYEAR(欄)</strong></td><td>去年同期，等同 DATEADD(欄, -1, YEAR)。搭配日期表自動抓出去年相同區間。</td></tr>
+  </table>
+
+  <h2 class="section"><span class="num">4</span>實作：建立量值</h2>
+  <p class="lead">在欄位窗格的資料表上按右鍵就能新增量值，公式從語法表複製。先建最關鍵的在職人數。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-1</span><span class="stepttl">新增在職人數量值</span></div>
+    <ol class="clean">
+      <li>在欄位窗格對 <span class="ui">員工基本資料</span> 按右鍵 <span class="arrow">›</span> <span class="ui">新增量值</span>。</li>
+      <li>輸入 <span class="ui">在職人數 =</span>，貼上語法表的公式，確定：</li>
+    </ol>
+    <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>在職人數 =
+CALCULATE(
+    COUNTROWS('員工基本資料'),
+    USERELATIONSHIP('員工基本資料'[HireDate], '日期表'[日期]),
+    '日期表'[日期] &lt;= MAX('日期表'[日期]),
+    OR(
+        ISBLANK('離職資料'[TerminationDate]),
+        '離職資料'[TerminationDate] > MAX('日期表'[日期])
+    )
+) + 0</div>
+    <details class="explain">
+      <summary>這條公式為什麼這麼複雜</summary>
+      <div class="body">
+        <p>要算某個時間點的在職人數，光看離職欄位不夠，要同時考慮入職日與離職日。例如 2023 年入職、2025 年離職的人，只在 2023 到 2024 算在職，2025 之後就不算。</p>
+        <p><code>MAX('日期表'[日期])</code> 抓出目前篩選區間的最後一天，當作判斷的時間點。</p>
+        <p><code>USERELATIONSHIP</code> 指定改用入職日與日期表的關聯來計算。</p>
+        <p><code>OR(ISBLANK(...), ... > MAX(...))</code> 的意思是：沒有離職日、或離職日在時間點之後的人，才算在職。</p>
+        <p><code>+ 0</code> 讓沒有資料時顯示 0 而不是空白。</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-2</span><span class="stepttl">照語法表把其餘量值全部建立</span></div>
+    <ol class="clean">
+      <li>同樣的方式逐一新增。建完後欄位窗格會多出一排帶計算機符號的量值。</li>
+      <li>建好的量值點選後，可在上方量值工具設定格式：人數類設整數、平均與成長率取小數 1 位、比率類設百分比。</li>
+      <li>離職人數、離職人數(去年同期)、平均留任時長建在離職資料表底下較直觀。</li>
+    </ol>
+    <table>
+      <tr><th>類別</th><th>要建立的量值</th></tr>
+      <tr><td style="white-space:nowrap">人數</td><td>在職人數、員工人數、員工人數(去年同期)、員工人數成長率</td></tr>
+      <tr><td style="white-space:nowrap">結構</td><td>平均年資、平均年齡、平均年齡(去年同期)、主管職人數、女性主管職人數、女性主管比、女性主管比(去年同期)</td></tr>
+      <tr><td style="white-space:nowrap">離職</td><td>離職人數、離職人數(去年同期)、離職率、平均留任時長</td></tr>
+      <tr><td style="white-space:nowrap">快速量值</td><td>在職人數與上月相比 %、離職人數與去年相比 %（建法見第 6 節）</td></tr>
+    </table>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">公式可以複製再改</p>
+    <p>之後若在別的檔案做類似分析，欄位結構相近的話，這些公式可以直接複製沿用，改掉表名與欄名即可。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">量值放哪裡</p>
+    <p>本課直接把量值掛在員工基本資料底下也可以。實務上建議集中管理：常用 › 輸入資料建立一張空表、命名「量值資料表」後載入；點選任一量值，在量值工具 › 主資料表改選量值資料表，就能把量值搬過去。成果檔就是這樣整理的。</p>
+  </div>
+
+  <h2 class="section"><span class="num">5</span>時間智慧：去年同期與成長率</h2>
+  <p class="lead">主管最常問的是：跟去年同期比如何。不用手動切到去年再抄數字，一條公式解決。</p>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>員工人數(去年同期) =
+CALCULATE(
+    [員工人數],
+    SAMEPERIODLASTYEAR('日期表'[日期])
+)</div>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>員工人數成長率 =
+DIVIDE(
+    [員工人數] - [員工人數(去年同期)],
+    [員工人數(去年同期)], 0
+)</div>
+  <details class="explain">
+    <summary>去年同期為什麼抓得到</summary>
+    <div class="body">
+      <p>Part 3 把日期表與員工基本資料建立了關聯。SAMEPERIODLASTYEAR 透過這條關聯，自動偵測目前報表選到的年份或日期區間，回推去年相同區間再計算。</p>
+      <p>成長率就是（今年 − 去年）÷ 去年，用 DIVIDE 處理分母為零的情況。</p>
+      <p>要算在職人數或離職人數的去年同期，把公式中間的量值換掉即可，寫法完全相同。</p>
+    </div>
+  </details>
+
+  <p class="lead">從一群人裡鎖定目標族群，用 CALCULATE 加上條件：</p>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>主管職人數 =
+CALCULATE(
+    [在職人數],
+    '員工基本資料'[IsManager] = "是"
+)</div>
+  <p>女性主管職人數、女性主管比都是同樣的寫法再多一層條件，公式都在語法表。</p>
+
+  <div class="callout warn">
+    <p class="ctitle">虛線關聯要用 USERELATIONSHIP 啟用</p>
+    <p>Part 3 那條日期表對離職日期的關聯是非作用中（虛線），平常不會自動聯動。所以像離職人數、平均留任時長這類以離職日期計算的量值，公式裡都會用 USERELATIONSHIP 暫時啟用那條關聯。想深究某條公式，可以把它貼給 AI 請它逐行解釋。</p>
+  </div>
+
+  <h2 class="section"><span class="num">6</span>快速量值：不寫公式的時間智慧</h2>
+  <p class="lead">與去年相比、與上月相比這類常見計算，Power BI 已內建好邏輯，用快速量值點選即可產生。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">建立與去年相比的變化 %</span></div>
+    <ol class="clean">
+      <li>常用功能區 <span class="arrow">›</span> <span class="ui">快速量值</span>，開啟選取計算的下拉選單。</li>
+      <li>往下找到 <span class="ui">時間智慧</span> 分類，選 <span class="ui">與去年相比的變化</span>。</li>
+      <li>基底值放 <span class="ui">離職人數</span>（或在職人數），日期放 <span class="ui">日期表</span> 的 <span class="ui">日期</span>，期間數填 1（相隔一年）。</li>
+      <li>按新增，欄位窗格會多出「離職人數與去年相比 %」。</li>
+    </ol>
+  </div>
+  <div class="callout note">
+    <p class="ctitle">與上月相比同理</p>
+    <p>要算月增減就選與上月相比的變化。成果檔矩陣裡用的「在職人數 與上月相比 %」就是這樣建出來的。快速量值產生的 DAX 也可以打開來看，是很好的學習素材。</p>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">用 AI 產生 DAX</p>
+    <p>另一條路是把資料結構描述給 ChatGPT 或 Copilot：員工基本資料含入職日期、離職資料含離職日期、已建好日期表，請幫忙寫計算各部門離職率的 DAX。描述得越完整，產出的公式越能直接貼上使用。</p>
+  </div>
+
+  <h2 class="section"><span class="num">7</span>量值 vs 計算資料行</h2>
+  <p class="lead">前面在 Power Query 算過年齡，這裡又用 DAX 算指標，差別在哪？兩者都用公式，但計算時機、儲存方式與用途完全不同。</p>
+  <table>
+    <tr><th style="white-space:nowrap">比較項目</th><th>量值</th><th>計算資料行</th></tr>
+    <tr><td style="white-space:nowrap"><strong>計算時機</strong></td><td>動態：每次互動、每次點報表都即時重算。</td><td>靜態：資料載入時算好就固定。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>篩選感知</strong></td><td>會隨篩選器、交叉篩選改變數值。</td><td>不感知篩選，算出 29 就一直是 29。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>儲存方式</strong></td><td>只存公式，不佔資料表欄位。</td><td>成為資料表的一欄，佔記憶體與檔案大小。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>拖曳位置</strong></td><td>放在視覺效果的值區域。</td><td>放在軸、圖例或篩選器。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>外觀</strong></td><td>欄位窗格帶計算機符號。</td><td>一般欄位，無計算機符號。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>用途舉例</strong></td><td>離職率、平均年資、成長率。</td><td>年齡、年齡區間、年資區間。</td></tr>
+  </table>
+  <div class="callout note">
+    <p class="ctitle">選用原則</p>
+    <p>大多數的指標計算都用量值。只有要放在軸或篩選器上的類別（例如年齡區間要逐一出現在長條圖的 X 軸）才需要計算資料行，因為量值做不出類別清單。</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section">接下來</h2>
+  <p class="lead">量值備齊後，進入視覺化：把指標放上畫布，組成完整的儀表板頁面。</p>
+  <table>
+    <tr><th>接下來的任務</th><th>用途</th></tr>
+    <tr><td>卡片與 KPI</td><td>員工總數、平均年齡、平均年資、主管人數、女性主管比。</td></tr>
+    <tr><td>分布與組成圖表</td><td>年齡與年資分布、職等性別組成、地區主管職比例、部門矩陣。</td></tr>
+    <tr><td>篩選與互動</td><td>年與地區交叉篩選器、編輯互動、整頁複製做離職分析。</td></tr>
+  </table>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 4 DAX 量值</strong></p>
+    <p>核心觀念：量值是動態的、會感知篩選；計算資料行是靜態的、用來當軸與篩選。先把指標做成量值，做圖時只需要把欄位放到對的位置。</p>
+  </footer>
+
+</div>
+</div><!-- /part4 -->
+
+
+<div id="part5" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 5 · 員工儀表板與離職分析</h1>
+    <div class="meta-row">
+      <span class="chip">難度：進階</span>
+      <span class="chip">預估 60–75 分鐘</span>
+      <span class="chip">工具：Power BI Desktop · 報表檢視</span>
+      <span class="chip">主題：視覺化與互動設計</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>本單元把量值做成員工儀表板整頁：五張指標卡、年齡與年資分布、職等性別組成、地區主管職比例、部門矩陣，加上年與地區篩選器；完成後整頁複製改製離職分析，並用鑽研與互動查看更細的資料層級。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>用卡片與 KPI 視覺呈現單一指標，並調整標題、字級、框線與小數位數。</li>
+    <li>用直條圖、堆疊直條圖與百分比堆疊圖呈現分布與組成。</li>
+    <li>用矩陣搭配圖示呈現各部門人數與年增減。</li>
+    <li>建立交叉分析篩選器，並用編輯互動控制篩選範圍。</li>
+    <li>整頁複製改製離職分析，使用鑽研下切離職原因。</li>
+  </ul>
+
+  <div class="callout note">
+    <p class="ctitle">版面規劃：先想議題，再選圖</p>
+    <p>這一頁要回答的議題是：人力結構是否健康。主管要快速掌握員工總數、部門組成、年齡與年資結構。單一數字用卡片或 KPI；分布用直條圖；組成比較用堆疊與百分比堆疊；部門明細用矩陣；時間與地區用交叉分析篩選器。配色與排版是另一門學問，先把對的數字放上對的圖。</p>
+  </div>
+
+  <h2 class="section"><span class="num">1</span>第一張卡片：員工總數</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-1</span><span class="stepttl">建立卡片</span></div>
+    <ol class="clean">
+      <li>在報表檢視勾選 <span class="ui">在職人數</span> 量值，畫布會出現預設圖表。</li>
+      <li>到視覺效果窗格把圖表類型改選 <span class="ui">卡片</span>，就會變成一個大數字。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-2</span><span class="stepttl">調整格式</span></div>
+    <ol class="clean">
+      <li>點視覺效果窗格的畫筆（格式）。設定分兩個分頁：<span class="ui">視覺效果</span> 管美觀（顏色、字級、標籤），<span class="ui">一般</span> 管標題、效果、大小位置。</li>
+      <li><span class="ui">一般</span> <span class="arrow">›</span> 標題打開，文字輸入 <span class="ui">員工總數</span>，字型約 16 粗體、置中、加分隔線，分隔線與標題太近可加大間距，標題可上背景色。</li>
+      <li><span class="ui">視覺效果</span> <span class="arrow">›</span> 圖說文字：把類別標籤關掉（下方的小標籤不需要），數值字型調大到 36、置中。</li>
+      <li><span class="ui">一般</span> <span class="arrow">›</span> 效果 <span class="arrow">›</span> 視覺框線打開、圓角約 5。</li>
+    </ol>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">格式只做一次</p>
+    <p>第一張卡片把標題、字級、框線都調好，後面四張直接複製貼上再換數字，格式全部跟著走。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>複製、對齊、換值</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-1</span><span class="stepttl">複製出五張並對齊</span></div>
+    <ol class="clean">
+      <li>複製貼上做出五張卡片，排成一列。</li>
+      <li>排不整齊時，全選卡片 <span class="arrow">›</span> <span class="ui">格式</span> <span class="arrow">›</span> <span class="ui">對齊</span>，用垂直置中與水平均分讓間隔一致；檢視裡也可打開格線與貼齊格線輔助。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-2</span><span class="stepttl">逐張換值</span></div>
+    <ol class="clean">
+      <li>點第二張卡片，在視覺效果的值區域把 <span class="ui">在職人數</span> 移除，把 <span class="ui">平均年齡</span> 拖進來；標題改成平均年齡。</li>
+      <li>第三張換 <span class="ui">平均年資</span>、第四張換 <span class="ui">主管職人數</span>，標題同步改。</li>
+    </ol>
+  </div>
+  <div class="callout warn">
+    <p class="ctitle">卡片顯示不出數字怎麼辦</p>
+    <p>數字出不來或顯示成怪值，多半是欄位被認成文字、無法計算。回資料表檢視點選該欄，用資料行工具檢查資料類型：年齡改整數、年資改小數，改完欄位旁會出現 Σ 符號，代表是可計算的數字。這正是前面一直強調資料類型的原因。</p>
+  </div>
+  <div class="callout note">
+    <p class="ctitle">小數位數兩個調整位置</p>
+    <p>整欄統一：資料表檢視 <span class="arrow">›</span> 資料行工具 <span class="arrow">›</span> 小數位數（年資取 1 位）。單一卡片：卡片的圖說文字設定裡有顯示單位與小數位數，可只改這張卡的呈現。</p>
+  </div>
+
+  <h2 class="section"><span class="num">3</span>KPI 卡：女性主管比</h2>
+  <p class="lead">第五張卡要呈現的不只是數字，還要跟去年同期比。卡片做不到，改用 KPI 視覺。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 3-1</span><span class="stepttl">改成 KPI 並設定三個欄位</span></div>
+    <ol class="clean">
+      <li>點第五張卡片，視覺效果類型改選 <span class="ui">KPI</span>。</li>
+      <li>值放 <span class="ui">女性主管比</span>，趨勢軸放日期表的 <span class="ui">年</span>，目標放 <span class="ui">女性主管比(去年同期)</span>。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 3-2</span><span class="stepttl">調整呈現</span></div>
+    <ol class="clean">
+      <li>方向設定維持 <span class="ui">高表示良好</span>：女性主管比高於去年會顯示好的顏色。</li>
+      <li>開啟目標標籤：值字型約 10、標籤文字改成去年；目標距離的樣式改 <span class="ui">值</span> 或百分比、小數位數取 1，距離方向選遞增為正值。</li>
+      <li>數值顯示成小數的話，點 <span class="ui">女性主管比</span> 量值 <span class="arrow">›</span> 量值工具 <span class="arrow">›</span> 格式改 <span class="ui">百分比</span>、小數 1 位；去年同期那條量值也一樣改。</li>
+      <li>標題改成女性主管比。</li>
+    </ol>
+  </div>
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>五張卡完成：員工總數、平均年齡、平均年資、主管人數為卡片，女性主管比為 KPI（含趨勢與去年比較）。數字因每個人的篩選狀態可能略有不同，版面與欄位放對即可。</p>
+  </div>
+
+  <h2 class="section"><span class="num">4</span>年齡與年資分布（直條圖）</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-1</span><span class="stepttl">年齡分布</span></div>
+    <ol class="clean">
+      <li>新增 <span class="ui">群組直條圖</span>：X 軸放 <span class="ui">年齡區間</span>，Y 軸放 <span class="ui">在職人數</span>。</li>
+      <li>X 軸與 Y 軸的軸標題關掉（圖表標題會講清楚，不用重複），標題改 <span class="ui">年齡分布</span>、置中。</li>
+      <li>開啟資料標籤，柱頂直接顯示人數。</li>
+      <li>一般 <span class="arrow">›</span> 效果，打開視覺框線與圓角，跟卡片一致。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 4-2</span><span class="stepttl">年資分布</span></div>
+    <ol class="clean">
+      <li>複製年齡分布那張，把 X 軸換成 <span class="ui">年資區間</span>，標題改 <span class="ui">年資分布</span>。</li>
+    </ol>
+  </div>
+  <div class="callout warn">
+    <p class="ctitle">區間順序亂掉</p>
+    <p>圖表預設依數值大小排序，連續區間應改依維度排序：點圖表右上角的更多選項（…）› 排序軸 › 選年齡區間 › 遞增。文字型區間若仍排不對（年資區間常見），用下面的排序對照表。</p>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">補充</span><span class="stepttl">年資區間排序表：文字排序的完整解法</span></div>
+    <ol class="clean">
+      <li><span class="ui">常用</span> <span class="arrow">›</span> <span class="ui">輸入資料</span>，建一張兩欄表：第一欄「排序」輸入 1 到 8，第二欄「年資區間」依序輸入八個區間標籤，表名取 <span class="ui">年資區間排序表</span>，載入。</li>
+      <li>把圖表上原本員工基本資料的年資區間，換成排序表的 <span class="ui">年資區間</span> 欄位（兩張表的年資區間欄需有關聯，數值才會跟著篩）。</li>
+      <li>點排序表的年資區間欄，<span class="ui">資料行工具</span> <span class="arrow">›</span> <span class="ui">依資料行排序</span> <span class="arrow">›</span> 選「排序」。</li>
+      <li>回到圖表，… <span class="arrow">›</span> 排序軸 <span class="arrow">›</span> 年資區間 <span class="arrow">›</span> 遞增，順序就正確了。</li>
+      <li>更省事的替代方案：建區間欄位時用方法二在標籤前加數字前綴（見 Part 1 第 12 節），文字排序自然正確。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">5</span>各職等性別組成（堆疊直條圖）</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-1</span><span class="stepttl">建立堆疊直條圖</span></div>
+    <ol class="clean">
+      <li>視覺效果選 <span class="ui">堆疊直條圖</span>：X 軸放 <span class="ui">JobLevel</span>，Y 軸放 <span class="ui">在職人數</span>，圖例放 <span class="ui">Gender</span>。</li>
+      <li>改顏色：格式 <span class="arrow">›</span> 資料行 <span class="arrow">›</span> 將設定套用至的數列選 <span class="ui">女性</span> 指定顏色，再切到 <span class="ui">男性</span> 指定藍色。</li>
+      <li>打開 <span class="ui">資料標籤</span> 顯示各段人數；再打開標籤的 <span class="ui">總計</span>，柱頂會出現該職等總人數，主管不用自己加。</li>
+      <li>標題改 <span class="ui">各職等性別組成</span>。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">6</span>各地區主管職比例（百分比堆疊）</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">建立百分比堆疊直條圖</span></div>
+    <ol class="clean">
+      <li>視覺效果選 <span class="ui">100% 堆疊直條圖</span>：X 軸放 <span class="ui">Region</span>，Y 軸放 <span class="ui">在職人數</span>，圖例放 <span class="ui">IsManager</span>。</li>
+      <li>在組建區把圖例欄位點兩下改名為 <span class="ui">主管職</span>；資料行顏色：是設深藍、否設淺藍。</li>
+      <li>打開資料標籤、小數位數取 1；數列選「否」可關閉它的值，畫面聚焦主管職比例。</li>
+      <li>標題改 <span class="ui">各地區主管職比例</span>。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">7</span>各部門人數（矩陣）</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 7-1</span><span class="stepttl">建立矩陣</span></div>
+    <ol class="clean">
+      <li>視覺效果選 <span class="ui">矩陣</span>：資料列放 <span class="ui">Department</span>，值放 <span class="ui">在職人數</span> 與快速量值建的 <span class="ui">在職人數與去年相比 %</span>。</li>
+      <li>欄名太長，在值區域對該欄位點兩下重新命名成 <span class="ui">YoY%</span>，只影響這張圖的顯示。</li>
+      <li>版面配置與樣式預設：樣式選最小、配置選精簡；值字型約 12；資料行標題可上背景色並開啟自動調整寬度。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 7-2</span><span class="stepttl">加上升降圖示</span></div>
+    <ol class="clean">
+      <li>格式 <span class="arrow">›</span> 資料格元素，將設定套用至選 YoY% 那一欄，打開 <span class="ui">圖示</span>。</li>
+      <li>點 fx 設定規則：格式樣式選規則、以 YoY 為基礎；大於 0 為正向（綠色上箭頭）、等於 0 持平、小於 0 為負向（紅色下箭頭），圖示位置設資料右方。</li>
+      <li>標題改 <span class="ui">各部門人數</span>。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">8</span>交叉分析篩選器（年、地區）</h2>
+  <div class="callout note">
+    <p class="ctitle">頁面標題列</p>
+    <p>用插入 › 圖案 › 矩形拉出頂部色帶，文字方塊輸入頁面名稱（字型約 32），篩選器旁放年度、地區小標（字型約 16），整頁的資訊層級會更清楚。篩選器的值可設粗體並改主題色。</p>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-1</span><span class="stepttl">年份篩選器</span></div>
+    <ol class="clean">
+      <li>視覺效果選 <span class="ui">交叉分析篩選器</span>，欄位放日期表的 <span class="ui">年</span>。</li>
+      <li>格式 <span class="arrow">›</span> 交叉分析篩選器設定 <span class="arrow">›</span> 樣式改 <span class="ui">磚</span>（或下拉式清單）。</li>
+      <li>選取設定打開 <span class="ui">單一選取</span>：看年度指標通常一次看一年，不跨年混看。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-2</span><span class="stepttl">排除空白選項</span></div>
+    <ol class="clean">
+      <li>選項出現（空白）是因為日期表範圍超出資料範圍。點選篩選器，在篩選窗格對年用基本篩選，把空白取消勾選，下拉就乾淨了。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-3</span><span class="stepttl">地區篩選器</span></div>
+    <ol class="clean">
+      <li>複製年份篩選器，欄位換成 <span class="ui">Region</span>。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">9</span>編輯互動：控制篩選的作用範圍</h2>
+  <p class="lead">預設每個篩選器會作用到整頁所有圖表。若某張圖不想被地區篩選影響，用編輯互動關掉。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 9-1</span><span class="stepttl">設定互動</span></div>
+    <ol class="clean">
+      <li>點選地區篩選器 <span class="arrow">›</span> <span class="ui">格式</span> <span class="arrow">›</span> <span class="ui">編輯互動</span>。</li>
+      <li>每張圖表右上會出現互動符號：篩選（受影響）與無（不受影響），對不想被篩的圖按 <span class="ui">無</span>。</li>
+      <li>設好後選地區，只有指定的圖表會跟著變。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">10</span>複製整頁，改製離職分析</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 10-1</span><span class="stepttl">複製頁面換量值</span></div>
+    <ol class="clean">
+      <li>頁籤按右鍵 <span class="arrow">›</span> 複製頁面，改名 <span class="ui">離職分析</span>。</li>
+      <li>卡片與 KPI：離職率（百分比、小數 1 位）、平均留任時長（年）、離職人數 KPI（趨勢軸年、目標離職人數(去年同期)、目標距離用百分比、遞增為正值）。</li>
+      <li>圖表：主管職比例改 100% 堆疊橫條圖（X 軸離職人數、圖例 IsManager）；年資分布改折線圖做各月離職人數趨勢（X 軸放日期表的月份）；年齡分布的值改離職人數；再新增各部門離職率直條圖（Y 軸格式改百分比）。</li>
+      <li>矩陣：值改離職人數與離職人數與去年相比 %（改名 YoY）；儲存格元素改用背景顏色規則，YoY 大於等於 0.5 標紅，提醒離職成長過快的部門。</li>
+      <li>離職原因改群組橫條圖：Y 軸放離職類別與離職原因、X 軸離職人數，依離職人數遞減排序。</li>
+      <li>標題逐一改成離職視角。</li>
+    </ol>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">整個版面都能複製</p>
+    <p>單張卡片能複製，整頁也能。版面、格式、互動設定全部保留，只要換數據與標題，第二頁的成本遠低於第一頁。</p>
+  </div>
+
+  <h2 class="section"><span class="num">11</span>鑽研：離職原因往下切</h2>
+  <p class="lead">離職原因在 Part 2 拆成了類別與原因兩欄，正好做成兩層的鑽研。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 11-1</span><span class="stepttl">兩層軸與下切</span></div>
+    <ol class="clean">
+      <li>離職原因長條圖的軸同時放 <span class="ui">離職類別</span> 與 <span class="ui">離職原因</span>（上下兩層）。</li>
+      <li>圖表上方會出現鑽研箭頭：點開向下箭頭啟用鑽研模式，再點圖上的 <span class="ui">自願離職</span>，就下切到該類別底下的細部原因。</li>
+      <li>雙箭頭是直接跳到下一層全部；分岔箭頭是展開階層（同時顯示類別＋原因）；向上箭頭返回上一層。</li>
+    </ol>
+  </div>
+
+  <h2 class="section"><span class="num">12</span>離職人員與主管明細（多列卡）</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 12-1</span><span class="stepttl">建立多列卡</span></div>
+    <ol class="clean">
+      <li>視覺效果選 <span class="ui">多列卡</span>，欄位放離職資料的 <span class="ui">姓名</span> 與 <span class="ui">ManagerName</span>。</li>
+      <li>因為 Part 3 建立的關聯，點任何圖上的一個人，明細會互動帶出他的離職時間、部門、主管與離職原因。</li>
+    </ol>
+  </div>
+  <div class="callout check">
+    <p class="ctitle">Checkpoint</p>
+    <p>兩頁完成：員工儀表板與離職分析。點地區或年份，整頁圖表同步更新；點離職原因圖的某一段，明細卡跟著變。這就是互動式報表與靜態圖表的差別。</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section">接下來</h2>
+  <p class="lead">最後一塊是滿意度分析與 Power BI 內建的 AI 功能：</p>
+  <table>
+    <tr><th>接下來的任務</th><th>用途</th></tr>
+    <tr><td>滿意度頁設計</td><td>七構面滿意 %、eNPS、小範圍篩選的分析設計。</td></tr>
+    <tr><td>關鍵影響因素</td><td>用 AI 視覺找出最影響離職的構面。</td></tr>
+    <tr><td>其他 AI 功能</td><td>異常偵測、分解樹、問與答。</td></tr>
+  </table>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 5 員工儀表板與離職分析</strong></p>
+    <p>核心觀念：先想議題再選圖；格式做一次、複製到處用。互動（篩選、編輯互動、鑽研）是 Power BI 與靜態報表最主要的差別。</p>
+  </footer>
+
+</div>
+</div><!-- /part5 -->
+
+
+<div id="part6" class="tabpage">
+
+<header class="hero">
+  <div class="inner">
+    <span class="kicker">Power BI 人資儀表板工作坊</span>
+    <h1>Part 6 · 滿意度與 AI 功能</h1>
+    <div class="meta-row">
+      <span class="chip">難度：進階</span>
+      <span class="chip">預估 40–50 分鐘</span>
+      <span class="chip">工具：Power BI Desktop</span>
+      <span class="chip">主題：滿意度報告與 AI 視覺</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tldr">
+    <h2>目的</h2>
+    <p>最後一塊是滿意度分析與 Power BI 內建的 AI 功能。流程是：匯入滿意度資料並建關聯、在 Power Query 算出構面平均與離職意圖、建立滿意 % 與 eNPS 量值、做出滿意度頁與動態交叉分析，最後用關鍵影響因素找出離職主因，並把三頁整合成一份可導覽的報告。課堂受時間限制，此單元可搭配成果檔對照操作。</p>
+  </div>
+
+  <h2 class="section">學習目標</h2>
+  <p class="lead">完成本單元後，應能夠：</p>
+  <ul class="goals">
+    <li>匯入滿意度資料並與員工基本資料建立關聯。</li>
+    <li>在 Power Query 用統計資料功能算出構面平均，並建立離職意圖欄位。</li>
+    <li>建立滿意 %、eNPS、高離職意圖等量值。</li>
+    <li>用欄位參數與 SWITCH 做出動態交叉分析。</li>
+    <li>用關鍵影響因素視覺找出最影響離職的構面並解讀結果。</li>
+    <li>用同步篩選器與頁面導覽按鈕整合多頁報告。</li>
+  </ul>
+
+  <h2 class="section"><span class="num">1</span>匯入滿意度資料與建立關聯</h2>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-1</span><span class="stepttl">匯入滿意度調查</span></div>
+    <ol class="clean">
+      <li><span class="ui">取得資料</span> <span class="arrow">›</span> <span class="ui">從 Excel 活頁簿</span>，選 <span class="ui">03_Survey_Data</span>，勾選 <span class="ui">滿意度調查</span> 工作表，按 <span class="ui">轉換資料</span>（接著先做第 2 節的前處理再套用）。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 1-2</span><span class="stepttl">建立關聯</span></div>
+    <ol class="clean">
+      <li>到模型檢視，把滿意度調查的 <span class="ui">EmployeeID</span> 拖到員工基本資料的 <span class="ui">EmployeeID</span>。</li>
+      <li>確認方向：員工基本資料為一端、滿意度調查為多端（同一位員工有多個年度的填答）。</li>
+    </ol>
+  </div>
+  <div class="callout note">
+    <p class="ctitle">資料結構</p>
+    <p>滿意度調查含 EmployeeID、SurveyYear、七個構面（整體滿意度、薪資、主管關係、職涯發展、工作環境、團隊合作、工作生活平衡）各 3 題的 Likert 1–5 分，加上 Q8_eNPS（0–10 分）。其中 Q1_Overall_3 是留任意願題，後面用它衍生離職意圖。</p>
+  </div>
+
+  <h2 class="section"><span class="num">2</span>前處理：構面平均與離職意圖</h2>
+  <p class="lead">每個構面有三題，要先算出構面平均分數當代表值。這一步在 Power Query 做，不用寫公式。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-1</span><span class="stepttl">構面平均（統計資料功能）</span></div>
+    <ol class="clean">
+      <li>在 Power Query 點 <span class="ui">滿意度調查</span>，按住 Shift 選取 <span class="ui">Q1_Overall_1</span> 到 <span class="ui">Q1_Overall_3</span> 三欄。</li>
+      <li><span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">統計資料</span> <span class="arrow">›</span> <span class="ui">平均</span>，新欄位點兩下改名 <span class="ui">Q1-整體滿意度</span>。</li>
+      <li>Q2 到 Q7 比照辦理，得到七個構面平均欄。</li>
+      <li>再按住 Shift 選取 Q1 到 Q7 七個構面平均欄，同樣 <span class="ui">統計資料</span> <span class="arrow">›</span> <span class="ui">平均</span>，改名 <span class="ui">ALL-整體滿意度平均</span>。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 2-2</span><span class="stepttl">離職意圖（條件資料行）</span></div>
+    <ol class="clean">
+      <li><span class="ui">新增資料行</span> <span class="arrow">›</span> <span class="ui">條件資料行</span>，依 <span class="ui">Q1_Overall_3</span>（留任意願）轉換，完成後 <span class="ui">關閉並套用</span>：</li>
+    </ol>
+    <table>
+      <tr><th>條件（Q1_Overall_3）</th><th>輸出</th></tr>
+      <tr><td>等於 1</td><td>高</td></tr>
+      <tr><td>等於 2</td><td>高</td></tr>
+      <tr><td>等於 3</td><td>中</td></tr>
+      <tr><td>等於 4</td><td>低</td></tr>
+      <tr><td>其他（else）</td><td>低</td></tr>
+    </table>
+  </div>
+
+  <h2 class="section"><span class="num">3</span>建立滿意度量值</h2>
+  <p class="lead">滿意 % 的核心邏輯：Likert 給 4 或 5 分視為滿意，計算滿意作答的占比。先建分母用的總數，再建各構面滿意 %。</p>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>總數 = COUNTROWS('滿意度調查')</div>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>整體滿意度 滿意% =
+DIVIDE(
+    SUMX(
+        '滿意度調查',
+        IF('滿意度調查'[Q1_Overall_1] IN {4,5}, 1, 0) +
+        IF('滿意度調查'[Q1_Overall_2] IN {4,5}, 1, 0) +
+        IF('滿意度調查'[Q1_Overall_3] IN {4,5}, 1, 0)
+    ),
+    [總數] * 3
+)</div>
+  <details class="explain">
+    <summary>這條公式在做什麼</summary>
+    <div class="body">
+      <p><code>IF(... IN {4,5}, 1, 0)</code> 把每一題轉成滿意記 1、不滿意記 0。</p>
+      <p><code>SUMX('滿意度調查', ...)</code> 逐列把三題的滿意數加總起來。</p>
+      <p>分母是 <code>[總數] * 3</code>：每人答三題，滿意作答數除以總作答數，得到滿意比例。</p>
+      <p>其餘六個構面把欄位前綴換掉即可（Q2_Salary、Q3_Manager…），公式都在語法表。</p>
+    </div>
+  </details>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>員工推薦 反對者% =
+DIVIDE(SUMX('滿意度調查', IF('滿意度調查'[Q8_eNPS] IN {0,1,2,3,4,5,6}, 1, 0)), [總數])
+
+員工推薦 推廣者% =
+DIVIDE(SUMX('滿意度調查', IF('滿意度調查'[Q8_eNPS] IN {9,10}, 1, 0)), [總數])
+
+eNPS = [員工推薦 推廣者%] - [員工推薦 反對者%]</div>
+  <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>高離職意圖% =
+DIVIDE(
+    CALCULATE([總數], '滿意度調查'[離職意圖] = "高"),
+    CALCULATE([總數], ALL('滿意度調查'[離職意圖]))
+)</div>
+
+  <h2 class="section"><span class="num">4</span>滿意度頁的視覺設計</h2>
+  <p class="lead">建立新頁面命名滿意度報告。這一頁要回答的議題是：員工最不滿意哪個面向、哪群人需要優先介入。</p>
+  <table>
+    <tr><th style="white-space:nowrap">區塊</th><th>內容與設定</th></tr>
+    <tr><td style="white-space:nowrap">樣本數 卡片</td><td>放總數量值，標題樣本數。</td></tr>
+    <tr><td style="white-space:nowrap">滿意度總平均 卡片</td><td>放 ALL-整體滿意度平均欄位，點欄位旁箭頭把摘要改成平均，小數 2 位。</td></tr>
+    <tr><td style="white-space:nowrap">eNPS 卡片</td><td>放 eNPS 量值（格式百分比、小數 1 位）；圖說文字的值顏色點 fx 設規則：大於 0 綠色、小於 0 紅色。</td></tr>
+    <tr><td style="white-space:nowrap">各年度滿意比例 矩陣</td><td>列放 SurveyYear、值依序放七個構面滿意 %（顯示名稱可把「滿意%」刪掉）；儲存格元素開資料橫條、用 fx 調整正值橫條顏色。</td></tr>
+    <tr><td style="white-space:nowrap">高離職意圖 直條圖</td><td>X 軸年齡區間、Y 軸高離職意圖 %，開資料標籤（位置自動）。</td></tr>
+  </table>
+  <div class="callout note">
+    <p class="ctitle">Likert 量表的處理慣例</p>
+    <p>滿意 % 看給 4 或 5 分的占比；eNPS 用推薦者 % 減批評者 %。分析時的三個常用視角：滿意比例當核心指標、依在職與離職等維度比較不同族群、追蹤各構面滿意比例的年度變化。</p>
+  </div>
+
+  <h2 class="section"><span class="num">5</span>動態交叉分析：欄位參數與 SWITCH</h2>
+  <p class="lead">成果檔的滿意程度比較圖可以動態切換分析維度與滿意度指標，背後是兩個技巧：欄位參數讓軸可切換、SWITCH 量值讓指標可切換。</p>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-1</span><span class="stepttl">分析維度（欄位參數）</span></div>
+    <ol class="clean">
+      <li><span class="ui">模型化</span> <span class="arrow">›</span> <span class="ui">新增參數</span> <span class="arrow">›</span> <span class="ui">欄位</span>，名稱輸入 <span class="ui">分析維度</span>。</li>
+      <li>欄位加入 EmploymentStatus、Gender、IsManager、Department、JobCategory、JobLevel（點兩下可改顯示名稱、可拖曳排序）。</li>
+      <li>勾選在本頁新增交叉分析篩選器，按建立。</li>
+      <li>把篩選器改成 <span class="ui">按鈕交叉分析篩選器</span>：開單一選取與強制選取；多按鈕版面配置用格線、磚、2×3；選取狀態的按鈕設深色背景與邊界，整體配淺色底與圓角。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-2</span><span class="stepttl">滿意度指標（輸入資料）</span></div>
+    <ol class="clean">
+      <li><span class="ui">常用</span> <span class="arrow">›</span> <span class="ui">輸入資料</span>：第一欄 <span class="ui">選項</span> 輸入七個構面名稱、第二欄 <span class="ui">索引</span> 輸入 1 到 7，表名 <span class="ui">滿意度項目</span>，載入。</li>
+      <li>再建一個按鈕交叉分析篩選器，欄位放選項；點一下分析維度篩選器後用 <span class="ui">複製格式</span> 刷到這個篩選器，配色改另一組（版面配置縱向 7 列）。</li>
+      <li>排序：點選項欄位，<span class="ui">資料行工具</span> <span class="arrow">›</span> <span class="ui">依資料行排序</span> <span class="arrow">›</span> 索引，篩選器再依遞增排序。</li>
+    </ol>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-3</span><span class="stepttl">動態指標量值（SWITCH）</span></div>
+    <ol class="clean">
+      <li>新增量值，依目前選到的選項回傳對應的滿意 %：</li>
+    </ol>
+    <div class="code"><span class="lbl">DAX</span><button class="copybtn" type="button">複製</button>滿意度向度 =
+SWITCH(
+    SELECTEDVALUE('滿意度項目'[選項]),
+    "整體滿意度", [整體滿意度 滿意%],
+    "薪資福利", [薪資福利 滿意%],
+    "主管關係", [主管關係 滿意%],
+    "職涯發展", [職涯發展 滿意%],
+    "工作環境", [工作環境 滿意%],
+    "團隊合作", [團隊合作 滿意%],
+    "工作生活平衡", [工作生活平衡 滿意%]
+)</div>
+  </div>
+
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 5-4</span><span class="stepttl">滿意程度比較圖</span></div>
+    <ol class="clean">
+      <li>建 <span class="ui">群組橫條圖</span>：Y 軸放分析維度（參數）、X 軸放滿意度向度量值，關標題、開資料標籤。</li>
+      <li>用編輯互動讓這兩個小篩選器只作用在這張圖，不影響整頁。</li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <p class="ctitle">小範圍篩選的用法</p>
+    <p>鎖定單一構面就能問出有意思的問題：例如切到薪資福利、維度選在離職狀態，若離職者的滿意度並不低，代表離職可能與薪資無關，要往其他構面找原因。</p>
+  </div>
+
+  <h2 class="section"><span class="num">6</span>關鍵影響因素（Key Influencers）</h2>
+  <p class="lead">哪個因素最影響離職，過去要跑統計模型、寫公式才能回答；這個 AI 視覺用拖欄位就能做到。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-1</span><span class="stepttl">建立關鍵影響因素視覺</span></div>
+    <ol class="clean">
+      <li>視覺效果窗格選 <span class="ui">關鍵影響因素</span>。</li>
+      <li>分析欄位放 <span class="ui">EmploymentStatus</span>（在職／離職）。</li>
+      <li>解釋依據放 Q1 到 Q7 七個構面平均，也可加入年資、年齡、部門等維度讓分析更全面。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 6-2</span><span class="stepttl">解讀結果</span></div>
+    <ol class="clean">
+      <li>左側列出最關鍵的因素與影響倍數：例如薪資福利平均分數低 0.58 分時，離職的可能性提高 1.6 倍；工作環境低 0.64 分也是顯著因素。</li>
+      <li>點選任一因素，右側顯示分布圖，可比較在職與離職者在該構面的平均分數差異。</li>
+    </ol>
+  </div>
+  <div class="callout tip">
+    <p class="ctitle">寫進報告的句型</p>
+    <p>薪資滿意度偏低的員工，離職風險比其他人高 60%，建議優先檢視薪資結構。把數字寫成這樣的一句話，讀報告的人才知道要採取什麼行動。</p>
+  </div>
+
+  <h2 class="section"><span class="num">7</span>其他內建 AI 功能</h2>
+  <table>
+    <tr><th style="white-space:nowrap">功能</th><th>用途</th></tr>
+    <tr><td style="white-space:nowrap"><strong>異常偵測</strong></td><td>折線圖自動標記統計上的異常點，不用手動設定閾值，適合監控離職率或人數的突波。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>分解樹</strong></td><td>逐層拆解指標的組成，例如離職人數先拆部門、再拆性別，找出貢獻最大的維度，類似可互動的心智圖。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>問與答 Q&amp;A</strong></td><td>輸入中英文問題，自動生成對應圖表；常用問題可預先設定，讓主管自助查詢。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>Copilot 與 Fabric</strong></td><td>自然語言生成報表、量值與摘要洞見，需 Pro 或 Premium 授權，可申請試用。</td></tr>
+  </table>
+  <p class="lead">前三個功能免費版就能使用，建議課後實際試用。</p>
+
+  <h2 class="section"><span class="num">8</span>報告整合與導覽</h2>
+  <p class="lead">三頁做完，最後讓它們像一份報告：篩選同步、頁面可導覽、敘事有層次。</p>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-1</span><span class="stepttl">同步交叉分析篩選器</span></div>
+    <ol class="clean">
+      <li><span class="ui">檢視</span> <span class="arrow">›</span> <span class="ui">同步交叉分析篩選器</span>，選取地區篩選器。</li>
+      <li>在右側窗格勾選員工儀表板與離職分析兩頁的同步欄。</li>
+      <li>測試：任一頁切換地區，另一頁同步反應。</li>
+    </ol>
+  </div>
+  <div class="step">
+    <div class="stephead"><span class="badge">步驟 8-2</span><span class="stepttl">頁面導覽按鈕</span></div>
+    <ol class="clean">
+      <li><span class="ui">插入</span> <span class="arrow">›</span> <span class="ui">按鈕</span> <span class="arrow">›</span> <span class="ui">頁面導覽</span>，按鈕文字輸入目標頁名（例如滿意度報告）。</li>
+      <li>動作的類型選頁面導覽、目的地選滿意度報告；在滿意度頁做一顆返回員工儀表板的按鈕。</li>
+      <li>編輯模式按住 Ctrl 點按鈕測試跳頁。</li>
+    </ol>
+  </div>
+  <table>
+    <tr><th style="white-space:nowrap">頁面</th><th>回答的問題</th></tr>
+    <tr><td style="white-space:nowrap"><strong>第一頁 人力結構總覽</strong></td><td>公司整體人力健康狀況：人數、年齡、年資的分布。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>第二頁 離職分析</strong></td><td>哪些部門需要優先關注、離職的趨勢與原因是什麼。</td></tr>
+    <tr><td style="white-space:nowrap"><strong>第三頁 滿意度診斷</strong></td><td>員工最在意什麼、哪個構面與族群最需要介入改善。</td></tr>
+  </table>
+
+  <div class="callout check">
+    <p class="ctitle">三大成果回顧</p>
+    <p>資料清理能力：用 Power Query 處理空值、格式、重複，縱向與橫向合併資料。資料模型與 DAX：建立多表關聯、撰寫離職率、平均年資、滿意度等量值。儀表板產出：人力結構、離職分析、滿意度三頁互動報告。其中資料清理是最通用的能力，之後處理論文問卷或任何資料整理，這套流程都用得上。</p>
+  </div>
+
+  <div class="callout note">
+    <p class="ctitle">延伸學習資源</p>
+    <p>Microsoft Learn 的 Power BI 免費官方學習路徑（learn.microsoft.com/power-bi）；SQLBI 的 dax.guide 是最完整的 DAX 函數參考；遇到問題可上 community.powerbi.com 或 Facebook 的 Taiwan Power BI User Group 發問。工具會與時俱進，定義問題、驗證 AI、解讀數據的判斷力才是長久的競爭力。</p>
+  </div>
+
+  <footer>
+    <p><strong>Power BI 人資儀表板工作坊 · Part 6 滿意度與 AI 功能</strong></p>
+    <p>核心觀念：分析要落在決策。把圖表上的差異改寫成一句具體建議，報告才有實際作用。</p>
+  </footer>
+
+</div>
+</div><!-- /part6 -->
+
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-target');
+      document.querySelectorAll('.tab').forEach(function(b){ b.classList.toggle('active', b === btn); });
+      document.querySelectorAll('.tabpage').forEach(function(p){ p.classList.toggle('active', p.id === target); });
+      window.scrollTo(0, 0);
+    });
+  });
+</script>
+<script>
+  document.querySelectorAll('.code').forEach(function(box){
+    var btn=box.querySelector('.copybtn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var clone=box.cloneNode(true);
+      clone.querySelectorAll('.lbl,.copybtn').forEach(function(n){n.remove();});
+      var text=clone.textContent.replace(/^\s+|\s+$/g,'');
+      function done(){ btn.textContent='已複製'; btn.classList.add('copied');
+        setTimeout(function(){ btn.textContent='複製'; btn.classList.remove('copied'); },1500); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+      function fallback(){
+        var ta=document.createElement('textarea'); ta.value=text;
+        ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+        ta.select(); try{ document.execCommand('copy'); done(); }catch(e){}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+</script>
+<script>
+  // 防孤兒字：把每個文字區塊最後兩個字綁成不可斷行，行尾就不會只剩單字
+  (function(){
+    var sel='p,li,td,th,.lead,.stepttl,.dsc,.fdesc,.ctitle,.cover-sub,.agenda .ttl,summary';
+    document.querySelectorAll(sel).forEach(function(el){
+      var last=el.lastChild;
+      if(last && last.nodeType===3){
+        var t=last.nodeValue.replace(/\s+$/,'');
+        if(t.length>=2){
+          last.nodeValue=t.slice(0,-2);
+          var span=document.createElement('span');
+          span.style.whiteSpace='nowrap';
+          span.textContent=t.slice(-2);
+          el.appendChild(span);
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>
