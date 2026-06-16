@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>職能盤點與職能地圖建置講義｜從職務說明書到學習地圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1a2233;
+    --ink-soft:#37425a;
+    --line:#e3e7ee;
+    --line-soft:#eef1f6;
+    --paper:#ffffff;
+    --bg:#f4f6f9;
+    --muted:#6b7689;
+    --accent:#1f3a5f;
+    --accent-soft:#eaf0f7;
+    --gold:#a9772e;
+    --gold-soft:#f7f0e2;
+    --rose:#9e3b46;
+    --rose-soft:#f7e9ea;
+    --green:#2f6b50;
+    --green-soft:#e7f1ec;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter','Noto Sans TC',sans-serif;
+    line-height:1.85;
+    font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:32px 20px 80px;
+  }
+  .sheet{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 1px 2px rgba(20,30,55,.04),0 12px 32px -16px rgba(20,30,55,.18);
+    overflow:hidden;
+  }
+
+  /* 刊頭 */
+  header.masthead{
+    padding:48px 48px 40px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(120% 140% at 100% 0%, #f0f4fa 0%, rgba(240,244,250,0) 55%),
+      var(--paper);
+  }
+  .eyebrow{
+    font-size:12.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--accent);
+    margin:0 0 14px;
+  }
+  h1.title{
+    font-family:'Noto Sans TC',sans-serif;
+    font-weight:900;
+    font-size:clamp(28px,4.4vw,40px);
+    line-height:1.28;
+    letter-spacing:-.01em;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .deck{
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:62ch;
+    margin:0 0 26px;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 28px;
+    padding-top:22px;
+    border-top:1px solid var(--line-soft);
+    font-size:13.5px;
+    color:var(--muted);
+  }
+  .meta-row b{color:var(--ink);font-weight:600;}
+
+  /* 流程列 */
+  .flow{
+    padding:30px 48px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .flow h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 18px;}
+  .flow-track{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:stretch;
+  }
+  .flow-chip{
+    flex:1 1 120px;
+    min-width:120px;
+    background:var(--accent-soft);
+    border:1px solid #d7e2f0;
+    border-radius:10px;
+    padding:12px 14px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .flow-chip:hover{transform:translateY(-2px);box-shadow:0 8px 18px -10px rgba(31,58,95,.4);}
+  .flow-chip .n{display:block;font-size:11.5px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-bottom:2px;}
+  .flow-chip .t{display:block;font-size:14px;font-weight:600;line-height:1.4;}
+
+  /* 內文 */
+  main{padding:8px 48px 8px;}
+  section.stage{padding:34px 0;border-bottom:1px solid var(--line-soft);}
+  section.stage:last-child{border-bottom:none;}
+  .stage-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:6px;}
+  .stage-num{
+    flex:none;
+    width:44px;height:44px;
+    border-radius:11px;
+    background:var(--accent);
+    color:#fff;
+    font-weight:800;
+    font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;
+  }
+  .stage-head h2{
+    font-family:'Noto Sans TC',sans-serif;
+    font-weight:900;
+    font-size:23px;
+    line-height:1.35;
+    margin:2px 0 2px;
+  }
+  .stage-head .kicker{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block;margin-bottom:4px;}
+  .stage-body{margin-top:10px;}
+  .stage-body > p:first-child{margin-top:0;}
+  p{margin:14px 0;}
+
+  h3{
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:16.5px;
+    font-weight:700;
+    margin:26px 0 10px;
+    color:var(--ink);
+    display:flex;align-items:baseline;gap:9px;
+  }
+  h3::before{
+    content:"";
+    width:7px;height:7px;border-radius:2px;
+    background:var(--accent);
+    transform:translateY(-1px);
+    flex:none;
+  }
+
+  ul,ol{margin:12px 0;padding-left:22px;}
+  li{margin:7px 0;}
+  ul.tight li{margin:4px 0;}
+  strong{font-weight:700;color:var(--ink);}
+
+  /* 標籤 */
+  .tag{
+    display:inline-block;
+    font-size:12px;font-weight:700;letter-spacing:.04em;
+    padding:3px 9px;border-radius:999px;
+    background:var(--accent-soft);color:var(--accent);
+    margin-right:6px;
+  }
+  .tag.gold{background:var(--gold-soft);color:var(--gold);}
+  .tag.rose{background:var(--rose-soft);color:var(--rose);}
+  .tag.green{background:var(--green-soft);color:var(--green);}
+
+  /* 標示框 */
+  .box{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 20px;
+    margin:18px 0;
+    background:#fcfdfe;
+  }
+  .box .box-label{
+    font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    margin:0 0 8px;display:flex;align-items:center;gap:8px;
+  }
+  .box.example{background:var(--accent-soft);border-color:#d7e2f0;}
+  .box.example .box-label{color:var(--accent);}
+  .box.warn{background:var(--rose-soft);border-color:#eccfd2;}
+  .box.warn .box-label{color:var(--rose);}
+  .box.note{background:var(--gold-soft);border-color:#ecdcbf;}
+  .box.note .box-label{color:var(--gold);}
+  .box.output{background:var(--green-soft);border-color:#cce3d6;}
+  .box.output .box-label{color:var(--green);}
+  .box p:first-of-type{margin-top:0;}
+  .box p:last-child{margin-bottom:0;}
+
+  /* 表格 */
+  .table-scroll{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:12px;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px;}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line-soft);}
+  thead th{background:#f3f6fa;color:var(--ink);font-weight:700;font-size:13.5px;letter-spacing:.02em;border-bottom:1px solid var(--line);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#fafbfd;}
+  td code,p code{background:#eef1f6;border-radius:5px;padding:1px 6px;font-size:13px;font-family:'Inter',monospace;color:var(--accent);}
+
+  /* 決策卡 */
+  .decision-grid{display:grid;gap:14px;margin:18px 0;}
+  .decision{
+    border:1px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:10px;padding:16px 18px;background:#fff;
+  }
+  .decision h4{margin:0 0 6px;font-size:15.5px;font-weight:700;font-family:'Noto Sans TC',sans-serif;}
+  .decision p{margin:6px 0 0;font-size:14.5px;color:var(--ink-soft);}
+  .decision .rec{margin-top:8px;font-size:13.5px;color:var(--accent);font-weight:600;}
+
+  /* 區段標頭 */
+  .section-divider{
+    margin:6px 0 0;padding:30px 0 6px;
+  }
+  .section-divider .eyebrow{margin-bottom:6px;}
+  .section-divider h2{
+    font-family:'Noto Sans TC',sans-serif;font-weight:900;font-size:21px;margin:0;
+  }
+
+  footer.colophon{
+    padding:30px 48px 40px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:13px;
+    background:#fbfcfe;
+  }
+  footer.colophon p{margin:5px 0;}
+
+  a.anchor-ref{color:var(--accent);text-decoration:none;border-bottom:1px solid #c7d6e8;}
+  a.anchor-ref:hover{border-bottom-color:var(--accent);}
+
+  @media (max-width:680px){
+    header.masthead,.flow,main,footer.colophon{padding-left:24px;padding-right:24px;}
+    .stage-head{gap:12px;}
+    .stage-num{width:38px;height:38px;font-size:16px;border-radius:9px;}
+    .stage-head h2{font-size:20px;}
+  }
+  @media print{
+    body{background:#fff;font-size:12.5px;line-height:1.6;}
+    .wrap{padding:0;max-width:100%;}
+    .sheet{border:none;box-shadow:none;border-radius:0;}
+    .flow-chip:hover{transform:none;box-shadow:none;}
+    section.stage,.box,.table-scroll,.decision{break-inside:avoid;}
+    a.anchor-ref{border:none;color:inherit;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="sheet">
+
+  <!-- ============ 刊頭 ============ -->
+  <header class="masthead">
+    <p class="eyebrow">人力資源管理講義　COMPETENCY MAPPING</p>
+    <h1 class="title">職能盤點與職能地圖建置：<br>從職務說明書到學習地圖</h1>
+    <p class="deck">這份講義說明如何把職務說明書裡的工作項目，逐步轉換成職能、職能地圖與學習地圖。內容以從未做過此專案的人為對象，每個階段都附上做法步驟、產出物與一個貫穿全程的實例，照著走即可完成一輪完整的職能盤點。</p>
+    <div class="meta-row">
+      <span><b>編撰</b>　國立中山大學人力資源管理研究所　王豫萱教授</span>
+      <span><b>適用對象</b>　HR 承辦、各單位主管</span>
+      <span><b>產出物</b>　職能字典・職能地圖・學習地圖・職等職級表（選配）</span>
+      <span><b>建議閱讀時間</b>　約 25 分鐘</span>
+    </div>
+  </header>
+
+  <!-- ============ 流程總覽 ============ -->
+  <nav class="flow" aria-label="流程總覽">
+    <h2>流程總覽（七個階段）</h2>
+    <div class="flow-track">
+      <a class="flow-chip" href="#s0"><span class="n">階段 0</span><span class="t">確認職能架構</span></a>
+      <a class="flow-chip" href="#s1"><span class="n">階段 1</span><span class="t">職能萃取</span></a>
+      <a class="flow-chip" href="#s2"><span class="n">階段 2</span><span class="t">建立職能字典</span></a>
+      <a class="flow-chip" href="#s3"><span class="n">階段 3</span><span class="t">對標與校準</span></a>
+      <a class="flow-chip" href="#s4"><span class="n">階段 4</span><span class="t">表單與主管確認</span></a>
+      <a class="flow-chip" href="#s5"><span class="n">階段 5</span><span class="t">繪製職能地圖</span></a>
+      <a class="flow-chip" href="#s6"><span class="n">階段 6</span><span class="t">設計學習地圖</span></a>
+      <a class="flow-chip" href="#sgrade" style="background:var(--gold-soft);border-color:#ecdcbf;"><span class="n" style="color:var(--gold);">進階支線</span><span class="t">職等職級表（連動薪酬）</span></a>
+      <a class="flow-chip" href="#sai"><span class="n">貫穿全程</span><span class="t">用 AI 加速</span></a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============ 開始之前 ============ -->
+    <section class="stage" id="intro">
+      <div class="stage-head">
+        <div class="stage-num" style="background:var(--gold);">!</div>
+        <div>
+          <span class="kicker">開始之前</span>
+          <h2>從工作分析到學習地圖：這份講義的起點</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p>職能的發展不是憑空開始的，它接在工作分析（job analysis）的後面。工作分析是有系統地蒐集一個職位的任務、職責與條件，整理後通常產出兩份文件：職務說明書，列出該職位要做哪些事；工作規範，列出做這些事需要什麼條件。</p>
+        <p>這份講義的起點，是已經完成的職務說明書。整段流程就是把說明書裡的工作項目，逐步發展成職能、彙整成職能地圖，再延伸成學習地圖。完整脈絡如下。</p>
+        <div class="box">
+          <p class="box-label" style="color:var(--accent);">整體脈絡</p>
+          <p style="margin:0 0 8px;">工作分析　→　職務說明書（已完成，本講義的起點）　→　職能萃取　→　職能字典　→　職能地圖　→　學習地圖</p>
+          <p style="margin:0;color:var(--gold);">選配支線：若公司尚無職等職級表，可從職能地圖延伸　→　職務評價　→　職等職級表　→　薪等薪級（連動薪酬）</p>
+        </div>
+        <p>流程中有數處需要先做決定，例如熟練度要分幾級、表單採哪種評定方式。這些不在開頭一次列完，而是放在實際碰到的階段標出。先建立以下幾個觀念，再進入流程。</p>
+
+        <h3>觀念一：職能是什麼</h3>
+        <p>職能指的是把一件工作做好，背後所需具備的條件，通常拆成三個面向：知識（Knowledge）、技能（Skill）、態度與其他特質（Attitude／Other characteristics），合稱 KSA 或 KSAO。重點在於，職能描述的是能力，不是任務本身。</p>
+
+        <h3>觀念二：工作項目不等於職能</h3>
+        <p>同一份職務說明書裡，工作項目和職能是兩回事。工作項目是要做哪些事，職能是把這些事做好所需具備的能力。從工作項目得到職能，中間一定要有一道轉譯，不能把任務換個說法就當成職能。少了這一步，學習地圖會退化成一份課程清單，而不是一條能力成長的階梯。</p>
+        <div class="box example">
+          <p class="box-label">範例：轉譯的差別</p>
+          <p>工作項目寫的是辦理招募甄選作業。這是任務。對應的職能則是：人才招募管道規劃能力（技能）、結構化面談技巧（技能）、勞動法令與就業歧視規範（知識）、客觀公正的識人態度（態度）。把一句任務攤開成數項可培養的能力，就是職能萃取要做的事。</p>
+        </div>
+
+        <h3>觀念三：最終會產出兩張不同的地圖</h3>
+        <ul>
+          <li><strong>職能地圖</strong>：呈現哪個職位需要哪些職能、要到什麼熟練程度。也就是一張職位 × 職能 × 級別的矩陣。</li>
+          <li><strong>學習地圖</strong>：呈現每一項職能、每一個級別，要透過哪些學習方案、依什麼順序培養。也就是把職能轉成可執行的學習路徑。</li>
+        </ul>
+        <p>兩者有先後關係。學習地圖必須先有職能地圖、且職能已經分出級別，才畫得出階梯。</p>
+
+        <h3>先選深度：簡版或完整版</h3>
+        <p>同一套流程可以做深，也可以做淺，取決於組織此刻需要什麼。投入之前先選定深度，後面每一步要做到什麼程度就有依據。</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>比較</th><th>簡版路徑</th><th>完整版路徑</th></tr></thead>
+            <tbody>
+              <tr><td>主要產出</td><td>標準化職務說明書，加上學習地圖（訓練對應）</td><td>職能字典、含級別的職能地圖、學習地圖</td></tr>
+              <tr><td>有無熟練度級別</td><td>無</td><td>有</td></tr>
+              <tr><td>學習地圖的骨架</td><td>以職務層級為骨架，把課程對應到職等或職稱</td><td>以職能級別為骨架，把方案對應到每個級別</td></tr>
+              <tr><td>投入</td><td>低，可較快產出</td><td>高，需萃取與建字典</td></tr>
+              <tr><td>能否連動薪酬或接職等職級</td><td>否</td><td>可，接得上進階支線</td></tr>
+              <tr><td>適合情境</td><td>先求職務說明書標準化與一份可用的訓練結構</td><td>需要精準發展、繼任規劃或薪酬連動</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>本講義以完整版為主軸說明。若採簡版，可略過與熟練度分級有關的部分，也就是階段 2 的分級、階段 4 的級別評定、階段 5 的級別呈現，直接由標準化職務說明書配出以職務層級為骨架的訓練對應。</p>
+      </div>
+    </section>
+
+    <!-- ============ 階段 0 ============ -->
+    <section class="stage" id="s0">
+      <div class="stage-head">
+        <div class="stage-num">0</div>
+        <div>
+          <span class="kicker">職能分類</span>
+          <h2>確認職能架構</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>在萃取任何職能之前，先決定職能要如何分類。這個分類是整個專案的骨架，會決定職能字典如何組織、表單如何分頁、地圖如何呈現。</p>
+
+        <h3>做法：把職能分成三類</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>類別</th><th>適用對象</th><th>說明與例子</th></tr></thead>
+            <tbody>
+              <tr><td><strong>核心職能</strong></td><td>全體員工</td><td>反映組織文化與共同價值，所有人都應具備。例如：誠信廉潔、團隊協作、客戶導向、學習成長。</td></tr>
+              <tr><td><strong>管理職能</strong></td><td>各層級主管</td><td>帶人與管事所需的能力。例如：目標設定與績效管理、團隊發展與授權、跨部門協調、決策與問題解決。</td></tr>
+              <tr><td><strong>專業／功能職能</strong></td><td>各職系職位</td><td>把該職位的專業工作做好所需的能力，依職系不同而異。例如：人資職系的薪酬制度設計、財務職系的成本分析、業務職系的客戶開發。</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>一張職能架構表，列出三大類別的定義範圍。後續所有職能在建檔時，都要歸入其中一類。</p>
+        </div>
+        <div class="box note">
+          <p class="box-label">延伸用途</p>
+          <p>這套分類同時是職涯骨架的起點。核心、管理、專業的切分，可往後延伸成職群與管理職、專業職的雙軌結構。若公司尚無職等職級表，這會是後面進階支線建表的第一塊基礎。</p>
+        </div>
+        <div class="box warn">
+          <p class="box-label">常見錯誤</p>
+          <p>跳過架構直接萃取職能，導致字典中核心、管理、專業混在一起，表單無法分頁、地圖也難以呈現。先有架構，後面才有依據。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 1 ============ -->
+    <section class="stage" id="s1">
+      <div class="stage-head">
+        <div class="stage-num">1</div>
+        <div>
+          <span class="kicker">從工作項目萃取</span>
+          <h2>職能萃取</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>以職務說明書中的工作項目為起點，逐項推導出背後所需的 KSA。這是把任務轉成能力的步驟。</p>
+
+        <h3>步驟一：逐項拆解工作項目</h3>
+        <p>針對每一條工作項目，固定追問三個問題：</p>
+        <ul class="tight">
+          <li>要把這件事做好，需要哪些<strong>知識</strong>（要懂什麼、知道什麼規範或原理）？</li>
+          <li>需要哪些<strong>技能</strong>（要會操作什麼、會運用什麼方法或工具）？</li>
+          <li>需要哪些<strong>態度與特質</strong>（要展現什麼樣的傾向、價值或人格特質）？</li>
+        </ul>
+
+        <h3>步驟二：選擇萃取方法</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>方法</th><th>適用時機</th><th>成本</th></tr></thead>
+            <tbody>
+              <tr><td><strong>文件分析</strong><br>分析現有職務說明書</td><td>所有專案的基礎，已有職務說明書時優先採用</td><td>低</td></tr>
+              <tr><td><strong>主題專家訪談</strong><br>SME 訪談或焦點團體</td><td>文件不夠細、需要補充實務細節時</td><td>中</td></tr>
+              <tr><td><strong>行為事件訪談</strong><br>BEI，訪談高績效者</td><td>關鍵職位，需要找出高績效者與一般者的差異化能力時</td><td>高</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>SME 指主題專家（Subject Matter Expert），通常是該職位的資深工作者或直屬主管。BEI 指行為事件訪談（Behavioral Event Interview），透過請受訪者回憶具體成功與失敗事件，萃取出真正造成績效差異的能力。</p>
+
+        <h3>步驟三：用對標資料庫補漏</h3>
+        <p>初步清單完成後，對照外部職能資料庫（詳見 <a class="anchor-ref" href="#s3">階段 3</a>），檢查是否有遺漏的重要職能。此處只先補漏，正式校準留到階段 3 統一處理。</p>
+
+        <div class="box example">
+          <p class="box-label">貫穿範例：招募甄選（第 1 站）</p>
+          <p>工作項目：辦理招募甄選作業。拆解後的原始 KSA 清單如下。</p>
+          <ul class="tight">
+            <li>知識：勞動法令與就業歧視規範、各招募管道特性、職務分析基礎。</li>
+            <li>技能：招募管道規劃、職缺文案撰寫、履歷篩選、結構化面談、評量工具運用。</li>
+            <li>態度：客觀公正、保密意識、對應徵者的尊重與服務態度。</li>
+          </ul>
+        </div>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>每一個職位的原始 KSA 清單。此時內容還很零散、跨職位有重複，屬於正常現象，下一階段會統一整理。</p>
+        </div>
+        <div class="box warn">
+          <p class="box-label">常見錯誤</p>
+          <p>把工作項目換句話說就當成職能，例如把辦理招募改寫成招募辦理能力。這只是換了詞性，沒有攤開成可培養的能力。判斷標準是：一句任務應該對應到數項具體的 KSA，而不是一對一改寫。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 2 ============ -->
+    <section class="stage" id="s2">
+      <div class="stage-head">
+        <div class="stage-num">2</div>
+        <div>
+          <span class="kicker">整理與標準化</span>
+          <h2>彙整與建立職能字典</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>把各職位零散的 KSA 整理成一套標準化、可重複引用的職能項目庫，也就是職能字典。後續的表單與兩張地圖，全部都引用這份字典。</p>
+
+        <h3>步驟一：分類與排除重複內容</h3>
+        <p>不同職位常會出現相同或相近的能力，例如多個職位都需要結構化面談技巧。將這些重複項目歸併為同一個職能，避免字典膨脹、也避免日後同一能力出現多種說法。</p>
+
+        <h3>步驟二：命名</h3>
+        <p>每個職能給一個清楚、一致的名稱。建議採用名詞性的能力名稱，例如結構化面談技巧、成本分析能力，避免動詞句或冗長描述。</p>
+
+        <h3>步驟三：為每個職能寫三項要素</h3>
+        <ul>
+          <li><strong>定義</strong>：用一到兩句話說明這項職能指的是什麼。</li>
+          <li><strong>行為指標</strong>：列出具備這項職能時，會表現出來、可被觀察的具體行為。行為指標必須可觀察、可評量，避免抽象形容詞。</li>
+          <li><strong>熟練度等級定義</strong>：逐級描述該級別應展現的能力深度，等級之間要能明確區辨。要分成幾級，見下方的決定。</li>
+        </ul>
+        <div class="decision">
+          <h4>需要先決定：熟練度採幾級制，如何對應 iCAP</h4>
+          <p>熟練度等級建議採 3 到 5 級。若客戶日後需與政府資源或外部證照接軌，可同步對應勞動部 iCAP 的 1 至 6 級。級數與對應關係要在這一步先定下來，否則字典與後面的表單會反覆改動。</p>
+          <p class="rec">建議：初次導入採 4 級制（具備認知、能在指導下執行、能獨立執行、能指導他人）。</p>
+        </div>
+
+        <h3>步驟四：標註類別</h3>
+        <p>依階段 0 的架構，標明該職能屬於核心、管理或專業／功能。</p>
+
+        <div class="box example">
+          <p class="box-label">貫穿範例：招募甄選（第 2 站）一個完整字典條目</p>
+          <p><strong>職能名稱</strong>　結構化面談技巧（專業／功能職能）</p>
+          <p><strong>定義</strong>　依據職能需求設計面談題目與評分標準，並能在面談中客觀蒐集與評估應徵者資訊的能力。</p>
+          <p><strong>行為指標</strong></p>
+          <ul class="tight">
+            <li>能依職缺所需職能，設計對應的行為面談題目。</li>
+            <li>面談時依預設評分尺規評分，不受月暈效應影響。</li>
+            <li>能向應徵者追問具體事例，蒐集可佐證的行為證據。</li>
+          </ul>
+          <p><strong>熟練度等級（4 級制）</strong></p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>級別</th><th>描述</th></tr></thead>
+              <tbody>
+                <tr><td>L1 認知</td><td>了解結構化面談的概念與基本流程。</td></tr>
+                <tr><td>L2 指導下執行</td><td>能在他人提供題庫與評分表的情況下，完成面談並評分。</td></tr>
+                <tr><td>L3 獨立執行</td><td>能自行設計題目與評分標準，獨立主持面談並產出評估結論。</td></tr>
+                <tr><td>L4 指導他人</td><td>能訓練其他面談官、稽核面談品質，並優化全公司的面談制度。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>一份職能字典，這是整個專案後續都會引用的基準。命名、定義與級別一旦確定，就應盡量穩定、避免反覆變動。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 3 ============ -->
+    <section class="stage" id="s3">
+      <div class="stage-head">
+        <div class="stage-num">3</div>
+        <div>
+          <span class="kicker">對標外部資源</span>
+          <h2>對標與校準</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>用外部權威資源校準職能字典，補齊遺漏、精修寫法，並讓成果在客戶內部更具說服力。重點是校準而非照抄，要保留客戶自身的語言與情境。</p>
+
+        <h3>三種對標資源的適用範圍</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>資源</th><th>用途定位</th><th>語言</th><th>需留意之處</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>勞動部職能基準<br>iCAP</strong></td>
+                <td>校準職能命名與級別定義，與本地政府資源接軌</td>
+                <td>繁體中文</td>
+                <td>並非所有職類都有，部分內容可能偏舊。實際涵蓋率以 iCAP 平台現況為準。</td>
+              </tr>
+              <tr>
+                <td><strong>O*NET</strong></td>
+                <td>檢查 KSA 完整性，尤其有助於新興職務補漏</td>
+                <td>美式英文</td>
+                <td>需轉譯並在地化，不能直接套用其職務分類與用語。</td>
+              </tr>
+              <tr>
+                <td><strong>澳洲<br>Units of Competency</strong></td>
+                <td>參考績效標準（performance criteria）的撰寫方式，精修行為指標</td>
+                <td>英文</td>
+                <td>屬於該國 Training Packages 體系，制度脈絡與台灣不同，僅取其寫法。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box note">
+          <p class="box-label">不確定／需查證</p>
+          <p>iCAP 各職類的涵蓋情況與更新時間，建議使用前實際登入平台確認。O*NET 與澳洲資料的可取得性與分類架構也可能調整，引用前宜再核對最新版本。這部分屬於會隨時間變動的資訊。</p>
+        </div>
+
+        <h3>做法</h3>
+        <ol>
+          <li>以 iCAP 對應職類，校準職能名稱與各級別的定義。</li>
+          <li>以 O*NET 逐項檢查 KSA 是否有遺漏，特別是新興或數位相關能力。</li>
+          <li>參考澳洲 Units of Competency 的績效標準寫法，把行為指標修得更具體、可評量。</li>
+        </ol>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>校準後的職能字典。命名、級別與行為指標都已對標外部標準，但仍保有客戶的語言與情境。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 4 ============ -->
+    <section class="stage" id="s4">
+      <div class="stage-head">
+        <div class="stage-num">4</div>
+        <div>
+          <span class="kicker">主管確認</span>
+          <h2>表單設計與主管確認</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>把職能字典做成自動化表單，讓各單位主管確認各職位真正需要的職能與要求程度。這一步的設計品質，會直接影響最終地圖好不好用。</p>
+
+        <h3>表單欄位設計</h3>
+        <div class="decision">
+          <h4>需要先決定：評定採二元勾選，還是加上熟練度等級</h4>
+          <p>純粹的需要與不需要勾選會帶來兩個問題：主管傾向全選，造成過度涵蓋；各職位的地圖也會趨於扁平，無法區辨深淺。</p>
+          <p class="rec">建議：在是否需要之外，再加上要求熟練度等級。這樣能防過度涵蓋、能區辨深淺，學習地圖也才畫得出階梯。</p>
+        </div>
+        <p>依此建議，每一項職能不採單純勾選，而是設計成三欄。</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>職能項目</th><th>此職位是否需要</th><th>要求熟練度等級</th><th>重要性（可選）</th></tr></thead>
+            <tbody>
+              <tr><td>結構化面談技巧</td><td>是／否</td><td>L1 ／ L2 ／ L3 ／ L4</td><td>高／中／低</td></tr>
+              <tr><td>勞動法令知識</td><td>是／否</td><td>L1 ／ L2 ／ L3 ／ L4</td><td>高／中／低</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>表單要不要開放主管補充職能</h3>
+        <div class="decision">
+          <h4>需要先決定：由上而下，還是由下而上</h4>
+          <p>只讓主管從既有清單確認，屬於由上而下（top-down）；允許主管補充清單裡沒有的職能，屬於由下而上（bottom-up）。兩者的彙整與收斂方式完全不同，要事先講清楚。</p>
+          <p class="rec">建議：第一輪以 top-down 為主，另留一個開放欄位收集補充，於校準會議再決定是否納入字典。</p>
+        </div>
+
+        <h3>防過度涵蓋機制</h3>
+        <p>為避免主管把所有職能都勾為需要、且都填最高級別，建議至少加入一項約束：</p>
+        <ul class="tight">
+          <li>限制每個職位可標為高級別（如 L3 以上）的職能數量上限。</li>
+          <li>設定關鍵職能數量上限，要求主管挑出最重要的數項。</li>
+          <li>要求主管對勾選結果排序，強制做出取捨。</li>
+        </ul>
+
+        <h3>工具與後台</h3>
+        <p>表單可用 SurveyCake、Google 表單或 SurveyMonkey 製作，後台串接 Looker Studio 即時彙整與視覺化。工具選擇取決於既有授權、題型彈性與資料匯出需求。</p>
+
+        <h3>填答指引與校驗邏輯</h3>
+        <p>表單務必附上填答指引，說明每個級別的定義與勾選原則，並設計校驗邏輯（例如未選需要時不可填級別）。缺少指引時，主管容易全選或隨意填答，使資料失去區辨力。</p>
+
+        <h3>建議採兩輪流程</h3>
+        <ol>
+          <li><strong>主管初評</strong>：各單位主管填寫表單。</li>
+          <li><strong>HR 彙整</strong>：收集結果，標出職位之間、主管之間的歧異。</li>
+          <li><strong>校準會議</strong>：針對歧異處討論收斂，形成共識版本。</li>
+        </ol>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>一份經主管確認並校準收斂後的資料：每個職位需要哪些職能、各要求到哪一級。這是繪製地圖的直接輸入。</p>
+        </div>
+        <div class="box warn">
+          <p class="box-label">常見錯誤</p>
+          <p>採用純二元勾選又不設約束，結果常常是幾乎所有職位都勾滿所有職能，地圖無法區辨職位差異。加上約束機制與級別評定，資料才會有區辨力。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 5 ============ -->
+    <section class="stage" id="s5">
+      <div class="stage-head">
+        <div class="stage-num">5</div>
+        <div>
+          <span class="kicker">彙整成矩陣</span>
+          <h2>繪製職能地圖</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>把主管確認後的資料，彙整成一張清楚呈現職位與職能對應關係的地圖。</p>
+
+        <h3>結構：職位 × 職能 × 要求級別矩陣</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>職能 ＼ 職位</th><th>招募專員</th><th>薪酬專員</th><th>HR 主管</th></tr></thead>
+            <tbody>
+              <tr><td>結構化面談技巧</td><td>L3</td><td>L1</td><td>L4</td></tr>
+              <tr><td>勞動法令知識</td><td>L2</td><td>L3</td><td>L4</td></tr>
+              <tr><td>薪酬制度設計</td><td>—</td><td>L3</td><td>L4</td></tr>
+              <tr><td>團隊績效管理</td><td>—</td><td>—</td><td>L3</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>依用途選擇視覺化方式</h3>
+        <ul class="tight">
+          <li><strong>熱力圖</strong>：適合呈現核心職能在全體職位的分布，用顏色深淺表示要求高低。</li>
+          <li><strong>矩陣表</strong>：適合完整呈現職位與職能的對應，資訊密度高。</li>
+          <li><strong>雷達圖</strong>：適合呈現單一職位在各職能上的深淺輪廓，便於個別職位溝通。</li>
+        </ul>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>職能地圖：完整呈現每個職位所需職能與要求級別。可作為招募甄選、職位調動、繼任規劃的依據。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 進階支線：職等職級表 ============ -->
+    <div class="section-divider">
+      <p class="eyebrow">進階支線　JOB GRADING &amp; PAY</p>
+      <h2>若公司尚無職等職級表，如何順著流程一起建立</h2>
+    </div>
+
+    <section class="stage" id="sgrade">
+      <div class="stage-head">
+        <div class="stage-num" style="background:var(--gold);">＋</div>
+        <div>
+          <span class="kicker">連動薪酬</span>
+          <h2>設計職等職級表</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag gold">支線目的</span>有些公司原本沒有職等職級表。這種情況可在職能盤點的基礎上一併建立。由於這張表後續會連動薪酬，職務評價與市場對標這兩塊必須認真做，不能只靠職能資料。</p>
+
+        <div class="box note">
+          <p class="box-label">先釐清一件事</p>
+          <p>職能盤點和職務評價是兩種邏輯。職能談的是把事情做好需要什麼能力；職務評價談的是這個職位相對其他職位值多少、該擺在哪一等。職等職級表的骨幹是後者。職能流程能餵出建表的大半素材，但連動薪酬還需要額外的職務評價與市場薪資對標，這條支線就是補上這兩塊。</p>
+        </div>
+
+        <h3>先把職等與職級分開看</h3>
+        <ul class="tight">
+          <li><strong>職級</strong>：同一職群內由淺到深的階，例如專員、資深專員、主任。來源是職能的熟練度等級。</li>
+          <li><strong>職等</strong>：跨職群比較相對價值後的等，例如不同職群的資深職位是否屬於同一等。來源是職務評價。</li>
+          <li>兩者最後都會對應到薪酬：職等決定落在哪個薪等，職級決定薪等之內的薪級。</li>
+        </ul>
+
+        <h3>步驟一：確立職涯骨架</h3>
+        <p>把階段 0 的核心、管理、專業分類，延伸成職群與雙軌。</p>
+        <ul class="tight">
+          <li><strong>職群</strong>：把性質相近的職位歸成一群，例如人資職群、財務職群、業務職群。</li>
+          <li><strong>雙軌</strong>：管理職與專業職兩條升遷路，讓專業人才不必轉任主管也能往上升。</li>
+          <li>決定職等數量。</li>
+        </ul>
+        <div class="decision">
+          <h4>需要先決定：要分幾個職等</h4>
+          <p>職等數量影響整張表的精細度與管理成本。等數多，區辨細但維護繁；等數少，簡潔但可能擠壓升遷空間。</p>
+          <p class="rec">建議：中小企業先採 5 到 9 等。組織層級少、職類單純的靠近 5；層級多、專業分化大的靠近 9。</p>
+        </div>
+
+        <h3>步驟二：用熟練度等級長出職級階梯</h3>
+        <p>一個職級不是單一職能的級別，而是這個職位在各職能上被要求到的級別組合，也就是一張能力輪廓。把同一職群的輪廓由淺到深排出來，就是職級階梯。對照建議：L1 對應初階、L2 對應中階、L3 對應資深、L4 對應專家或主管預備。</p>
+        <div class="box example">
+          <p class="box-label">貫穿範例：招募職群的職級階梯</p>
+          <ul class="tight">
+            <li>招募專員（初階）：多數職能要求 L1 到 L2。</li>
+            <li>資深招募專員（中階到資深）：核心職能要求 L3，能獨立負責整輪招募。</li>
+            <li>招募主任或招募專家（資深到專家）：部分職能要求 L4，能設計制度、指導他人。</li>
+          </ul>
+          <p>這一步直接沿用階段 4 主管確認的要求級別資料，不需另外重做。</p>
+        </div>
+
+        <h3>步驟三：用職務評價決定職等</h3>
+        <p>熟練度等級無法跨職群比較高低，因為不同職群的職能本來就不同。要決定職等，必須補一套共同的衡量邏輯，這就是職務評價。</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>方法</th><th>精細度與可辯護性</th><th>適用</th></tr></thead>
+            <tbody>
+              <tr><td><strong>因素評點法</strong><br>point-factor</td><td>高，最能支撐薪酬連動</td><td>需要嚴謹、要連動薪資時</td></tr>
+              <tr><td><strong>分類法</strong><br>classification</td><td>中，先寫職等定義再對位</td><td>求快、職位數不多時</td></tr>
+              <tr><td><strong>排序法</strong><br>ranking</td><td>低，整體排序</td><td>規模很小的組織</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="decision">
+          <h4>需要先決定：採哪一種職務評價方法</h4>
+          <p>方法決定分等結果有多禁得起檢驗。要連動薪酬，分等必須有明確依據，日後面對申訴或調整時才站得住腳。</p>
+          <p class="rec">建議：連動薪酬採因素評點法。</p>
+        </div>
+        <p>因素評點法的做法如下。</p>
+        <ol>
+          <li>選 4 到 6 個共同衡量因素，例如知識與技能要求、問題解決複雜度、職責與影響範圍、管理幅度、外部互動層級。</li>
+          <li>為每個因素定義程度等級與配分。</li>
+          <li>挑選代表性職位（benchmark jobs）先評分。</li>
+          <li>加總分數，分群成職等。</li>
+          <li>其餘職位再對照代表性職位定位。</li>
+        </ol>
+        <div class="box note">
+          <p class="box-label">可重複利用</p>
+          <p>其中知識與技能要求這個因素，可以直接引用職能地圖的要求級別，不必重新蒐集。這是職能流程帶來的省力之處。</p>
+        </div>
+        <div class="box warn">
+          <p class="box-label">治理要點</p>
+          <p>由職務評價委員會審查因素權重與分等結果，確保跨部門一致、降低偏誤與灌水。分等若由各部門各自喊，整張表很快失去公信力。</p>
+        </div>
+
+        <h3>步驟四：組成職等職級表</h3>
+        <p>把職等當縱軸，職級在職等內細分，組成一張表。每個職等內可再分數個職級（例如第 5 職等分 5-1、5-2、5-3），每一格放入各職群的代表職稱，並掛上該格的職能輪廓，往回連結職能地圖。</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>職等</th><th>人資職群</th><th>財務職群</th><th>能力輪廓摘要</th></tr></thead>
+            <tbody>
+              <tr><td>第 7 等</td><td>人資經理</td><td>財務經理</td><td>管理職能 L3 以上，能帶團隊與制度</td></tr>
+              <tr><td>第 5 等</td><td>資深人資專員</td><td>資深財務專員</td><td>核心專業職能 L3，能獨立作業</td></tr>
+              <tr><td>第 3 等</td><td>人資專員</td><td>財務專員</td><td>專業職能 L1 到 L2，能在指導下執行</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted);margin-top:-6px;">上表為示意，實際等數與職稱對應依職務評價結果而定。</p>
+
+        <h3>步驟五：連動薪酬</h3>
+        <p>這一步把職等職級表接到實際薪資，是連動薪酬的關鍵，也最敏感。</p>
+        <ol>
+          <li><strong>市場薪資對標</strong>：取得或購買薪資調查（salary survey）資料，針對代表性職位比對市場行情。</li>
+          <li><strong>訂定薪酬政策定位</strong>：決定整體薪資要對齊市場的哪個位置（見下方決定）。</li>
+          <li><strong>設計薪等薪級</strong>：每個職等對應一個薪資區間（下限、中點、上限），並決定區間寬度與相鄰職等的重疊幅度。</li>
+          <li><strong>對應職級到薪級</strong>：職等內的職級對應到薪級的不同段位。</li>
+          <li><strong>員工落點分析</strong>：把現職員工的薪資放進新薪等，檢查落點。高於上限者與低於下限者需個別處理。</li>
+        </ol>
+        <div class="decision">
+          <h4>需要先決定：薪酬的市場定位</h4>
+          <p>常見定位是對齊市場中位數（P50，貼近主流），或市場前段（P75，主動領先以利搶才）。定位越高，人事成本越高。</p>
+          <p class="rec">建議：依產業搶才程度與預算決定，多數情況先採 P50，關鍵職類再單獨拉高。</p>
+        </div>
+        <div class="box warn">
+          <p class="box-label">連動薪酬的風險</p>
+          <p>薪酬高度敏感。新表上線前要做預算衝擊分析、溝通計畫與政策核可，並先備妥薪資高於或低於新區間者的處理原則。職能資料可以支撐分等邏輯，但無法單獨決定薪酬水準，市場對標與薪酬政策是不可省略的步驟。</p>
+        </div>
+
+        <h3>步驟六：治理與維護</h3>
+        <ul class="tight">
+          <li>設職務評價委員會，維持跨部門分等一致。</li>
+          <li>定期檢視，建議每年或每兩年一次，隨職位演變更新。</li>
+          <li>建立申訴機制，處理分等爭議。</li>
+          <li>防灌水：鎖定因素定義，分等需附證據。</li>
+        </ul>
+
+        <div class="box output">
+          <p class="box-label">本支線產出</p>
+          <p>一張連動薪酬的職等職級表，含職等、職級、代表職稱與能力輪廓，加上薪等薪級表與員工落點分析。這張表與職能地圖、學習地圖互相扣住，每一次升等升級都對應到一組明確的職能成長與一條學習路徑，形成一套互通的人才管理基礎。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 階段 6 ============ -->
+    <section class="stage" id="s6">
+      <div class="stage-head">
+        <div class="stage-num">6</div>
+        <div>
+          <span class="kicker">轉成學習路徑</span>
+          <h2>設計學習地圖</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p><span class="tag">目的</span>把職能地圖轉換成可執行的學習路徑：每一項職能、每一個級別，對應到具體的學習方案與培養順序。</p>
+
+        <h3>步驟一：為每個職能的每個級別配對學習方案</h3>
+        <p>學習方案不限於課堂訓練，常見類型包括：內部訓練課程、在職訓練（OJT）、外部認證或證照、指定閱讀、導師制（mentoring）。同一職能在不同級別，應對應不同深度的方案。</p>
+
+        <h3>步驟二：用 70-20-10 思維分配</h3>
+        <p>70-20-10 是能力發展的經驗法則，主張能力主要來自三種來源：約七成來自實際工作中的歷練、約兩成來自向他人學習與回饋、約一成來自正式訓練。據此分配方案，避免把學習地圖全填成課程。</p>
+        <div class="box note">
+          <p class="box-label">需留意</p>
+          <p>70-20-10 是廣為引用的經驗比例，並非精確的科學定論，宜當作配置時的提醒，而非硬性規定。</p>
+        </div>
+
+        <h3>步驟三：排成學習路徑</h3>
+        <p>依職涯階段或級別，把各方案排出先後順序，形成一條從入門到精熟的路徑。若公司已建立職等職級表（見進階支線），可直接沿著職級階梯排序，讓每一次升級對應到一段明確的學習路徑。</p>
+
+        <h3>步驟四：向後連結</h3>
+        <p>把學習地圖接回公司的訓練體系與個人發展計畫（IDP），讓地圖不只是文件，而能驅動實際的訓練安排與個人成長對話。</p>
+
+        <div class="box example">
+          <p class="box-label">貫穿範例：招募甄選（最終站）結構化面談技巧的學習路徑</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>目標級別</th><th>學習方案（依 70-20-10）</th></tr></thead>
+              <tbody>
+                <tr><td>L1 → L2</td><td>10：面談技巧基礎課程。20：觀摩資深面談官實際面談。70：在資深者陪同下參與面談並評分。</td></tr>
+                <tr><td>L2 → L3</td><td>10：結構化面談進階工作坊。20：面談後與主管覆盤、接受回饋。70：獨立負責特定職缺的整輪面談。</td></tr>
+                <tr><td>L3 → L4</td><td>10：面談官培訓師認證。20：與 HR 主管共同檢討面談制度。70：主導全公司面談官訓練與品質稽核。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="box output">
+          <p class="box-label">本階段產出</p>
+          <p>學習地圖：每項職能在各級別的培養方案與順序，可直接連結到年度訓練計畫與員工個人發展計畫。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 貫穿全程：用 AI 加速 ============ -->
+    <div class="section-divider">
+      <p class="eyebrow">貫穿全程　AI ACCELERATION</p>
+      <h2>用 AI 加速整套流程</h2>
+    </div>
+
+    <section class="stage" id="sai">
+      <div class="stage-head">
+        <div class="stage-num" style="font-size:15px;">AI</div>
+        <div>
+          <span class="kicker">草擬交給 AI，定稿由人</span>
+          <h2>哪些環節可以交給 AI</h2>
+        </div>
+      </div>
+      <div class="stage-body">
+        <p>這套流程有大量重複、可規則化的勞動，例如整理散亂的職務說明書、把零散 KSA 分類並排除重複內容、由字典生成表單題目。這些最適合交給 AI 加速，把人力留給判斷。一句原則貫穿全程：AI 草擬，人定稿。</p>
+
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>環節</th><th>AI 能幫的事</th><th>必須由人把關</th></tr></thead>
+            <tbody>
+              <tr><td>上游：職務說明書</td><td>批次分類與重新命名現有檔案；套公版格式產出標準化初稿；跨區跨部門交叉比對，標出用詞與內容落差</td><td>確認分類邏輯、內容定稿、處理特殊職務</td></tr>
+              <tr><td>階段 1 職能萃取</td><td>從工作項目提列候選 KSA</td><td>SME 驗證，刪補不合實務的項目</td></tr>
+              <tr><td>階段 2 職能字典</td><td>分類、排除重複內容、草擬定義與行為指標、草擬各級別描述</td><td>命名一致性、級別是否真能區辨</td></tr>
+              <tr><td>階段 3 對標</td><td>對照 O*NET、iCAP 提示遺漏，協助翻譯與轉寫</td><td>在地化、保留客戶語言與情境</td></tr>
+              <tr><td>階段 4 表單</td><td>由字典自動生成表單題目與填答指引</td><td>評定方式與約束機制的設計</td></tr>
+              <tr><td>階段 5 職能地圖</td><td>彙整矩陣、產生視覺化草圖</td><td>校準會議的歧異收斂</td></tr>
+              <tr><td>階段 6 學習地圖</td><td>依職能級別建議學習方案草稿</td><td>方案可行性與 70-20-10 配置</td></tr>
+              <tr><td>進階支線 職等職級</td><td>整理職務評價因素表、彙整評分</td><td>分等與薪酬定位的決策，委員會治理</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>用哪一種 AI</h3>
+        <p>檔案層級的工作，例如把一整批舊職務說明書分類、重新命名、套版產出初稿，適合用能讀寫檔案、批次執行的 AI 代理工具，例如 Claude Code（Anthropic）、Codex（OpenAI）、Antigravity（Google）、Cursor、GitHub Copilot 等。構思、草擬、改寫等對話型工作，用一般 AI 對話介面即可。這類工具更迭快、名稱常變動，選用時以資料保護條件與團隊熟悉度為準。</p>
+
+        <div class="box warn">
+          <p class="box-label">三條底線</p>
+          <p>第一，AI 會編造或錯估，所有產出都要經 SME 或主管驗證，不可直接採用。第二，任何連動薪酬的判斷，包含職務評價、分等與薪酬定位，不可交給 AI 決定，必須由人治理。第三，職務說明書與人事資料屬敏感資訊，使用前確認工具的資料保護與保密條件，不要上傳到無保障的服務。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 附錄 ============ -->
+    <div class="section-divider">
+      <p class="eyebrow">附錄　Reference</p>
+      <h2>名詞速查表</h2>
+    </div>
+    <div class="table-scroll" style="margin-top:14px;">
+      <table>
+        <thead><tr><th>名詞</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td>KSA／KSAO</td><td>職能的構成面向：知識 Knowledge、技能 Skill、態度 Attitude、其他特質 Other characteristics。</td></tr>
+          <tr><td>SME</td><td>主題專家（Subject Matter Expert），通常是該職位的資深工作者或主管，協助補充實務細節。</td></tr>
+          <tr><td>BEI</td><td>行為事件訪談（Behavioral Event Interview），透過回憶具體事件，萃取造成績效差異的能力。</td></tr>
+          <tr><td>iCAP</td><td>勞動部職能發展應用平台，提供本地職能基準，級別分為 1 至 6 級。</td></tr>
+          <tr><td>O*NET</td><td>美國職業資訊資料庫，提供各職業的 KSA 與工作活動等資料，為英文資源。</td></tr>
+          <tr><td>Units of Competency</td><td>澳洲 Training Packages 體系中的能力單元，含明確的績效標準寫法。</td></tr>
+          <tr><td>行為指標</td><td>具備某項職能時可被觀察到的具體行為，需可觀察、可評量。</td></tr>
+          <tr><td>熟練度等級</td><td>同一職能的能力深度分級，本講義範例採 4 級制。</td></tr>
+          <tr><td>top-down／bottom-up</td><td>表單收集邏輯：由上而下僅從既有清單確認；由下而上允許補充新職能。</td></tr>
+          <tr><td>70-20-10</td><td>能力發展的經驗比例：約七成來自工作歷練、兩成來自他人、一成來自正式訓練。</td></tr>
+          <tr><td>IDP</td><td>個人發展計畫（Individual Development Plan），員工個別的能力成長規劃。</td></tr>
+          <tr><td>職等／職級</td><td>職等是跨職群比較相對價值後的等，由職務評價決定；職級是同職群內由淺到深的階，由熟練度等級長出。</td></tr>
+          <tr><td>職務評價</td><td>Job evaluation，衡量各職位相對價值以決定職等的方法，是職等職級表的骨幹，也是連動薪酬的基礎。</td></tr>
+          <tr><td>因素評點法</td><td>Point-factor，選定數個共同因素並配分，逐職位評分後分等，可辯護性最高的職務評價方法。</td></tr>
+          <tr><td>職群／雙軌</td><td>職群是性質相近職位的集合；雙軌指管理職與專業職兩條升遷路，讓專業人才不必轉任主管也能升遷。</td></tr>
+          <tr><td>薪等薪級</td><td>薪等對應職等的薪資區間，薪級是區間內的段位，職等職級表據此連動薪酬。</td></tr>
+          <tr><td>市場薪資對標</td><td>Salary survey，以市場薪資調查資料比對職位行情，作為訂定薪酬定位（如 P50、P75）的依據。</td></tr>
+          <tr><td>benchmark jobs</td><td>代表性職位，職務評價與市場對標時先處理的標竿職位，其餘職位再對照定位。</td></tr>
+          <tr><td>簡版／完整版</td><td>兩種深度。簡版只標準化職務說明書並配出訓練對應，不做熟練度分級；完整版建立含級別的職能字典與職能地圖，可往下接薪酬。</td></tr>
+          <tr><td>AI 代理工具</td><td>能讀寫檔案、批次執行任務的 AI，例如 Claude Code、Codex、Antigravity、Cursor 等，適合檔案分類、批次套版產出等工作。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>國立中山大學人力資源管理研究所　王豫萱教授｜職能盤點與職能地圖建置</p>
+    <p>本講義以實務流程為主軸，所引用之外部資源（iCAP、O*NET、澳洲職能資料）內容與涵蓋範圍可能隨時間更新，正式採用前請核對各資源最新版本。</p>
+  </footer>
+
+</div>
+</div>
+</body>
+</html>
