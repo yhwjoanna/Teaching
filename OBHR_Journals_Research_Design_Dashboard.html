@@ -87,6 +87,22 @@ footer{font-size:12px;color:var(--tx2);padding:12px 4px 24px;line-height:1.8;bor
   <div class="card"><h3>研究設計分類：單篇合計 N 分布</h3><div class="note">預設對數尺度；多重標記：命中多種設計之文章其合計 N 會同時計入各該類；長條為 Q1（第 25 百分位）至 Q3（第 75 百分位）區間，即中間一半文章的合計 N 落點；黑線與數字為中位數 <button class="tgl" id="tglc6" onclick="D.toggleScale('c6')">切換線性</button></div><div class="ch tall"><canvas id="c6"></canvas></div></div>
 </section>
 
+<section class="kpis">
+  <div class="kpi"><div class="lb">期刊間合計 N 差異</div><div class="v" id="s_kw"></div><div class="n" id="s_kwn"></div></div>
+  <div class="kpi"><div class="lb">事後配對（Holm 校正）</div><div class="v" id="s_ph"></div><div class="n" id="s_phn"></div></div>
+  <div class="kpi"><div class="lb">期刊間多研究比例差異</div><div class="v" id="s_cj"></div><div class="n" id="s_cjn"></div></div>
+  <div class="kpi"><div class="lb">主題間多研究比例差異</div><div class="v" id="s_ct"></div><div class="n" id="s_ctn"></div></div>
+</section>
+
+<section class="row">
+  <div class="card"><h3>統計檢定：各期刊多研究比例的偏離</h3><div class="note">依比例高至低；藍為顯著高於全庫平均、紅為顯著低於（調整後標準化殘差 |z| &gt; 2.58）、灰為未顯著；虛線為全庫平均。檢定基於全庫，不隨上方篩選連動</div><div class="ch"><canvas id="s1"></canvas></div></div>
+  <div class="card"><h3>統計檢定：各期刊合計 N 分布（對數尺度）</h3><div class="note">依中位數高至低；長條為 Q1 至 Q3、黑線與數字為中位數；括號為有標 N 篇數，灰色長條（少於 10 篇）未納入 Kruskal-Wallis 檢定。條件推論：僅及於有揭露 N 之文章</div><div class="ch tall"><canvas id="s2"></canvas></div></div>
+</section>
+
+<section class="row">
+  <div class="card"><h3>統計檢定：各主題多研究比例的偏離</h3><div class="note">主題以標題與摘要關鍵詞自動判定、每篇取命中最多者（探索性分類，未做效度抽驗）；依比例高至低，配色與虛線同上。Study 數為摘要層級下限，摘要不列舉 study 之期刊（AMJ、JOM、HRel、HRM）相關主題可能被低估</div><div class="ch tall"><canvas id="s3"></canvas></div></div>
+</section>
+
 <section class="card" style="margin-bottom:14px">
   <h3>研究設計彙總表</h3>
   <div class="note" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">點欄位名稱可排序；多重標記使占實證比例合計可能超過 100%；有標 N 篇數少於 10 之樣本統計以灰字加 ※ 標示僅供參考；統計依上方期刊與年份篩選，另可鎖定單一期刊：
@@ -103,7 +119,7 @@ footer{font-size:12px;color:var(--tx2);padding:12px 4px 24px;line-height:1.8;bor
 設計分類為摘要層級自動判定，單篇文章若含多種設計僅計入優先序最高者，個別文章可能誤分。<br>
 不確定性與使用注意：IF 為 JCR 公開轉載值，各資料源數字不一致（例如 APIR 有 4.3 與 7.2 兩種說法；OBHDP 依使用者提供值採 5.0），正式引用前請以 Clarivate JCR 原始資料核實。
 OBHDP 30 篇、LQ 16 篇、JVB 45 篇無摘要可解析（Elsevier 不開放摘要），統計基數偏小；OBHDP 之極大值來自一篇 N 約 298 萬之巨型田野實驗，判讀請以中位數為準。等級依據：國科會管理一學門組織與管理領域推薦期刊清單（附表一），一級為該清單之第一級學術期刊；FT50 對照見 Excel 方法工作表。
-AMJ、JAP、JOB 摘要極少標明樣本數（N 覆蓋率約 12%、22%、37%），跨刊比較樣本數時應併同 N 覆蓋率解讀。全庫統計皆為摘要層級下限估計，精確數字需回到全文方法段核對。設計分類器效度：先以 50 篇樣本調整規則，另以全新 60 篇做樣本外盲測（黃金標準由獨立 AI 編碼者逐篇判讀產生，非人工雙編碼）：微平均 precision 0.88、recall 0.81、逐篇完全吻合 75%；次級資料類 recall 0.50、團隊類 0.67，兩類篇數為下限估計。產出日期：2026-07-06。
+AMJ、JAP、JOB 摘要極少標明樣本數（N 覆蓋率約 12%、22%、37%），跨刊比較樣本數時應併同 N 覆蓋率解讀。全庫統計皆為摘要層級下限估計，精確數字需回到全文方法段核對。設計分類器效度：先以 50 篇樣本調整規則，另以全新 60 篇做樣本外盲測（黃金標準由獨立 AI 編碼者逐篇判讀產生，非人工雙編碼）：微平均 precision 0.88、recall 0.81、逐篇完全吻合 75%；次級資料類 recall 0.50、團隊類 0.67，兩類篇數為下限估計。統計檢定：期刊與主題差異之檢定基於全庫（Kruskal-Wallis、卡方與調整後標準化殘差，事後配對採 Holm 校正），合計 N 檢定僅納入有標 N 達 10 篇之期刊，屬條件推論；主題為關鍵詞探索性分類。產出日期：2026-07-06。
 </footer>
 </div>
 
@@ -306,6 +322,48 @@ const D = {
   },
   sort(c){ if(this.sortCol===c)this.sortDir*=-1; else {this.sortCol=c;this.sortDir=-1;} this.table(this.rows()); }
 };
+const STATS = {"kw": {"H": 35.6, "df": 12, "p": "< .001", "eps2": 0.037, "k": 13, "n": 644}, "posthoc": ["JAP（795) vs JOOP（296），p = 0.050"], "chij": {"chi2": 77.8, "df": 13, "p": "< .001", "V": 0.229}, "chit": {"chi2": 67.5, "df": 12, "p": "< .001", "V": 0.214}, "javg": 24.6, "tavg": 24.6, "jmulti": [{"j": "OBHDP", "pct": 45.0, "n": 20, "sig": "ns"}, {"j": "PPsych", "pct": 42.6, "n": 47, "sig": "hi"}, {"j": "JAP", "pct": 38.8, "n": 147, "sig": "hi"}, {"j": "JOB", "pct": 32.9, "n": 149, "sig": "ns"}, {"j": "APIR", "pct": 32.8, "n": 137, "sig": "ns"}, {"j": "JBP", "pct": 29.3, "n": 140, "sig": "ns"}, {"j": "EJWOP", "pct": 24.3, "n": 111, "sig": "ns"}, {"j": "JOOP", "pct": 22.8, "n": 162, "sig": "ns"}, {"j": "LQ", "pct": 20.0, "n": 25, "sig": "ns"}, {"j": "JOM", "pct": 15.8, "n": 152, "sig": "lo"}, {"j": "HRM", "pct": 15.2, "n": 151, "sig": "lo"}, {"j": "JVB", "pct": 14.8, "n": 54, "sig": "ns"}, {"j": "AMJ", "pct": 10.4, "n": 96, "sig": "lo"}, {"j": "HRel", "pct": 10.2, "n": 88, "sig": "lo"}], "tmulti": [{"t": "職場行為與偏差", "pct": 44.0, "n": 109, "sig": "hi"}, {"t": "領導", "pct": 34.9, "n": 261, "sig": "hi"}, {"t": "公平與倫理", "pct": 31.7, "n": 63, "sig": "ns"}, {"t": "招募甄選與評量", "pct": 26.8, "n": 56, "sig": "ns"}, {"t": "多樣性與包容", "pct": 25.3, "n": 150, "sig": "ns"}, {"t": "態度動機與敬業", "pct": 22.3, "n": 148, "sig": "ns"}, {"t": "福祉壓力與復原", "pct": 22.1, "n": 145, "sig": "ns"}, {"t": "職涯與人才流動", "pct": 22.0, "n": 127, "sig": "ns"}, {"t": "團隊與協作", "pct": 18.5, "n": 92, "sig": "ns"}, {"t": "工作家庭與彈性", "pct": 16.7, "n": 24, "sig": "ns"}, {"t": "科技與新工作型態", "pct": 14.9, "n": 94, "sig": "ns"}, {"t": "其他", "pct": 11.9, "n": 160, "sig": "lo"}, {"t": "績效與回饋", "pct": 10.0, "n": 50, "sig": "ns"}], "ndist": [{"j": "OBHDP", "n": 5, "med": 4493, "q1": 905, "q3": 8229, "inc": false}, {"j": "LQ", "n": 12, "med": 1233, "q1": 711, "q3": 2200, "inc": true}, {"j": "AMJ", "n": 15, "med": 954, "q1": 86, "q3": 3793, "inc": true}, {"j": "JAP", "n": 37, "med": 795, "q1": 244, "q3": 3657, "inc": true}, {"j": "HRM", "n": 59, "med": 544, "q1": 210, "q3": 1160, "inc": true}, {"j": "JOM", "n": 27, "med": 435, "q1": 126, "q3": 1072, "inc": true}, {"j": "JOB", "n": 60, "med": 421, "q1": 162, "q3": 772, "inc": true}, {"j": "EJWOP", "n": 74, "med": 409, "q1": 190, "q3": 968, "inc": true}, {"j": "JVB", "n": 33, "med": 390, "q1": 108, "q3": 749, "inc": true}, {"j": "APIR", "n": 80, "med": 389, "q1": 246, "q3": 1053, "inc": true}, {"j": "PPsych", "n": 10, "med": 368, "q1": 172, "q3": 528, "inc": true}, {"j": "JBP", "n": 101, "med": 350, "q1": 192, "q3": 711, "inc": true}, {"j": "JOOP", "n": 105, "med": 296, "q1": 152, "q3": 612, "inc": true}, {"j": "HRel", "n": 31, "med": 90, "q1": 26, "q3": 441, "inc": true}]};
+function buildStats(){
+  const HI='#006BA2', LO='#DB444B', NS='#C7C7C7';
+  set('s_kw','p '+STATS.kw.p); set('s_kwn','Kruskal-Wallis H('+STATS.kw.df+') = '+STATS.kw.H+'，epsilon² = '+STATS.kw.eps2+'（效果量小）；納入有標 N ≥ 10 篇之 '+STATS.kw.k+' 刊');
+  set('s_ph', STATS.posthoc.length+' 組'); set('s_phn', STATS.posthoc.length? '達（邊界）顯著：'+STATS.posthoc.join('；') : '無配對達顯著');
+  set('s_cj','p '+STATS.chij.p); set('s_cjn','卡方('+STATS.chij.df+') = '+STATS.chij.chi2+'，Cramér V = '+STATS.chij.V+'（中小效果量）');
+  set('s_ct','p '+STATS.chit.p); set('s_ctn','卡方('+STATS.chit.df+') = '+STATS.chit.chi2+'，Cramér V = '+STATS.chit.V+'（中小效果量）');
+  const ctx=id=>document.getElementById(id).getContext('2d');
+  const avgLine=(val,axis)=>({id:'avg'+axis+val,afterDatasetsDraw(c){
+    const a=c.chartArea; c.ctx.save(); c.ctx.strokeStyle=INK; c.ctx.setLineDash([5,4]); c.ctx.beginPath();
+    if(axis==='y'){const y=c.scales.y.getPixelForValue(val); c.ctx.moveTo(a.left,y); c.ctx.lineTo(a.right,y); c.ctx.stroke(); c.ctx.setLineDash([]);
+      c.ctx.font='11px sans-serif'; c.ctx.fillStyle=INK; c.ctx.textAlign='right'; c.ctx.fillText('全庫平均 '+val+'%',a.right-4,y-5);}
+    else{const x=c.scales.x.getPixelForValue(val); c.ctx.moveTo(x,a.top); c.ctx.lineTo(x,a.bottom); c.ctx.stroke(); c.ctx.setLineDash([]);
+      c.ctx.font='11px sans-serif'; c.ctx.fillStyle=INK; c.ctx.textAlign='left'; c.ctx.fillText('全庫平均 '+val+'%',x+5,a.bottom-8);}
+    c.ctx.restore();}});
+  const sigc=d=>d.sig==='hi'?HI:(d.sig==='lo'?LO:NS);
+  const JM=STATS.jmulti;
+  new Chart(ctx('s1'),{type:'bar',data:{labels:JM.map(d=>d.j),datasets:[{data:JM.map(d=>d.pct),backgroundColor:JM.map(sigc),borderRadius:0,maxBarThickness:26}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(1)+'%（'+JM[c.dataIndex].n+' 篇實證中之多研究比例）'}}},
+    scales:{x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:c=>({size:c.chart.width<640?8:9}),callback:function(v,i){const l=this.getLabelForValue(v);return (this.chart.width<640&&i%2)?['',l]:l;}}},
+    y:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},title:{display:true,text:'多研究比例'}}}},
+    plugins:[avgLine(STATS.javg,'y')]});
+  const ND=STATS.ndist;
+  new Chart(ctx('s2'),{data:{labels:ND.map(d=>d.j+'（'+d.n+'）'),datasets:[
+    {type:'bar',data:ND.map(d=>[d.q1,d.q3]),backgroundColor:ND.map(d=>d.inc?'#006BA288':'#D9D9D9'),borderRadius:0,maxBarThickness:16},
+    {type:'scatter',data:ND.map((d,i)=>({x:d.med,y:i})),pointStyle:'line',rotation:90,pointRadius:9,pointHoverRadius:9,borderColor:INK,borderWidth:3}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>c.datasetIndex?('中位數 '+fmt(c.parsed.x)):('Q1–Q3：'+fmt(c.raw[0])+' – '+fmt(c.raw[1]))}}},
+    scales:{x:{type:'logarithmic',title:{display:true,text:'單篇合計 N（log）'}},y:{grid:{display:false},ticks:{font:{size:11}}}}},
+    plugins:[{id:'s2lbl',afterDatasetsDraw(c){const meta=c.getDatasetMeta(1);c.ctx.save();
+      c.ctx.font="700 10px -apple-system,'Segoe UI',sans-serif";c.ctx.fillStyle=INK;c.ctx.textAlign='left';c.ctx.textBaseline='middle';
+      meta.data.forEach((el,i)=>{c.ctx.fillText(fmt(ND[i].med),el.x+7,el.y);});c.ctx.restore();}}]});
+  const TM=STATS.tmulti;
+  new Chart(ctx('s3'),{type:'bar',data:{labels:TM.map(d=>d.t+'（'+d.n+'）'),datasets:[{data:TM.map(d=>d.pct),backgroundColor:TM.map(sigc),borderRadius:0,maxBarThickness:20}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:c=>c.parsed.x.toFixed(1)+'%（多研究文章比例）'}}},
+    scales:{y:{grid:{display:false},ticks:{font:{size:12}}},x:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},title:{display:true,text:'多研究比例'}}}},
+    plugins:[avgLine(STATS.tavg,'x'),{id:'s3lbl',afterDatasetsDraw(c){const meta=c.getDatasetMeta(0);c.ctx.save();
+      c.ctx.font="700 11px -apple-system,'Segoe UI',sans-serif";c.ctx.fillStyle=INK;c.ctx.textAlign='left';c.ctx.textBaseline='middle';
+      meta.data.forEach((el,i)=>{c.ctx.fillText(TM[i].pct.toFixed(1)+'%',el.x+5,el.y);});c.ctx.restore();}}]});
+}
 function set(id,v){document.getElementById(id).textContent=v;}
 function pct(a,b){return b?(100*a/b).toFixed(1)+'%':'—';}
 const ts=document.getElementById('tjsel');
@@ -323,6 +381,7 @@ JORDER.forEach(j=>{const s=document.createElement('span');s.className='pill';s.i
   s.onclick=()=>{if(D.jon.has(j)){D.jon.delete(j);s.classList.add('off');}
     else{D.jon.add(j);s.classList.remove('off');} D.apply();};pw.appendChild(s);});
 D.build();
+buildStats();
 </script>
 </body>
 </html>
